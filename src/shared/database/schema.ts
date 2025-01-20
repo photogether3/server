@@ -7,6 +7,7 @@ const deletedAt = int('deleted_at', { mode: 'timestamp' });
 export const users = sqliteTable('users', {
     id: text({ length: 30 }).primaryKey(),
     nickname: text({ length: 20 }).notNull(),
+    bio: text({ length: 50 }),
     email: text({ length: 50 }).notNull().unique(),
     isEmailVerified: int('is_email_verified', { mode: 'boolean' }).notNull(),
     password: text({ length: 200 }),
