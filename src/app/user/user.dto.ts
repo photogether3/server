@@ -37,6 +37,18 @@ export class UpdatePasswordToOtpDTO {
     readonly password: string;
 }
 
+export class UpdatePasswordDTO {
+    @IsNotEmpty({ message: '현재 비밀번호를 입력해 주세요.' })
+    @ApiProperty({ description: '현재 비밀번호', example: '1q2w3e1!@' })
+    readonly currentPassword: string;
+
+    @IsNotEmpty({ message: '비밀번호는 필수 입력 항목입니다.' })
+    @Length(USER_RULES.password.min, USER_RULES.password.max, { message: USER_RULES.password.lengthErrMsg })
+    @Matches(USER_RULES.password.regex, { message: USER_RULES.password.regexErrMsg })
+    @ApiProperty({ description: '새로운 비밀번호', example: '1q2w3e1!@' })
+    readonly newPassword: string;
+}
+
 export class WithdrawDTO {
     @IsNotEmpty({ message: 'OTP 코드가 비어있습니다.' })
     @Length(6, 6, { message: 'OTP는 6자리입니다.' })

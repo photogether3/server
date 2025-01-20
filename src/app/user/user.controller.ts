@@ -6,8 +6,9 @@ import { Public, UserModel, UserParam } from 'src/features/user';
 import { UserFacade } from './user.facade';
 import {
     IsEmailTakenResultDTO,
-    ProfileResultDTO,
-    UpdatePasswordToOtpDTO, UpdateProfileDTO,
+    ProfileResultDTO, UpdatePasswordDTO,
+    UpdatePasswordToOtpDTO,
+    UpdateProfileDTO,
     WithdrawDTO,
 } from './user.dto';
 
@@ -46,8 +47,15 @@ export class UserController {
     @Public()
     @Patch('password')
     @ApiOperation({ summary: 'OTP인증 후 비밀번호 변경' })
-    async updatePassword(@Body() dto: UpdatePasswordToOtpDTO) {
+    async updatePasswordFromOtp(@Body() dto: UpdatePasswordToOtpDTO) {
         await this.userFacade.updatePassword(dto);
+    }
+
+    @Patch('me/password')
+    @ApiBearerAuth()
+    @ApiOperation({ summary: '비밀번호 변경' })
+    async updatePassword(@Body() dto: UpdatePasswordDTO) {
+        return;
     }
 
     @Delete('me/withdraw')
