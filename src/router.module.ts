@@ -3,6 +3,8 @@ import {RouterModule as NestRouterModule, Routes} from "@nestjs/core";
 
 import {AuthModule} from "./app/auth";
 import {UserModule} from "./app/user";
+import { CollectionModule } from './app/collection';
+
 const routes: Routes = [
     {
         path: 'auth',
@@ -11,6 +13,10 @@ const routes: Routes = [
     {
         path: 'users',
         module: UserModule,
+    },
+    {
+        path: 'collections',
+        module: CollectionModule
     }
 ];
 
@@ -18,7 +24,8 @@ const routes: Routes = [
     imports: [
         NestRouterModule.register(routes),
         AuthModule,
-        UserModule
+        UserModule,
+        CollectionModule
     ]
 })
 export class RouterModule {}
