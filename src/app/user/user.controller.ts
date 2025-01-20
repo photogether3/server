@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Put } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { Public, UserModel, UserParam } from 'src/features/user';
@@ -7,8 +7,7 @@ import { UserFacade } from './user.facade';
 import {
     IsEmailTakenResultDTO,
     ProfileResultDTO,
-    UpdateNicknameDTO,
-    UpdatePasswordToOtpDTO,
+    UpdatePasswordToOtpDTO, UpdateProfileDTO,
     WithdrawDTO,
 } from './user.dto';
 
@@ -37,12 +36,11 @@ export class UserController {
         return ProfileResultDTO.from(user);
     }
 
-    @Patch('me/nickname')
+    @Put('me')
     @ApiBearerAuth()
-    @ApiOperation({ summary: '닉네임 변경' })
-    @ApiResponse({ type: ProfileResultDTO })
-    async updateNickname(@UserParam() user: UserModel, @Body() dto: UpdateNicknameDTO) {
-        return await this.userFacade.updateNickname(user, dto);
+    @ApiOperation({ summary: '프로필 수정' })
+    async updateProfile(@UserParam() user: UserModel, @Body() dto: UpdateProfileDTO) {
+        return this.userFacade.updateProfile(user, dto);
     }
 
     @Public()

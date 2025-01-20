@@ -137,14 +137,16 @@ export class UserService {
     }
 
     /**
-     * @todo 유저의 닉네임을 변경합니다.
+     * @todo 유저 프로필 정보를 수정합니다.
+     * - 닉네임, 자기소개
      * - 업데이트 이후 유저모델을 반환합니다.
      */
-    async updateNickname(user: UserModel, nickname: string) {
-        user = user.withUpdateNickname(nickname);
+    async updateProfile(user: UserModel, nickname: string, bio: string) {
+        user = user.withUpdateProfile(nickname, bio);
         await this.userRepository.save(user);
         return user;
     }
+
 
     /**
      * @todo 유저의 비밀번호를 변경합니다.

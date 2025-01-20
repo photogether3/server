@@ -7,8 +7,7 @@ import {DrizzleService} from "src/shared/database";
 import {
     IsEmailTakenResultDTO,
     ProfileResultDTO,
-    UpdateNicknameDTO,
-    UpdatePasswordToOtpDTO,
+    UpdatePasswordToOtpDTO, UpdateProfileDTO,
     WithdrawDTO,
 } from './user.dto';
 
@@ -43,8 +42,10 @@ export class UserFacade {
         });
     }
 
-    async updateNickname(user: UserModel, dto: UpdateNicknameDTO) {
-        user = await this.userService.updateNickname(user, dto.nickname);
-        return ProfileResultDTO.from(user);
+    async updateProfile(user: UserModel, dto: UpdateProfileDTO) {
+        await this.drizzleService.runInTx(async () => {
+            user = await this.userService.updateProfile(user, dto.nickname, dto.bio);
+            return ProfileResultDTO.from(user);
+        })
     }
 }

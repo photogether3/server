@@ -5,16 +5,21 @@ import {plainToInstance} from "class-transformer";
 import {USER_RULES, UserModel} from "src/features/user";
 import {toKSTDate} from "../../shared/database";
 
-/**
- * ===========
- * Request
- * ===========
- */
-export class UpdateNicknameDTO {
+export class UpdateProfileDTO {
     @IsNotEmpty()
-    @ApiProperty()
+    @ApiProperty({ description: '닉네임' })
     readonly nickname: string;
+
+    @IsNotEmpty()
+    @ApiProperty({ description: '자기소개' })
+    readonly bio: string;
+
+    @IsNotEmpty()
+    @ApiProperty({ description: '관심사 ID 목록' })
+    readonly favoriteIds: string[];
 }
+
+/** @Response */
 
 export class UpdatePasswordToOtpDTO {
     @IsNotEmpty({ message: 'OTP 코드가 비어있습니다.' })

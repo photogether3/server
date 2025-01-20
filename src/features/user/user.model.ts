@@ -10,6 +10,7 @@ export class UserModel extends OrmModel {
     readonly email: string;
     readonly password: string;
     readonly nickname: string;
+    readonly bio: string;
     readonly otp: string;
     readonly otpExpiryDate: Date;
     readonly isEmailVerified: boolean;
@@ -74,14 +75,6 @@ export class UserModel extends OrmModel {
         } as UserModel);
     }
 
-    withUpdateNickname(nickname: string) {
-        return plainToInstance(UserModel, {
-            ...this,
-            nickname,
-            updatedAt: new Date()
-        } as UserModel);
-    }
-
     withUpdatePassword(password: string) {
         return plainToInstance(UserModel, {
             ...this,
@@ -97,5 +90,14 @@ export class UserModel extends OrmModel {
             email: this.email+ '__' + now.getTime(),
             deletedAt: now
         } as UserModel);
+    }
+
+    withUpdateProfile(nickname: string, bio: string) {
+        return plainToInstance(UserModel, {
+            ...this,
+            nickname,
+            bio,
+            updatedAt: new Date()
+        });
     }
 }
