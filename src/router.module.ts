@@ -4,6 +4,7 @@ import {RouterModule as NestRouterModule, Routes} from "@nestjs/core";
 import {AuthModule} from "./app/auth";
 import {UserModule} from "./app/user";
 import { CollectionModule } from './app/collection';
+import { FavoriteModule } from './app/favorite';
 
 const routes: Routes = [
     {
@@ -15,9 +16,13 @@ const routes: Routes = [
         module: UserModule,
     },
     {
+        path: 'favorites',
+        module: FavoriteModule,
+    },
+    {
         path: 'collections',
         module: CollectionModule
-    }
+    },
 ];
 
 @Module({
@@ -25,6 +30,7 @@ const routes: Routes = [
         NestRouterModule.register(routes),
         AuthModule,
         UserModule,
+        FavoriteModule,
         CollectionModule
     ]
 })
