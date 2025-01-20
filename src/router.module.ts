@@ -6,6 +6,7 @@ import { UserModule } from './app/user';
 import { CollectionModule } from './app/collection';
 import { FavoriteModule } from './app/favorite';
 import { PostModule } from './app/post';
+import { FileSystemModule } from './app/file-system';
 
 const routes: Routes = [
     {
@@ -28,6 +29,10 @@ const routes: Routes = [
         path: 'posts',
         module: PostModule,
     },
+    {
+        path: 'files',
+        module: FileSystemModule,
+    },
 ];
 
 @Module({
@@ -38,6 +43,7 @@ const routes: Routes = [
         FavoriteModule,
         CollectionModule,
         PostModule,
+        FileSystemModule,
     ],
 })
 export class RouterModule {
