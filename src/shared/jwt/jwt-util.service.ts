@@ -2,7 +2,7 @@ import {Injectable, UnauthorizedException} from "@nestjs/common";
 import * as jwt from 'jsonwebtoken';
 
 import {EnvService} from "../env";
-import {JwtResource} from "./types";
+import {JwtResourceDTO} from "./types";
 
 @Injectable()
 export class JwtUtilService {
@@ -25,7 +25,7 @@ export class JwtUtilService {
         const accessToken: string = this.generateJwtToken(sub, payload);
         const expiresIn: number = this.getJwtExpiresIn(accessToken);
         const refreshToken: string = this.generateOpaqueToken();
-        return { accessToken, expiresIn, refreshToken } as JwtResource;
+        return { accessToken, expiresIn, refreshToken } as JwtResourceDTO;
     }
 
     verifyJwtToken(token: string): jwt.JwtPayload {

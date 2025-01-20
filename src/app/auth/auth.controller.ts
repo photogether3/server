@@ -1,11 +1,12 @@
 import {Body, Controller, Delete, HttpCode, HttpStatus, Post} from "@nestjs/common";
-import {ApiBearerAuth, ApiOperation, ApiTags} from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import {Public, UserModel, UserParam} from "src/features/user";
 import {ApiRefreshTokenHeader, RefreshToken} from "src/features/user-token";
 
 import {GenerateOtpDTO, LoginDTO, RegisterDTO, VerifyOtpDTO} from "./auth.dto";
 import {AuthFacade} from "./auth.facade";
+import { JwtResourceDTO } from '../../shared/jwt/types';
 
 @Controller({ version: '1' })
 @ApiTags('일반인증')
@@ -19,6 +20,7 @@ export class AuthController {
     @Post('login')
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: '로그인' })
+    @ApiResponse({ type: JwtResourceDTO })
     async login(@Body() dto: LoginDTO) {
         return await this.authFacade.login(dto);
     }
@@ -40,6 +42,7 @@ export class AuthController {
     @Public()
     @Post('otp/verify')
     @ApiOperation({ summary: 'OTP 검증 및 토큰 발급' })
+    @ApiResponse({ type: JwtResourceDTO })
     async verifyOtp(@Body() dto: VerifyOtpDTO) {
         return await this.authFacade.verifyOtp(dto);
     }
@@ -48,6 +51,7 @@ export class AuthController {
     @ApiRefreshTokenHeader()
     @Post('refresh')
     @ApiOperation({ summary: '토큰 재발급' })
+    @ApiResponse({ type: JwtResourceDTO })
     async refresh(@RefreshToken() refreshToken: string) {
         return await this.authFacade.refresh(refreshToken);
     }
