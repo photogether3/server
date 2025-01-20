@@ -6,7 +6,9 @@ import { Public, UserModel, UserParam } from 'src/features/user';
 import { UserFacade } from './user.facade';
 import {
     IsEmailTakenResultDTO,
-    ProfileResultDTO, UpdatePasswordDTO,
+    ProfileResultDTO,
+    ResetDataDTO,
+    UpdatePasswordDTO,
     UpdatePasswordToOtpDTO,
     UpdateProfileDTO,
     WithdrawDTO,
@@ -58,10 +60,18 @@ export class UserController {
         return;
     }
 
+    @Delete('me/reset')
+    @ApiBearerAuth()
+    @HttpCode(HttpStatus.NO_CONTENT)
+    @ApiOperation({ summary: 'OTP 인증 후 기록초기화' })
+    async resetData(@UserParam() user: UserModel, @Body() dto: ResetDataDTO) {
+        return;
+    }
+
     @Delete('me/withdraw')
     @ApiBearerAuth()
     @HttpCode(HttpStatus.NO_CONTENT)
-    @ApiOperation({ summary: 'OTP인증 후 회원탈퇴' })
+    @ApiOperation({ summary: 'OTP 인증 후 회원탈퇴' })
     async withdraw(@UserParam() user: UserModel, @Body() dto: WithdrawDTO) {
         await this.userFacade.withdraw(user, dto);
     }

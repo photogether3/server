@@ -49,11 +49,14 @@ export class UpdatePasswordDTO {
     readonly newPassword: string;
 }
 
-export class WithdrawDTO {
+export class ResetDataDTO {
     @IsNotEmpty({ message: 'OTP 코드가 비어있습니다.' })
     @Length(6, 6, { message: 'OTP는 6자리입니다.' })
     @ApiProperty({ description: 'OTP 코드', example: '123456' })
     readonly otp: string;
+}
+
+export class WithdrawDTO extends ResetDataDTO {
 }
 
 /** @Response */
