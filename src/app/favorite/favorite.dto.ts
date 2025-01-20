@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-
-import { GetFavoriteScopes } from './favorite.enum';
 import { IsIn } from 'class-validator';
 
-export class GetFavoriteDTO {
-    @IsIn(Object.values(GetFavoriteScopes))
-    @ApiProperty({ description: '조회범위', enum: GetFavoriteScopes, default: GetFavoriteScopes.ALL })
-    readonly scope: GetFavoriteScopes = GetFavoriteScopes.ALL;
+import { RequestScopes } from 'src/shared/base';
+
+export class GetFavoritesDTO {
+    @IsIn(Object.values(RequestScopes))
+    @ApiProperty({ description: '조회범위', enum: RequestScopes, default: RequestScopes.USER })
+    readonly scope: RequestScopes = RequestScopes.USER;
 }
 
 /** @Response */
