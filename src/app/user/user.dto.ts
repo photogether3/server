@@ -1,9 +1,9 @@
-import {ApiProperty} from "@nestjs/swagger";
-import {IsNotEmpty, Length, Matches} from "class-validator";
-import {plainToInstance} from "class-transformer";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, Length, Matches } from 'class-validator';
+import { plainToInstance } from 'class-transformer';
 
-import {USER_RULES, UserModel} from "src/features/user";
-import {toKSTDate} from "../../shared/database";
+import { USER_RULES, UserModel } from 'src/features/user';
+import { toKSTDate } from '../../shared/database';
 
 export class UpdateProfileDTO {
     @IsNotEmpty()
@@ -47,7 +47,7 @@ export class WithdrawDTO {
 /** @Response */
 
 export class IsEmailTakenResultDTO {
-    @ApiProperty()
+    @ApiProperty({ description: '중복여부' })
     readonly isDuplicated: boolean;
 }
 
