@@ -1,10 +1,11 @@
-import {Module} from "@nestjs/common";
-import {RouterModule as NestRouterModule, Routes} from "@nestjs/core";
+import { Module } from '@nestjs/common';
+import { RouterModule as NestRouterModule, Routes } from '@nestjs/core';
 
-import {AuthModule} from "./app/auth";
-import {UserModule} from "./app/user";
+import { AuthModule } from './app/auth';
+import { UserModule } from './app/user';
 import { CollectionModule } from './app/collection';
 import { FavoriteModule } from './app/favorite';
+import { PostModule } from './app/post';
 
 const routes: Routes = [
     {
@@ -21,7 +22,11 @@ const routes: Routes = [
     },
     {
         path: 'collections',
-        module: CollectionModule
+        module: CollectionModule,
+    },
+    {
+        path: 'posts',
+        module: PostModule,
     },
 ];
 
@@ -31,7 +36,9 @@ const routes: Routes = [
         AuthModule,
         UserModule,
         FavoriteModule,
-        CollectionModule
-    ]
+        CollectionModule,
+        PostModule,
+    ],
 })
-export class RouterModule {}
+export class RouterModule {
+}
