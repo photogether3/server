@@ -9,7 +9,7 @@ import { CollectionPaginationDTO, CreateCollectionDTO, UpdateCollectionDTO } fro
 export class CollectionController {
 
     @Get()
-    @ApiOperation({ summary: '사진첩 목록 조회' })
+    @ApiOperation({ summary: '사진첩 목록 조회 [Draft]' })
     @ApiResponse({ type: CollectionPaginationDTO })
     async getCollections() {
         return CollectionPaginationDTO.fromNullData();
@@ -17,13 +17,13 @@ export class CollectionController {
 
 
     @Post()
-    @ApiOperation({ summary: '사진첩 생성' })
+    @ApiOperation({ summary: '사진첩 생성 [Draft]' })
     async create(@Body() dto: CreateCollectionDTO) {
         return;
     }
 
     @Put(':collectionId')
-    @ApiOperation({ summary: '사진첩 수정'})
+    @ApiOperation({ summary: '사진첩 수정 [Draft]'})
     async update(
         @Param('collectionId') collectionId: string,
         @Body() dto: UpdateCollectionDTO,

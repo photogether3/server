@@ -8,7 +8,7 @@ export class FileSystemController {
 
     @Post('images')
     @ApiOperation({
-        summary: '이미지 파일 단건/일괄 생성', description: `
+        summary: '이미지 파일 단건/일괄 생성 [Draft]', description: `
         # 이미지 파일을 필요로하는 다른 도메인 API 이전에 호출
         - 먼저 저장이 필요한 파일들을 업로드
         - 반환 값으로 임시저장된 파일 URL 배열을 제공(일괄성을 위해 단건 저장도 배열로 반환됨)

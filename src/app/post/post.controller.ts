@@ -18,14 +18,14 @@ import {
 export class PostController {
 
     @Get()
-    @ApiOperation({ summary: '게시물 목록 조회' })
+    @ApiOperation({ summary: '게시물 목록 조회 [Draft]' })
     @ApiResponse({ type: PostPaginationResultDTO })
     async getPosts(@Query() dto: GetPostsDTO) {
         return [];
     }
 
     @Post()
-    @ApiOperation({ summary: '게시물 생성' })
+    @ApiOperation({ summary: '게시물 생성 [Draft]' })
     async create(
         @UserParam() user: UserModel,
         @Body() dto: CreatePostDTO,
@@ -34,7 +34,7 @@ export class PostController {
     }
 
     @Put(':postId')
-    @ApiOperation({ summary: '게시물 수정' })
+    @ApiOperation({ summary: '게시물 수정 [Draft]' })
     async update(
         @Param('postId') postId: string,
         @UserParam() user: UserModel,
@@ -44,7 +44,7 @@ export class PostController {
     }
 
     @Patch('move')
-    @ApiOperation({ summary: '게시물 단건/일괄 다른 사진첩으로 이동' })
+    @ApiOperation({ summary: '게시물 단건/일괄 다른 사진첩으로 이동 [Draft]' })
     async moveToOtherCollection(
         @UserParam() user: UserModel,
         @Body() dto: MovePostsDTO,
@@ -53,7 +53,7 @@ export class PostController {
     }
 
     @Delete()
-    @ApiOperation({ summary: '게시물 단건/일괄 삭제' })
+    @ApiOperation({ summary: '게시물 단건/일괄 삭제 [Draft]' })
     async remove(
         @UserParam() user: UserModel,
         @Body() dto: RemovePostsDTO,

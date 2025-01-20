@@ -9,7 +9,7 @@ import { FavoriteResultDTO, GetFavoritesDTO } from './favorite.dto';
 export class FavoriteController {
 
     @Get()
-    @ApiOperation({ summary: '관심사 목록 조회' })
+    @ApiOperation({ summary: '관심사 목록 조회 [Draft]' })
     @ApiResponse({ type: [FavoriteResultDTO] })
     async getFavorites(@Query() dto: GetFavoritesDTO) {
         console.log(dto);

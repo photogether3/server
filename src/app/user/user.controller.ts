@@ -41,7 +41,7 @@ export class UserController {
 
     @Put('me')
     @ApiBearerAuth()
-    @ApiOperation({ summary: '프로필 수정' })
+    @ApiOperation({ summary: '프로필 수정 [Draft]' })
     async updateProfile(@UserParam() user: UserModel, @Body() dto: UpdateProfileDTO) {
         return this.userFacade.updateProfile(user, dto);
     }
@@ -55,7 +55,7 @@ export class UserController {
 
     @Patch('me/password')
     @ApiBearerAuth()
-    @ApiOperation({ summary: '비밀번호 변경' })
+    @ApiOperation({ summary: '비밀번호 변경 [Draft]' })
     async updatePassword(@Body() dto: UpdatePasswordDTO) {
         return;
     }
@@ -63,7 +63,7 @@ export class UserController {
     @Delete('me/reset')
     @ApiBearerAuth()
     @HttpCode(HttpStatus.NO_CONTENT)
-    @ApiOperation({ summary: 'OTP 인증 후 기록초기화' })
+    @ApiOperation({ summary: 'OTP 인증 후 기록초기화 [Draft]' })
     async resetData(@UserParam() user: UserModel, @Body() dto: ResetDataDTO) {
         return;
     }
@@ -71,7 +71,7 @@ export class UserController {
     @Delete('me/withdraw')
     @ApiBearerAuth()
     @HttpCode(HttpStatus.NO_CONTENT)
-    @ApiOperation({ summary: 'OTP 인증 후 회원탈퇴' })
+    @ApiOperation({ summary: 'OTP 인증 후 회원탈퇴 [Draft]' })
     async withdraw(@UserParam() user: UserModel, @Body() dto: WithdrawDTO) {
         await this.userFacade.withdraw(user, dto);
     }
