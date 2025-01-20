@@ -19,8 +19,6 @@ export class UpdateProfileDTO {
     readonly favoriteIds: string[];
 }
 
-/** @Response */
-
 export class UpdatePasswordToOtpDTO {
     @IsNotEmpty({ message: 'OTP 코드가 비어있습니다.' })
     @Length(6, 6, { message: 'OTP는 6자리입니다.' })
@@ -46,36 +44,37 @@ export class WithdrawDTO {
     readonly otp: string;
 }
 
-/**
- * ===========
- * Response
- * ===========
- */
+/** @Response */
+
 export class IsEmailTakenResultDTO {
     @ApiProperty()
     readonly isDuplicated: boolean;
 }
 
 export class ProfileResultDTO {
-    @ApiProperty()
+    @ApiProperty({ description: '사용자 ID' })
     readonly id: string;
 
-    @ApiProperty()
+    @ApiProperty({ description: '닉네임' })
     readonly nickname: string;
 
-    @ApiProperty()
+    @ApiProperty({ description: '자기소개' })
+    readonly bio: string;
+
+    @ApiProperty({ description: '이메일' })
     readonly email: string;
 
-    @ApiProperty()
+    @ApiProperty({ description: '생성일' })
     readonly createdAt: Date;
 
-    @ApiProperty()
+    @ApiProperty({ description: '수정일' })
     readonly updatedAt: Date;
 
     static from(user: UserModel) {
         return plainToInstance(ProfileResultDTO, {
             id: user.id,
             nickname: user.nickname,
+            bio: user.bio,
             email: user.email,
             createdAt: toKSTDate(user.createdAt),
             updatedAt: toKSTDate(user.updatedAt),
