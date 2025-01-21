@@ -1,16 +1,15 @@
-import {plainToInstance} from "class-transformer";
-
-import {OrmModel} from "src/shared/database";
+import { plainToInstance } from 'class-transformer';
 import { nanoid } from 'nanoid';
 
+import { OrmModel } from 'src/shared/database';
+
 export class UserTokenModel extends OrmModel {
+    private static readonly REFRESH_EXPIRES_TIME: number = 7 * 24 * 60 * 60 * 1000; //7일
     readonly id: string;
     readonly userId: string;
     readonly refreshToken: string;
     readonly expiryDate: Date;
     readonly lastRefreshingDate: Date;
-
-    private static readonly REFRESH_EXPIRES_TIME: number = 7 * 24 * 60 * 60 * 1000; //7일
 
     static from(param: Pick<UserTokenModel, 'userId' | 'refreshToken'>) {
         const now: Date = new Date();
@@ -22,7 +21,7 @@ export class UserTokenModel extends OrmModel {
             lastRefreshingDate: now,
             createdAt: now,
             updatedAt: now,
-            deletedAt: null
+            deletedAt: null,
         } as UserTokenModel);
     }
 
@@ -37,7 +36,7 @@ export class UserTokenModel extends OrmModel {
             refreshToken,
             refreshTokenExpiryDate: new Date(Date.now() + UserTokenModel.REFRESH_EXPIRES_TIME),
             lastRefreshingDate: now,
-            updatedAt: now
+            updatedAt: now,
         } as UserTokenModel);
     }
 
@@ -45,7 +44,7 @@ export class UserTokenModel extends OrmModel {
         const now: Date = new Date();
         return plainToInstance(UserTokenModel, {
             ...this,
-            deletedAt: now
+            deletedAt: now,
         } as UserTokenModel);
     }
 }
