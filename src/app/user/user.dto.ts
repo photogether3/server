@@ -2,8 +2,10 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, Length, Matches } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
 
-import { USER_RULES, UserModel } from 'src/features/user';
-import { toKSTDate } from '../../shared/database';
+import { toKSTDate } from 'src/shared/database';
+
+import { USER_RULES } from './core/rule';
+import { UserModel } from './core/user.model';
 
 export class UpdateProfileDTO {
     @IsNotEmpty()

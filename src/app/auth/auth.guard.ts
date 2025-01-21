@@ -1,10 +1,10 @@
-import {CanActivate, ExecutionContext, Injectable, SetMetadata, UnauthorizedException} from "@nestjs/common";
-import {Reflector} from "@nestjs/core";
-import {Request} from "express";
+import { CanActivate, ExecutionContext, Injectable, SetMetadata, UnauthorizedException } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { Request } from 'express';
 
-import {JwtUtilService} from "src/shared/jwt";
+import { JwtUtilService } from 'src/shared/jwt';
 
-import {UserService} from "./user.service";
+import { UserService } from '../user/public-api';
 
 /**
  * @description
@@ -28,8 +28,9 @@ export class AuthGuard implements CanActivate {
     constructor(
         private readonly reflector: Reflector,
         private readonly jwtUtilService: JwtUtilService,
-        private readonly userService: UserService
-    ) { }
+        private readonly userService: UserService,
+    ) {
+    }
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const req: Request = context.switchToHttp().getRequest();
@@ -40,7 +41,7 @@ export class AuthGuard implements CanActivate {
 
         const token = this.getBearerTokenOrThrow(context);
         const tokenPayload = this.jwtUtilService.verifyJwtToken(token);
-        req['user'] = await this.userService.getUserByIdOrUnAuthorize(tokenPayload.sub);
+        req['core'] = await this.userService.getUserByIdOrUnAuthorize(tokenPayload.sub);
         return true;
     }
 
@@ -53,7 +54,7 @@ export class AuthGuard implements CanActivate {
 
     private getBearerTokenOrThrow(context: ExecutionContext) {
         const request = context.switchToHttp().getRequest();
-        const token = request.headers.authorization?.split(' ')[1] as string|undefined;
+        const token = request.headers.authorization?.split(' ')[1] as string | undefined;
 
         if (!token) {
             throw new UnauthorizedException('액세스토큰이 유효하지 않습니다.');

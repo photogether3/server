@@ -1,8 +1,9 @@
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 
+import { CustomBadRequestException, CustomExceptions } from 'src/shared/error';
+
 import { UserModel } from './user.model';
 import { UserRepository } from './user.repository';
-import { CustomBadRequestException, CustomExceptions } from '../../shared/error';
 
 @Injectable()
 export class UserService {

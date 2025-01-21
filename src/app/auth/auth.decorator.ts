@@ -1,5 +1,5 @@
-import { applyDecorators, createParamDecorator, ExecutionContext, UnauthorizedException } from "@nestjs/common";
-import { ApiHeader } from "@nestjs/swagger";
+import { applyDecorators, createParamDecorator, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { ApiHeader } from '@nestjs/swagger';
 
 export function ApiRefreshTokenHeader() {
     return applyDecorators(
@@ -11,7 +11,7 @@ export function ApiRefreshTokenHeader() {
                 type: 'string',
                 example: 'asdf-zxcv-qwer-fghg',
             },
-        })
+        }),
     );
 }
 

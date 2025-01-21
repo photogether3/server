@@ -1,17 +1,22 @@
-import {Module} from "@nestjs/common";
+import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 
-import {UserDomainModule} from "src/features/user";
-import {UserTokenModule} from "src/features/user-token";
+import { UserCoreModule, UserTokenModule } from '../user/public-api';
 
-import {AuthController} from "./auth.controller";
-import {AuthFacade} from "./auth.facade";
+import { AuthController } from './auth.controller';
+import { AuthFacade } from './auth.facade';
+import { AuthGuard } from './auth.guard';
 
 @Module({
     imports: [
-        UserDomainModule,
-        UserTokenModule
+        UserCoreModule,
+        UserTokenModule,
     ],
     controllers: [AuthController],
-    providers: [AuthFacade],
+    providers: [
+        AuthFacade,
+        { provide: APP_GUARD, useClass: AuthGuard },
+    ],
 })
-export class AuthModule {}
+export class AuthModule {
+}

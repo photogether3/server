@@ -1,12 +1,12 @@
-import {Injectable} from "@nestjs/common";
+import { Injectable } from '@nestjs/common';
 
-import {UserModel, UserService} from "src/features/user";
-import {JwtUtilService} from "src/shared/jwt";
-import {MailService} from "src/shared/mail";
-import {UserTokenService} from "src/features/user-token";
-import {DiscordColors, DiscordWebHookService} from "src/shared/third-party";
+import { JwtUtilService } from 'src/shared/jwt';
+import { MailService } from 'src/shared/mail';
+import { DiscordColors, DiscordWebHookService } from 'src/shared/third-party';
 
-import {GenerateOtpDTO, LoginDTO, RegisterDTO, VerifyOtpDTO} from "./auth.dto";
+import { UserModel, UserService, UserTokenService } from '../user/public-api';
+
+import { GenerateOtpDTO, LoginDTO, RegisterDTO, VerifyOtpDTO } from './auth.dto';
 
 @Injectable()
 export class AuthFacade {
@@ -16,8 +16,9 @@ export class AuthFacade {
         private readonly jwtUtilService: JwtUtilService,
         private readonly discordWebHook: DiscordWebHookService,
         private readonly userService: UserService,
-        private readonly userTokenService: UserTokenService
-    ) {}
+        private readonly userTokenService: UserTokenService,
+    ) {
+    }
 
     async login(dto: LoginDTO) {
         const user = await this.userService.verifyCredentials(dto.email, dto.password);

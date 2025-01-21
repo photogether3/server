@@ -28,7 +28,7 @@
 막히기 때문에 `Object.assin` 또는 `class-transformer` 라이브러리 활용
 
   ```ts
-  // user model
+  // core model
   static from(param: Pick<UserModel, 'email' | 'password'>) {
       const now = new Date();
       return plainToInstance(UserModel, {
@@ -47,7 +47,7 @@
   ```
 - 수정은 기존의 값을 복사하여 변경될 값을 넣어 새로운 객체를 할당
   ```ts
-  // user model
+  // core model
   withUpdateEmailVerified() {
       return plainToInstance(UserModel, {
           ...this,
@@ -56,7 +56,7 @@
       } as UserModel);
   }
     
-  // updateEmail from user service..
+  // updateEmail from core service..
   user = user.withUpdateEmailVerified();
   await this.userRepository.save(user);
   ```

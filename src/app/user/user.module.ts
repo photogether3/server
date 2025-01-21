@@ -1,17 +1,17 @@
-import {Module} from "@nestjs/common";
+import { Module } from '@nestjs/common';
 
-import {UserDomainModule} from "src/features/user";
-import {UserTokenModule} from "src/features/user-token";
-
-import {UserController} from "./user.controller";
-import {UserFacade} from "./user.facade";
+import { UserController } from './user.controller';
+import { UserFacade } from './user.facade';
+import { UserCoreModule } from './core/user-core.module';
+import { UserTokenModule } from './token/user-token.module';
 
 @Module({
     imports: [
-        UserDomainModule,
-        UserTokenModule
+        UserCoreModule,
+        UserTokenModule,
     ],
     controllers: [UserController],
-    providers: [UserFacade]
+    providers: [UserFacade],
 })
-export class UserModule {}
+export class UserModule {
+}

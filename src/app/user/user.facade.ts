@@ -1,15 +1,17 @@
-import {Injectable} from "@nestjs/common";
+import { Injectable } from '@nestjs/common';
 
-import {UserModel, UserService} from "src/features/user";
-import {UserTokenService} from "src/features/user-token";
-import {DrizzleService} from "src/shared/database";
+import { DrizzleService } from 'src/shared/database';
 
 import {
     IsEmailTakenResultDTO,
     ProfileResultDTO,
-    UpdatePasswordToOtpDTO, UpdateProfileDTO,
+    UpdatePasswordToOtpDTO,
+    UpdateProfileDTO,
     WithdrawDTO,
 } from './user.dto';
+import { UserService } from './core/user.service';
+import { UserTokenService } from './token/user-token.service';
+import { UserModel } from './core/user.model';
 
 @Injectable()
 export class UserFacade {
@@ -17,13 +19,13 @@ export class UserFacade {
     constructor(
         private readonly drizzleService: DrizzleService,
         private readonly userService: UserService,
-        private readonly userTokenService: UserTokenService
+        private readonly userTokenService: UserTokenService,
     ) {
     }
 
     async isEmailTaken(email: string) {
         const isDuplicated = await this.userService.isEmailTaken(email);
-        return {isDuplicated} as IsEmailTakenResultDTO;
+        return { isDuplicated } as IsEmailTakenResultDTO;
     }
 
     async updatePassword(dto: UpdatePasswordToOtpDTO) {
@@ -46,6 +48,6 @@ export class UserFacade {
         await this.drizzleService.runInTx(async () => {
             user = await this.userService.updateProfile(user, dto.nickname, dto.bio);
             return ProfileResultDTO.from(user);
-        })
+        });
     }
 }

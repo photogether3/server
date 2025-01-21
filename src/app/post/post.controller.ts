@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import { UserModel, UserParam } from 'src/features/user';
+import { UserModel, UserParam } from '../user/public-api';
 
 import {
     CreatePostDTO,

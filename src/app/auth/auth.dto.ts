@@ -1,7 +1,7 @@
 import {IsNotEmpty, Length, Matches} from "class-validator";
 import {ApiProperty} from "@nestjs/swagger";
 
-import {USER_RULES} from "src/features/user";
+import {USER_RULES} from "../user/public-api";
 
 export class LoginDTO {
     @IsNotEmpty({message: '이메일은 필수 입력 항목입니다.'})

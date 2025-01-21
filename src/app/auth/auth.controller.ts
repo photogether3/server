@@ -1,12 +1,15 @@
-import {Body, Controller, Delete, HttpCode, HttpStatus, Post} from "@nestjs/common";
+import { Body, Controller, Delete, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import {Public, UserModel, UserParam} from "src/features/user";
-import {ApiRefreshTokenHeader, RefreshToken} from "src/features/user-token";
+import { JwtResourceDTO } from 'src/shared/jwt/types';
 
-import {GenerateOtpDTO, LoginDTO, RegisterDTO, VerifyOtpDTO} from "./auth.dto";
-import {AuthFacade} from "./auth.facade";
-import { JwtResourceDTO } from '../../shared/jwt/types';
+import { UserModel, UserParam } from '../user/public-api';
+
+import { GenerateOtpDTO, LoginDTO, RegisterDTO, VerifyOtpDTO } from './auth.dto';
+import { AuthFacade } from './auth.facade';
+import { Public } from './auth.guard';
+import { ApiRefreshTokenHeader, RefreshToken } from './auth.decorator';
+
 
 @Controller({ version: '1' })
 @ApiTags('일반인증')
@@ -14,7 +17,8 @@ export class AuthController {
 
     constructor(
         private readonly authFacade: AuthFacade,
-    ) {}
+    ) {
+    }
 
     @Public()
     @Post('login')
