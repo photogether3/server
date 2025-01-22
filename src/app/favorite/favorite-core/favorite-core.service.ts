@@ -12,6 +12,22 @@ export class FavoriteCoreService {
     }
 
     /**
+     * @todo 시스템에 등록된 모든 관심사 목록을 조회합니다.
+     * @return 관심사모델 목록
+     */
+    async getSystemFavorites() {
+        return this.favoriteRepository.findFavorites();
+    }
+
+    /**
+     * @todo 유저의 관심사 목록을 조회합니다.
+     * @return 관심사모델 목록
+     */
+    async getUserFavorites(userId: string) {
+        return await this.favoriteRepository.findFavoritesByUserId(userId);
+    }
+
+    /**
      * @todo 유저의 특정 관심사를 조회합니다.
      * @throw 관심사가 존재하지 않으면 400 에러
      * @return 관심사모델

@@ -12,6 +12,33 @@ export class FavoriteRepository {
     ) {
     }
 
+    async findFavorites() {
+        const results = await this.drizzleService
+            .db
+            .select()
+            .from(favorites)
+            .where(isNull(favorites.deletedAt));
+
+        return results.map(x => FavoriteModel.fromDrizzleModel(x));
+    }
+
+    async findFavoritesByUserId(userId: string) {
+        const results = await this.drizzleService
+            .db
+            .select()
+            .from(favorites)
+            .innerJoin(
+                userFavorites,
+                and(
+                    eq(userFavorites.userId, userId),
+                    isNull(userFavorites.deletedAt),
+                ),
+            )
+            .where(isNull(favorites.deletedAt));
+
+        return results.map(x => FavoriteModel.fromDrizzleModel(x));
+    }
+
     async findFavoriteById(userId: string, favoriteId: string) {
         const results = await this.drizzleService
             .db
