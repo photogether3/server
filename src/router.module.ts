@@ -7,6 +7,7 @@ import { CollectionModule } from './app/collection';
 import { FavoriteModule } from './app/favorite';
 import { PostModule } from './app/post';
 import { FileSystemModule } from './app/file-system';
+import { CategoryModule } from './app/category';
 
 const routes: Routes = [
     {
@@ -16,6 +17,10 @@ const routes: Routes = [
     {
         path: 'users',
         module: UserModule,
+    },
+    {
+        path: 'categories',
+        module: CategoryModule,
     },
     {
         path: 'favorites',
@@ -40,6 +45,7 @@ const routes: Routes = [
         NestRouterModule.register(routes),
         AuthModule,
         UserModule,
+        CategoryModule,
         FavoriteModule,
         CollectionModule,
         PostModule,

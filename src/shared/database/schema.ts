@@ -32,17 +32,18 @@ export const userTokens = sqliteTable('user_tokens', {
     userTokenUnique: uniqueIndex('user_token_unique_idx').on(table.userId, table.refreshToken),
 }));
 
-export const favorites = sqliteTable('favorites', {
-    favoriteId: text('favorite_id', { length: 30 }).notNull().primaryKey(),
+export const categories = sqliteTable('categories', {
+    categoryId: text('category_id', { length: 30 }).notNull().primaryKey(),
     name: text({ length: 50 }).notNull(),
     createdAt,
     updatedAt,
     deletedAt,
 });
 
-export const userFavorites = sqliteTable('user_favorites', {
+export const favorites = sqliteTable('favorites', {
+    favoriteId: text('favorite_id', { length: 30 }).notNull().primaryKey(),
     userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
-    favoriteId: text('favorite_id').notNull().references(() => favorites.favoriteId, { onDelete: 'cascade' }),
+    categoryId: text('category_id').notNull().references(() => categories.categoryId, { onDelete: 'cascade' }),
     createdAt,
     updatedAt,
     deletedAt,
@@ -50,8 +51,8 @@ export const userFavorites = sqliteTable('user_favorites', {
 
 export const collections = sqliteTable('collections', {
     collectionId: text({ length: 30 }).notNull().primaryKey(),
-    userId: text('user_id').notNull().references(() => userFavorites.userId),
-    favoriteId: text('favorite_id').notNull().references(() => userFavorites.favoriteId),
+    userId: text('user_id').notNull().references(() => favorites.userId),
+    favoriteId: text('favorite_id').notNull().references(() => favorites.favoriteId),
     title: text({ length: 50 }).notNull(),
     createdAt,
     updatedAt,

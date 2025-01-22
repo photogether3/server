@@ -1,16 +1,16 @@
-import {MiddlewareConsumer, Module, NestModule} from "@nestjs/common";
-import {APP_FILTER} from "@nestjs/core";
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { APP_FILTER } from '@nestjs/core';
 
-import {EnvModule} from "./shared/env";
-import {JwtModule} from "./shared/jwt";
-import {MailModule} from "./shared/mail";
-import {DatabaseModule} from "./shared/database";
-import {DiscordModule} from "./shared/third-party";
+import { EnvModule } from './shared/env';
+import { JwtModule } from './shared/jwt';
+import { MailModule } from './shared/mail';
+import { DatabaseModule } from './shared/database';
+import { DiscordModule } from './shared/third-party';
 
-import {AppMiddleware} from "./system/middlewares";
-import {AppExceptionFilter} from "./system/exceptions";
+import { AppMiddleware } from './system/middlewares';
+import { AppExceptionFilter } from './system/exceptions';
 
-import {RouterModule} from "./router.module";
+import { RouterModule } from './router.module';
 
 @Module({
     imports: [
@@ -22,10 +22,11 @@ import {RouterModule} from "./router.module";
         RouterModule,
     ],
     providers: [
-        {provide: APP_FILTER, useClass: AppExceptionFilter},
-    ]
+        { provide: APP_FILTER, useClass: AppExceptionFilter },
+    ],
 })
-export class MainModule implements NestModule{
+export class MainModule implements NestModule {
+
     configure(consumer: MiddlewareConsumer) {
         consumer
             .apply(AppMiddleware)
