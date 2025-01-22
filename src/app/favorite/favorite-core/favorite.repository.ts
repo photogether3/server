@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { DrizzleService, favorites } from 'src/shared/database';
+import { DrizzleService, favorites, userFavorites } from 'src/shared/database';
 import { and, eq, isNull } from 'drizzle-orm';
 import { FavoriteModel } from './favorite.model';
 
@@ -12,17 +12,20 @@ export class FavoriteRepository {
     ) {
     }
 
-    async findFavoriteById(favoriteId: string) {
+    async findFavoriteById(userId: string, favoriteId: string) {
         const results = await this.drizzleService
             .db
             .select()
             .from(favorites)
-            .where(
+            .innerJoin(
+                userFavorites,
                 and(
                     eq(favorites.favoriteId, favoriteId),
-                    isNull(favorites.deletedAt),
+                    eq(userFavorites.userId, userId),
+                    isNull(userFavorites.deletedAt),
                 ),
             )
+            .where(isNull(favorites.deletedAt))
             .limit(1);
         if (results.length === 0) return null;
 
