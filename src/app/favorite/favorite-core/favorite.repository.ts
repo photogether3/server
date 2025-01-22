@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
-
-import { DrizzleService, favorites, userFavorites } from 'src/shared/database';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { and, eq, isNull } from 'drizzle-orm';
+
+import { DrizzleService, favorites } from 'src/shared/database';
+
 import { FavoriteModel } from './favorite.model';
 
 @Injectable()
@@ -12,26 +13,16 @@ export class FavoriteRepository {
     ) {
     }
 
-    async findFavorites() {
-        const results = await this.drizzleService
-            .db
-            .select()
-            .from(favorites)
-            .where(isNull(favorites.deletedAt));
-
-        return results.map(x => FavoriteModel.fromDrizzleModel(x));
-    }
-
-    async findFavoritesByUserId(userId: string) {
+    async findFavorites(userId: string) {
         const results = await this.drizzleService
             .db
             .select()
             .from(favorites)
             .innerJoin(
-                userFavorites,
+                favorites,
                 and(
-                    eq(userFavorites.userId, userId),
-                    isNull(userFavorites.deletedAt),
+                    eq(favorites.userId, userId),
+                    isNull(favorites.deletedAt),
                 ),
             )
             .where(isNull(favorites.deletedAt));
@@ -39,23 +30,35 @@ export class FavoriteRepository {
         return results.map(x => FavoriteModel.fromDrizzleModel(x));
     }
 
-    async findFavoriteById(userId: string, favoriteId: string) {
+    async findFavorite(userId: string, favoriteId: string) {
         const results = await this.drizzleService
             .db
             .select()
             .from(favorites)
             .innerJoin(
-                userFavorites,
+                favorites,
                 and(
                     eq(favorites.favoriteId, favoriteId),
-                    eq(userFavorites.userId, userId),
-                    isNull(userFavorites.deletedAt),
+                    eq(favorites.userId, userId),
+                    isNull(favorites.deletedAt),
                 ),
             )
             .where(isNull(favorites.deletedAt))
             .limit(1);
+
         if (results.length === 0) return null;
 
         return FavoriteModel.fromDrizzleModel(results?.shift());
+    }
+
+    async saves(_favorites: FavoriteModel[]) {
+        await this.drizzleService.db
+            .insert(favorites)
+            .values(
+                _favorites.map(favorite => favorite.toPlainObject()),
+            )
+            .catch(err => {
+                throw new InternalServerErrorException(err);
+            });
     }
 }

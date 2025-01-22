@@ -1,9 +1,9 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { UserModel, UserParam } from '../user/public-api';
 
-import { FavoriteResultDTO, GetFavoritesDTO } from './favorite.dto';
+import { FavoriteResultDTO } from './favorite.dto';
 import { FavoriteFacade } from './favorite.facade';
 
 @Controller({ version: '1' })
@@ -19,10 +19,7 @@ export class FavoriteController {
     @Get()
     @ApiOperation({ summary: '관심사 목록 조회' })
     @ApiResponse({ type: [FavoriteResultDTO] })
-    async getFavorites(
-        @UserParam() user: UserModel,
-        @Query() dto: GetFavoritesDTO,
-    ) {
-        return this.favoriteFace.getFavorites(user.id, dto);
+    async getFavorites(@UserParam() user: UserModel) {
+        return this.favoriteFace.getFavorites(user.id);
     }
 }

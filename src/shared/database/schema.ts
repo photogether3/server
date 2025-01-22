@@ -47,11 +47,14 @@ export const favorites = sqliteTable('favorites', {
     createdAt,
     updatedAt,
     deletedAt,
-});
+}, (table) => ({
+    // userId와 refreshToken을 합쳐서 unique 제약조건 생성
+    userTokenUnique: uniqueIndex('unique_idx').on(table.userId, table.categoryId),
+}));
 
 export const collections = sqliteTable('collections', {
     collectionId: text({ length: 30 }).notNull().primaryKey(),
-    userId: text('user_id').notNull().references(() => favorites.userId),
+    userId: text('user_id').notNull().references(() => users.id),
     favoriteId: text('favorite_id').notNull().references(() => favorites.favoriteId),
     title: text({ length: 50 }).notNull(),
     createdAt,

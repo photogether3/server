@@ -17,8 +17,8 @@ export class UpdateProfileDTO {
     readonly bio: string;
 
     @IsNotEmpty()
-    @ApiProperty({ description: '관심사 ID 목록' })
-    readonly favoriteIds: string[];
+    @ApiProperty({ description: '카테고리 ID 목록' })
+    readonly categoryIds: string[];
 }
 
 export class UpdatePasswordToOtpDTO {

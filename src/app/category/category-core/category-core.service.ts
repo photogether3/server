@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { CategoryRepository } from './category.repository';
 import { CategoryModel } from './category.model';
@@ -17,6 +17,18 @@ export class CategoryCoreService {
      */
     async getCategories() {
         return await this.categoryRepository.findCategories();
+    }
+
+    /**
+     * @todo 카테고리 ID 목록을 검사합니다.
+     * @throw 파라미터 개수와 조회된 데이터 크기가 다르면 예외처리합니다.
+     * @return void
+     */
+    async verifyCategories(categoryIds: string[]) {
+        const results = await this.categoryRepository.findCategoriesByIds(categoryIds);
+        if (categoryIds.length !== results.length) {
+            throw new BadRequestException('잘못된 데이터입니다.');
+        }
     }
 
     /**
