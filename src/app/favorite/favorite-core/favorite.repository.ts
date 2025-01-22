@@ -18,14 +18,12 @@ export class FavoriteRepository {
             .db
             .select()
             .from(favorites)
-            .innerJoin(
-                favorites,
+            .where(
                 and(
                     eq(favorites.userId, userId),
                     isNull(favorites.deletedAt),
                 ),
-            )
-            .where(isNull(favorites.deletedAt));
+            );
 
         return results.map(x => FavoriteModel.fromDrizzleModel(x));
     }

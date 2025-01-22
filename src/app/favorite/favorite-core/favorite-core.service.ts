@@ -15,8 +15,10 @@ export class FavoriteCoreService {
      * @todo 유저의 관심사 목록을 조회합니다.
      * @return 관심사 모델 목록
      */
-    async getUserFavorites(userId: string) {
-        return await this.favoriteRepository.findFavorites(userId);
+    async getFavorites(userId: string) {
+        const results = await this.favoriteRepository.findFavorites(userId);
+        console.log(results);
+        return results;
     }
 
     /**
@@ -24,7 +26,7 @@ export class FavoriteCoreService {
      * @throw 관심사가 존재하지 않으면 400 에러
      * @return 관심사 모델
      */
-    async getUserFavoriteOrThrow(userId: string, favoriteId: string) {
+    async getFavoriteOrThrow(userId: string, favoriteId: string) {
         const result = await this.favoriteRepository.findFavorite(userId, favoriteId);
         if (!result) {
             throw new BadRequestException('관심사가 존재하지 않습니다.');

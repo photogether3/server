@@ -11,6 +11,6 @@ export class FavoriteFacade {
     }
 
     async getFavorites(userId: string) {
-
+        return await this.favoriteCoreService.getFavorites(userId);
     }
 }
