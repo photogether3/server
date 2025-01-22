@@ -16,7 +16,7 @@ export class CollectionFacade {
     }
 
     async create(userId: string, dto: CreateCollectionDTO) {
-        await this.favoriteCoreService.getFavoriteOrThrow(dto.favoriteId);
+        await this.favoriteCoreService.getUserFavoriteOrThrow(userId, dto.favoriteId);
 
         const param: CreateCollectionParam = { userId, ...dto };
         await this.collectionCoreService.create(param);
