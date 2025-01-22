@@ -13,7 +13,8 @@ export class CreateCollectionDTO {
     readonly favoriteId: string;
 }
 
-export class UpdateCollectionDTO extends CreateCollectionDTO {}
+export class UpdateCollectionDTO extends CreateCollectionDTO {
+}
 
 /** @Response */
 
