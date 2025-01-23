@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { CategoryCoreModule } from '../category/public-api';
-import { FavoriteCoreModule } from '../favorite/public-api';
+import { CategoryCoreModule, FavoriteModule } from '../category/public-api';
 
 import { UserController } from './user.controller';
 import { UserFacade } from './user.facade';
@@ -10,7 +9,7 @@ import { UserTokenModule } from './token/user-token.module';
 
 @Module({
     imports: [
-        FavoriteCoreModule,
+        FavoriteModule,
         CategoryCoreModule,
         UserCoreModule,
         UserTokenModule,

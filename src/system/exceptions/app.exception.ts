@@ -23,22 +23,22 @@ export class AppExceptionFilter implements ExceptionFilter {
         let errorMessage = exception.message ?? '';
         if (status >= 400 && status < 500) {
             this.logger.warn(`[${status}] ${errorMessage} - Request IP: ${clientIp}`, exception.stack);
-            await this.discordWebHook.sendError('🍫 사용자 에러 리포트', {
-                endPoint: request.url,
-                method: request.method,
-                errMsg: errorMessage,
-                errCode: status,
-            }, DiscordColors.WARNING);
+            // await this.discordWebHook.sendError('🍫 사용자 에러 리포트', {
+            //     endPoint: request.url,
+            //     method: request.method,
+            //     errMsg: errorMessage,
+            //     errCode: status,
+            // }, DiscordColors.WARNING);
         } else {
             errorMessage = exception.message;
             this.logger.error(`[${status}] ${errorMessage} - Request IP: ${clientIp}`, exception.stack);
 
-            await this.discordWebHook.sendError('🚨 시스템 에러 리포트', {
-                endPoint: request.url,
-                method: request.method,
-                errMsg: errorMessage,
-                errCode: status,
-            }, DiscordColors.ERROR);
+            // await this.discordWebHook.sendError('🚨 시스템 에러 리포트', {
+            //     endPoint: request.url,
+            //     method: request.method,
+            //     errMsg: errorMessage,
+            //     errCode: status,
+            // }, DiscordColors.ERROR);
         }
 
         response

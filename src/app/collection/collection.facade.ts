@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { FavoriteCoreService } from '../favorite/public-api';
+import { FavoriteService } from '../category/public-api';
 
 import { CreateCollectionDTO } from './collection.dto';
 import { CollectionCoreService } from './collection-core/collection-core.service';
@@ -10,13 +10,13 @@ import { CreateCollectionParam } from './collection-core/collection.model';
 export class CollectionFacade {
 
     constructor(
-        private readonly favoriteCoreService: FavoriteCoreService,
+        private readonly favoriteService: FavoriteService,
         private readonly collectionCoreService: CollectionCoreService,
     ) {
     }
 
     async create(userId: string, dto: CreateCollectionDTO) {
-        await this.favoriteCoreService.getFavoriteOrThrow(userId, dto.favoriteId);
+        // await this.favoriteService.getFavoriteOrThrow(userId, dto.favoriteId);
 
         const param: CreateCollectionParam = { userId, ...dto };
         await this.collectionCoreService.create(param);

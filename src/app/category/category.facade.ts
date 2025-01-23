@@ -3,7 +3,7 @@ import { plainToInstance } from 'class-transformer';
 
 import { DiscordColors, DiscordWebHookService } from 'src/shared/third-party';
 
-import { CategoryCoreService } from './category-core/category-core.service';
+import { CategoryService } from './category-core/category.service';
 import { CategoryResultDTO, CreateCategoryDTO } from './category.dto';
 
 @Injectable()
@@ -11,13 +11,17 @@ export class CategoryFacade {
 
     constructor(
         private readonly discordWebHook: DiscordWebHookService,
-        private readonly categoryCoreService: CategoryCoreService,
+        private readonly categoryCoreService: CategoryService,
     ) {
     }
 
     async getCategories() {
         const results = await this.categoryCoreService.getCategories();
         return plainToInstance(CategoryResultDTO, results);
+    }
+
+    async getFavorites(userId: string) {
+        return Promise.resolve(undefined);
     }
 
     async create(dto: CreateCategoryDTO) {

@@ -2,8 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { DrizzleService } from 'src/shared/database';
 
-import { CategoryCoreService } from '../category/public-api';
-import { FavoriteCoreService } from '../favorite/public-api';
+import { CategoryService, FavoriteService } from '../category/public-api';
 
 import { IsEmailTakenResultDTO, UpdatePasswordToOtpDTO, UpdateProfileDTO, WithdrawDTO } from './user.dto';
 import { UserService } from './core/user.service';
@@ -15,8 +14,8 @@ export class UserFacade {
 
     constructor(
         private readonly drizzleService: DrizzleService,
-        private readonly categoryService: CategoryCoreService,
-        private readonly favoriteService: FavoriteCoreService,
+        private readonly categoryService: CategoryService,
+        private readonly favoriteService: FavoriteService,
         private readonly userService: UserService,
         private readonly userTokenService: UserTokenService,
     ) {

@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 
-import { CategoryCoreService } from './category-core.service';
+import { CategoryService } from './category.service';
 import { CategoryRepository } from './category.repository';
 
 @Module({
-    providers: [CategoryCoreService, CategoryRepository],
-    exports: [CategoryCoreService],
+    providers: [CategoryService, CategoryRepository],
+    exports: [CategoryService],
 })
 export class CategoryCoreModule {
 }

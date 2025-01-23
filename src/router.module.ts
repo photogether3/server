@@ -4,7 +4,6 @@ import { RouterModule as NestRouterModule, Routes } from '@nestjs/core';
 import { AuthModule } from './app/auth';
 import { UserModule } from './app/user';
 import { CollectionModule } from './app/collection';
-import { FavoriteModule } from './app/favorite';
 import { PostModule } from './app/post';
 import { FileSystemModule } from './app/file-system';
 import { CategoryModule } from './app/category';
@@ -21,10 +20,6 @@ const routes: Routes = [
     {
         path: 'categories',
         module: CategoryModule,
-    },
-    {
-        path: 'favorites',
-        module: FavoriteModule,
     },
     {
         path: 'collections',
@@ -46,7 +41,6 @@ const routes: Routes = [
         AuthModule,
         UserModule,
         CategoryModule,
-        FavoriteModule,
         CollectionModule,
         PostModule,
         FileSystemModule,

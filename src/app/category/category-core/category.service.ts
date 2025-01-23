@@ -4,7 +4,7 @@ import { CategoryRepository } from './category.repository';
 import { CategoryModel } from './category.model';
 
 @Injectable()
-export class CategoryCoreService {
+export class CategoryService {
 
     constructor(
         private readonly categoryRepository: CategoryRepository,
