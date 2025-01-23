@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { CategoryRepository } from './category.repository';
 import { CategoryModel } from './category.model';
+import { FavoriteCategoryResultDTO } from '../category.dto';
 
 @Injectable()
 export class CategoryService {
@@ -12,11 +13,27 @@ export class CategoryService {
     }
 
     /**
-     * @todo 카테고리 목록을 조회합니다.
+     * @todo 전체 카테고리 목록을 조회합니다.
      * @return 카테고리모델 목록
      */
     async getCategories() {
         return await this.categoryRepository.findCategories();
+    }
+
+    /**
+     * @todo 관심사 여부를 포함한 전체 카테고리 목록을 조회합니다.
+     * @return 카테고리모델 변형 목록
+     */
+    async getFavoriteCategories(userId: string) {
+        const results = await this.categoryRepository.findCategoriesByUserId(userId);
+
+        return results.map(({ categories, favorites }) => {
+            return {
+                categoryId: categories.categoryId,
+                name: categories.name,
+                isFavorite: !!favorites,
+            } as FavoriteCategoryResultDTO;
+        });
     }
 
     /**

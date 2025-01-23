@@ -23,7 +23,7 @@ export class DrizzleService {
         Logger.debug('Drizzle DB Init');
         const { url, authToken } = this.envService.getDBEnv();
         const client = createClient({ url, authToken });
-        this._db = drizzle(client);
+        this._db = drizzle(client, { casing: 'snake_case' });
     }
 
     get db() {

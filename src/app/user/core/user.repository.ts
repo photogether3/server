@@ -1,15 +1,15 @@
-import {Injectable} from "@nestjs/common";
-import {and, eq, isNull} from "drizzle-orm";
+import { Injectable } from '@nestjs/common';
+import { and, eq, isNull } from 'drizzle-orm';
 
-import {DrizzleService, users} from "src/shared/database";
+import { DrizzleService, users } from 'src/shared/database';
 
-import {UserModel} from "./user.model";
+import { UserModel } from './user.model';
 
 @Injectable()
 export class UserRepository {
 
     constructor(
-        private readonly drizzleService: DrizzleService
+        private readonly drizzleService: DrizzleService,
     ) {
     }
 
@@ -20,8 +20,8 @@ export class UserRepository {
             .where(
                 and(
                     eq(users.id, userId),
-                    isNull(users.deletedAt)
-                )
+                    isNull(users.deletedAt),
+                ),
             )
             .limit(1);
         if (results.length === 0) return null;
@@ -37,14 +37,14 @@ export class UserRepository {
             .where(
                 and(
                     eq(users.email, email),
-                    isNull(users.deletedAt)
-                )
+                    isNull(users.deletedAt),
+                ),
             )
             .limit(1);
+
         if (results.length === 0) return null;
 
-        const entity = results.shift();
-        return UserModel.fromDrizzleModel(entity);
+        return UserModel.fromDrizzleModel(results.shift());
     }
 
     async save(user: UserModel) {
@@ -53,7 +53,7 @@ export class UserRepository {
             .values(user.toPlainObject())
             .onConflictDoUpdate({
                 target: users.id,
-                set: user.toPlainObject()
+                set: user.toPlainObject(),
             });
     }
 }

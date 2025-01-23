@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { plainToInstance } from 'class-transformer';
 
 import { DiscordColors, DiscordWebHookService } from 'src/shared/third-party';
 
@@ -11,21 +10,25 @@ export class CategoryFacade {
 
     constructor(
         private readonly discordWebHook: DiscordWebHookService,
-        private readonly categoryCoreService: CategoryService,
+        private readonly categoryService: CategoryService,
     ) {
     }
 
     async getCategories() {
-        const results = await this.categoryCoreService.getCategories();
-        return plainToInstance(CategoryResultDTO, results);
+        const results = await this.categoryService.getCategories();
+
+        return results.map(x => ({
+            categoryId: x.categoryId,
+            name: x.name,
+        } as CategoryResultDTO));
     }
 
     async getFavorites(userId: string) {
-        return Promise.resolve(undefined);
+        return await this.categoryService.getFavoriteCategories(userId);
     }
 
     async create(dto: CreateCategoryDTO) {
-        await this.categoryCoreService.create(dto.name);
+        await this.categoryService.create(dto.name);
         await this.discordWebHook.sendMessage(`새로운 카테고리 [${dto.name}](이)가 생성되었어요 😊`, DiscordColors.SUCCESS);
     }
 }

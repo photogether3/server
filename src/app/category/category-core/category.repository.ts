@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { and, asc, inArray, isNull } from 'drizzle-orm';
+import { and, asc, eq, inArray, isNull } from 'drizzle-orm';
 
-import { categories, DrizzleService } from 'src/shared/database';
+import { categories, DrizzleService, favorites } from 'src/shared/database';
 
 import { CategoryModel } from './category.model';
 
@@ -24,6 +24,20 @@ export class CategoryRepository {
             });
 
         return results.map(x => CategoryModel.fromDrizzleModel(x));
+    }
+
+    async findCategoriesByUserId(userId: string) {
+        return await this.drizzleService.db
+            .select()
+            .from(categories)
+            .leftJoin(favorites, and(
+                eq(favorites.categoryId, categories.categoryId),
+                eq(favorites.userId, userId),
+            ))
+            .orderBy(asc(categories.name))
+            .catch(err => {
+                throw new InternalServerErrorException(err);
+            });
     }
 
     async findCategoriesByIds(categoryIds: string[]) {
@@ -56,4 +70,5 @@ export class CategoryRepository {
                 throw new InternalServerErrorException(err);
             });
     }
+
 }
