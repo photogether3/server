@@ -4,6 +4,7 @@ import { Logger } from '@nestjs/common';
 
 import { MainModule } from './main.module';
 import { EnvService } from './shared/env';
+import { apiReference } from '@scalar/nestjs-api-reference';
 
 async function bootstrap() {
     const app = await NestFactory.create(MainModule);
@@ -23,13 +24,23 @@ async function bootstrap() {
     const envService = app.get(EnvService);
 
     const config = new DocumentBuilder()
-        .setTitle('Alexandria Lib API')
-        .setDescription('Alexandria Lib API')
+        .setTitle('Alexandria Lib')
+        .setDescription('사진첩 덜어내기 API 문서')
         .addBearerAuth()
         .setVersion('1.0')
         .build();
-    const documentFactory = () => SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api', app, documentFactory);
+
+    const document = SwaggerModule.createDocument(app, config);
+    app.use(
+        '/reference',
+        apiReference({
+            theme: 'elysiajs',
+            spec: {
+                url: 'http://localhost:4200',
+                content: document,
+            },
+        }),
+    );
 
     const { name, port } = envService.getAppEnv();
     await app.listen(port ?? 8000, () => Logger.log(`[${name}] Server started on port ${port}`));
