@@ -1,7 +1,9 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Put } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import { Public } from '../../auth/public-api';
+import { toKSTDate } from 'src/shared/database';
+
+import { Public } from '../../auth/framework';
 
 import {
     IsEmailTakenResultDTO,
@@ -14,8 +16,7 @@ import {
     WithdrawDTO,
 } from '../domain';
 import { UserFacade } from './user.facade';
-import { UserParam } from './user.decorator';
-import { toKSTDate } from '../../../shared/database';
+import { UserParam } from '../framework';
 
 @Controller({ version: '1' })
 @ApiTags('사용자 정보')

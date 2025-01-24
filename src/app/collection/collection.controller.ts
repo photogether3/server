@@ -1,7 +1,8 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import { UserModel, UserParam } from '../user/public-api';
+import { UserParam } from '../user/framework';
+import { UserModel } from '../user/domain';
 
 import { CollectionPaginationDTO, CreateCollectionDTO, UpdateCollectionDTO } from './collection.dto';
 import { CollectionFacade } from './collection.facade';

@@ -19,5 +19,5 @@ import { FavoriteFacade } from './favorite/favorite.facade';
         FavoriteFacade,
     ],
 })
-export class CategoryAppModule {
+export class CategoryModule {
 }

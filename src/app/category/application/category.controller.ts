@@ -1,8 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import { Public } from '../../auth/public-api';
-import { UserModel, UserParam } from '../../user/public-api';
+import { Public } from '../../auth/framework';
+import { UserParam } from '../../user/framework';
+import { UserModel } from '../../user/domain';
 
 import { CategoryResultDTO, CategoryWithFavoriteStatusResultDTO, CreateCategoryDTO } from '../domain';
 import { CategoryFacade } from './category.facade';

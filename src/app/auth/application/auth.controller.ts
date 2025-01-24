@@ -3,13 +3,12 @@ import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagg
 
 import { JwtResourceDTO } from 'src/shared/jwt/types';
 
-import { UserModel, UserParam } from '../user/public-api';
+import { UserModel } from '../../user/domain';
+import { UserParam } from '../../user/framework';
 
 import { GenerateOtpDTO, LoginDTO, RegisterDTO, VerifyOtpDTO } from './auth.dto';
 import { AuthFacade } from './auth.facade';
-import { Public } from './auth.guard';
-import { ApiRefreshTokenHeader, RefreshToken } from './auth.decorator';
-
+import { ApiRefreshTokenHeader, Public, RefreshToken } from '../framework';
 
 @Controller({ version: '1' })
 @ApiTags('일반인증')

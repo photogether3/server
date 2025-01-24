@@ -1,1 +1,1 @@
-export * from './category-app.module';
+export * from './category.module';

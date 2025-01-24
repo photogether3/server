@@ -1,2 +1,1 @@
-export * from './user.decorator';
-export * from './user-app.module';
+export * from './user.module';

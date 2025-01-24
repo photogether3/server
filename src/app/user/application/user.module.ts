@@ -11,5 +11,5 @@ import { UserDomainModule } from '../domain';
     controllers: [UserController],
     providers: [UserFacade],
 })
-export class UserAppModule {
+export class UserModule {
 }

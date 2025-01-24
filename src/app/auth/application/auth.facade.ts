@@ -4,7 +4,7 @@ import { JwtUtilService } from 'src/shared/jwt';
 import { MailService } from 'src/shared/mail';
 import { DiscordColors, DiscordWebHookService } from 'src/shared/third-party';
 
-import { UserModel, UserService, UserTokenService } from '../user/public-api';
+import { UserModel, UserService, UserTokenService } from '../../user/domain';
 
 import { GenerateOtpDTO, LoginDTO, RegisterDTO, VerifyOtpDTO } from './auth.dto';
 

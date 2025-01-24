@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { RouterModule as NestRouterModule, Routes } from '@nestjs/core';
 
-import { AuthModule } from './app/auth';
-import { UserModule } from './app/user';
 import { CollectionModule } from './app/collection';
 import { PostModule } from './app/post';
 import { FileSystemModule } from './app/file-system';
-import { CategoryAppModule } from './app/category/application';
+import { AuthModule } from './app/auth/application';
+import { UserModule } from './app/user/application';
+import { CategoryModule } from './app/category/application/category.module';
 
 const routes: Routes = [
     {
@@ -19,7 +19,7 @@ const routes: Routes = [
     },
     {
         path: 'categories',
-        module: CategoryAppModule,
+        module: CategoryModule,
     },
     {
         path: 'collections',
@@ -40,7 +40,7 @@ const routes: Routes = [
         NestRouterModule.register(routes),
         AuthModule,
         UserModule,
-        CategoryAppModule,
+        CategoryModule,
         CollectionModule,
         PostModule,
         FileSystemModule,
