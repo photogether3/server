@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 
 import { CollectionController } from './collection.controller';
 import { CollectionFacade } from './collection.facade';
-import { CollectionCoreModule } from './collection-core/collection-core.module';
+import { CollectionDomainModule } from '../domain';
 
 @Module({
-    imports: [CollectionCoreModule],
+    imports: [CollectionDomainModule],
     controllers: [CollectionController],
     providers: [CollectionFacade],
 })

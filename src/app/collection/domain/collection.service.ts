@@ -4,7 +4,7 @@ import { CollectionModel, CreateCollectionParam } from './collection.model';
 import { CollectionRepository } from './collection.repository';
 
 @Injectable()
-export class CollectionCoreService {
+export class CollectionService {
 
     constructor(
         private readonly collectionRepository: CollectionRepository,

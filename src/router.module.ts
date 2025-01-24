@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { RouterModule as NestRouterModule, Routes } from '@nestjs/core';
 
-import { CollectionModule } from './app/collection';
+import { CollectionModule } from './app/collection/application';
 import { PostModule } from './app/post';
 import { FileSystemModule } from './app/file-system';
 import { AuthModule } from './app/auth/application';
 import { UserModule } from './app/user/application';
-import { CategoryModule } from './app/category/application/category.module';
+import { CategoryModule } from './app/category/application';
 
 const routes: Routes = [
     {

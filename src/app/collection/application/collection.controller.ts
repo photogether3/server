@@ -1,11 +1,11 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import { UserParam } from '../user/framework';
-import { UserModel } from '../user/domain';
+import { UserParam } from '../../user/framework';
+import { UserModel } from '../../user/domain';
 
-import { CollectionPaginationDTO, CreateCollectionDTO, UpdateCollectionDTO } from './collection.dto';
 import { CollectionFacade } from './collection.facade';
+import { CollectionPaginationDTO, CreateCollectionDTO, UpdateCollectionDTO } from '../domain';
 
 @Controller({ version: '1' })
 @ApiTags('사진첩')
