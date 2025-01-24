@@ -15,6 +15,7 @@ import {
 } from '../domain';
 import { UserFacade } from './user.facade';
 import { UserParam } from './user.decorator';
+import { toKSTDate } from '../../../shared/database';
 
 @Controller({ version: '1' })
 @ApiTags('사용자 정보')
@@ -38,7 +39,14 @@ export class UserController {
     @ApiOperation({ summary: '프로필 조회' })
     @ApiResponse({ type: ProfileResultDTO })
     async getProfile(@UserParam() user: UserModel) {
-        return ProfileResultDTO.from(user);
+        return {
+            id: user.id,
+            nickname: user.nickname,
+            bio: user.bio,
+            email: user.email,
+            createdAt: toKSTDate(user.createdAt),
+            updatedAt: toKSTDate(user.updatedAt),
+        } as ProfileResultDTO;
     }
 
     @Put('me')

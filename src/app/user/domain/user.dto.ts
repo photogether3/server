@@ -1,11 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, Length, Matches } from 'class-validator';
-import { plainToInstance } from 'class-transformer';
-
-import { toKSTDate } from 'src/shared/database';
 
 import { USER_RULES } from './rule';
-import { UserModel } from './user.model';
 
 export class UpdateProfileDTO {
     @IsNotEmpty()
@@ -87,14 +83,4 @@ export class ProfileResultDTO {
     @ApiProperty({ description: '수정일' })
     readonly updatedAt: Date;
 
-    static from(user: UserModel) {
-        return plainToInstance(ProfileResultDTO, {
-            id: user.id,
-            nickname: user.nickname,
-            bio: user.bio,
-            email: user.email,
-            createdAt: toKSTDate(user.createdAt),
-            updatedAt: toKSTDate(user.updatedAt),
-        } as ProfileResultDTO);
-    }
 }
