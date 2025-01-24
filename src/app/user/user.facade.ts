@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 
 import { DrizzleService } from 'src/shared/database';
 
-import { CategoryService, FavoriteService } from '../category/public-api';
-
 import { IsEmailTakenResultDTO, UpdatePasswordToOtpDTO, UpdateProfileDTO, WithdrawDTO } from './user.dto';
 import { UserService } from './core/user.service';
 import { UserTokenService } from './token/user-token.service';
@@ -14,8 +12,6 @@ export class UserFacade {
 
     constructor(
         private readonly drizzleService: DrizzleService,
-        private readonly categoryService: CategoryService,
-        private readonly favoriteService: FavoriteService,
         private readonly userService: UserService,
         private readonly userTokenService: UserTokenService,
     ) {
@@ -45,8 +41,6 @@ export class UserFacade {
     async updateProfile(user: UserModel, dto: UpdateProfileDTO) {
         await this.drizzleService.runInTx(async () => {
             await this.userService.updateProfile(user, dto.nickname, dto.bio);
-            await this.categoryService.verifyCategories(dto.categoryIds);
-            await this.favoriteService.creates(user.id, dto.categoryIds);
         });
     }
 }

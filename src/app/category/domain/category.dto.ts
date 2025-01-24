@@ -3,11 +3,15 @@ import { IsNotEmpty } from 'class-validator';
 
 export class CreateCategoryDTO {
     @IsNotEmpty()
+    @ApiProperty({ description: '카테고리 ID', example: 'CTGR' })
+    readonly categoryId: string;
+
+    @IsNotEmpty()
     @ApiProperty({ description: '카테고리 이름' })
     readonly name: string;
 }
 
-/** @Responses */
+//////////////////////////////////////Response////////////////////////////////////////
 
 export class CategoryResultDTO {
     @ApiProperty({ description: '카테고리 ID' })
@@ -17,7 +21,7 @@ export class CategoryResultDTO {
     readonly name: string;
 }
 
-export class FavoriteCategoryResultDTO {
+export class CategoryWithFavoriteStatusResultDTO {
     @ApiProperty({ description: '카테고리 ID' })
     readonly categoryId: string;
 

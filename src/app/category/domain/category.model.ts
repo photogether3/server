@@ -1,5 +1,4 @@
 import { plainToInstance } from 'class-transformer';
-import { nanoid } from 'nanoid';
 
 import { OrmModel } from 'src/shared/database';
 
@@ -8,9 +7,9 @@ export class CategoryModel extends OrmModel {
     readonly categoryId: string;
     readonly name: string;
 
-    static from(name: string) {
+    static from(categoryId: string, name: string) {
         return plainToInstance(CategoryModel, {
-            categoryId: nanoid(30),
+            categoryId,
             name,
             createdAt: new Date(),
             updatedAt: new Date(),
@@ -20,5 +19,12 @@ export class CategoryModel extends OrmModel {
 
     static fromDrizzleModel(param: any) {
         return plainToInstance(CategoryModel, param as CategoryModel);
+    }
+
+    withRemove() {
+        return plainToInstance(CategoryModel, {
+            ...this,
+            deletedAt: new Date(),
+        } as CategoryModel);
     }
 }

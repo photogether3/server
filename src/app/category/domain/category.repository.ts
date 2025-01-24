@@ -27,6 +27,22 @@ export class CategoryRepository {
     }
 
     async findCategoriesByUserId(userId: string) {
+        const results = await this.drizzleService.db
+            .select()
+            .from(categories)
+            .leftJoin(favorites, and(
+                eq(favorites.categoryId, categories.categoryId),
+            ))
+            .where(eq(favorites.userId, userId))
+            .orderBy(asc(categories.name))
+            .catch(err => {
+                throw new InternalServerErrorException(err);
+            });
+
+        return results.map(x => CategoryModel.fromDrizzleModel(x.categories));
+    }
+
+    async getCategoriesWithFavoriteStatus(userId: string) {
         return await this.drizzleService.db
             .select()
             .from(categories)
@@ -58,6 +74,24 @@ export class CategoryRepository {
         return results.map(x => CategoryModel.fromDrizzleModel(x));
     }
 
+
+    async findCategoryById(categoryId: string) {
+        const results = await this.drizzleService.db
+            .select()
+            .from(categories)
+            .where(and(
+                eq(categories.categoryId, categoryId),
+                isNull(categories.deletedAt),
+            ))
+            .limit(1)
+            .catch(err => {
+                throw new InternalServerErrorException(err);
+            });
+        if (results.length === 0) return null;
+
+        return CategoryModel.fromDrizzleModel(results.shift());
+    }
+
     async save(category: CategoryModel) {
         await this.drizzleService.db
             .insert(categories)
@@ -70,5 +104,5 @@ export class CategoryRepository {
                 throw new InternalServerErrorException(err);
             });
     }
-
 }
+

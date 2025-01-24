@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
 
-import { FavoriteService } from '../category/public-api';
-
 import { CreateCollectionDTO } from './collection.dto';
 import { CollectionCoreService } from './collection-core/collection-core.service';
 import { CreateCollectionParam } from './collection-core/collection.model';
@@ -10,7 +8,6 @@ import { CreateCollectionParam } from './collection-core/collection.model';
 export class CollectionFacade {
 
     constructor(
-        private readonly favoriteService: FavoriteService,
         private readonly collectionCoreService: CollectionCoreService,
     ) {
     }
