@@ -8,9 +8,9 @@ export class CreateCollectionDTO {
     @ApiProperty({ description: '제목' })
     readonly title: string;
 
-    @IsNotEmpty({ message: '관심사 ID를 입력해 주세요.' })
+    @IsNotEmpty({ message: '카테고리 ID를 입력해 주세요.' })
     @ApiProperty({ description: '관심사 ID' })
-    readonly favoriteId: string;
+    readonly categoryId: string;
 }
 
 export class UpdateCollectionDTO extends CreateCollectionDTO {

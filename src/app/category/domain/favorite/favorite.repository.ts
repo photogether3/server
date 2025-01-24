@@ -1,5 +1,5 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, or } from 'drizzle-orm';
 
 import { DrizzleService, favorites } from 'src/shared/database';
 
@@ -13,13 +13,22 @@ export class FavoriteRepository {
     ) {
     }
 
+    async findFavoritesByUserId(userId: string) {
+        const results = await this.drizzleService.db
+            .select()
+            .from(favorites)
+            .where(eq(favorites.userId, userId));
+
+        return results.map(x => FavoriteModel.fromDrizzleModel(x));
+    }
+
     async findFavorite(userId: string, favoriteId: string) {
         const results = await this.drizzleService.db
             .select()
             .from(favorites)
             .where(and(
                 eq(favorites.userId, userId),
-                eq(favorites.favoriteId, favoriteId),
+                eq(favorites.categoryId, favoriteId),
             ));
         if (results.length === 0) return null;
 
@@ -35,5 +44,18 @@ export class FavoriteRepository {
             .catch(err => {
                 throw new InternalServerErrorException(err);
             });
+    }
+
+    async removes(_favorites: FavoriteModel[]) {
+        const conditions = _favorites.map((fav) =>
+            and(
+                eq(favorites.userId, fav.userId),
+                eq(favorites.categoryId, fav.categoryId),
+            ),
+        );
+
+        await this.drizzleService.db
+            .delete(favorites)
+            .where(or(...conditions));
     }
 }

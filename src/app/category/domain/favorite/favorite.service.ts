@@ -12,13 +12,21 @@ export class FavoriteService {
     }
 
     /**
-     * @todo 카테고리ID 목록만큼 관심사모델을 생성, DB에 저장합니다.
-     * @return 관심사 모델 목록
+     * @todo 기존 데이터셋을 비교하여 새로운 데이터는 생성, 삭제되는 데이터는 제거 시킵니다.
+     * @warning 한 개 이상의 기능을 수행합니다.
+     * @warning 외부 트랜잭션 처리가 필요합니다.
      */
-    async creates(userId: string, categoryIds: string[]) {
-        const favorites = categoryIds.map(x => FavoriteModel.from(userId, x));
-        console.log(favorites);
-        await this.favoriteRepository.saves(favorites);
-        return favorites;
+    async createOrUpdate(userId: string, categoryIds: string[]) {
+        const oldFavorites = await this.favoriteRepository.findFavoritesByUserId(userId);
+        const newFavorites = categoryIds.map(x => FavoriteModel.from(userId, x));
+
+        const toDelete = oldFavorites
+            .filter(x => !newFavorites.some(y => x.categoryId === y.categoryId));
+
+        const toCreate = newFavorites
+            .filter(x => !oldFavorites.some(y => x.categoryId === y.categoryId));
+
+        if (toDelete.length > 0) await this.favoriteRepository.removes(toDelete);
+        if (toCreate.length > 0) await this.favoriteRepository.saves(toCreate);
     }
 }

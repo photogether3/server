@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { Public } from '../../auth/framework';
 import { UserParam } from '../../user/framework';
@@ -7,7 +7,6 @@ import { UserModel } from '../../user/domain';
 
 import { CategoryResultDTO, CategoryWithFavoriteStatusResultDTO, CreateCategoryDTO } from '../domain';
 import { CategoryFacade } from './category.facade';
-
 
 @Controller({ version: '1' })
 @ApiTags('카테고리')
@@ -27,6 +26,7 @@ export class CategoryController {
     }
 
     @Get('with-favorite-status')
+    @ApiBearerAuth()
     @ApiOperation({ summary: '전체 카테고리 별 관심사 여부 조회' })
     @ApiResponse({ type: [CategoryWithFavoriteStatusResultDTO] })
     async getCategoryWithFavoriteStatus(@UserParam() user: UserModel) {

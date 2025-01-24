@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common';
 
+import { DrizzleService } from 'src/shared/database';
+
 import { CategoryService, CreateOrUpdateFavoriteDTO, FavoriteService } from '../../domain';
 
 @Injectable()
 export class FavoriteFacade {
 
     constructor(
+        private readonly drizzleService: DrizzleService,
         private readonly categoryService: CategoryService,
         private readonly favoriteService: FavoriteService,
     ) {
@@ -16,7 +19,10 @@ export class FavoriteFacade {
     }
 
     async createOrUpdate(userId: string, dto: CreateOrUpdateFavoriteDTO) {
-        const { categoriesIds } = dto;
-        return this.favoriteService.creates(userId, categoriesIds);
+        return this.drizzleService.runInTx(async () => {
+            const { categoriesIds } = dto;
+            await this.categoryService.verifyCategories(categoriesIds);
+            return this.favoriteService.createOrUpdate(userId, categoriesIds);
+        });
     }
 }

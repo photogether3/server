@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Put } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { UserParam } from '../../../user/framework';
 import { UserModel } from '../../../user/domain';
@@ -9,6 +9,7 @@ import { FavoriteFacade } from './favorite.facade';
 
 @Controller({ path: 'favorites', version: '1' })
 @ApiTags('관심 카테고리')
+@ApiBearerAuth()
 export class FavoriteController {
 
     constructor(

@@ -33,7 +33,10 @@ export class CategoryRepository {
             .leftJoin(favorites, and(
                 eq(favorites.categoryId, categories.categoryId),
             ))
-            .where(eq(favorites.userId, userId))
+            .where(and(
+                eq(favorites.userId, userId),
+                isNull(categories.deletedAt)
+            ))
             .orderBy(asc(categories.name))
             .catch(err => {
                 throw new InternalServerErrorException(err);

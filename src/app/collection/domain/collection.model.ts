@@ -8,14 +8,14 @@ export class CollectionModel extends OrmModel {
     readonly collectionId: string;
     readonly title: string;
     readonly userId: string;
-    readonly favoriteId: string;
+    readonly categoryId: string;
 
     static from(param: CreateCollectionParam) {
         return plainToInstance(CollectionModel, {
             collectionId: nanoid(30),
             title: param.title,
             userId: param.userId,
-            favoriteId: param.favoriteId,
+            categoryId: param.categoryId,
             createdAt: new Date(),
             updatedAt: new Date(),
             deletedAt: null,
@@ -30,5 +30,5 @@ export class CollectionModel extends OrmModel {
 export interface CreateCollectionParam {
     title: string;
     userId: string;
-    favoriteId: string;
+    categoryId: string;
 }
