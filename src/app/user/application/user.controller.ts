@@ -52,7 +52,7 @@ export class UserController {
 
     @Put('me')
     @ApiBearerAuth()
-    @ApiOperation({ summary: '프로필 수정 [Draft]' })
+    @ApiOperation({ summary: '프로필 수정' })
     async updateProfile(@UserParam() user: UserModel, @Body() dto: UpdateProfileDTO) {
         return this.userFacade.updateProfile(user, dto);
     }
