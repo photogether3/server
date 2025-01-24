@@ -4,8 +4,8 @@ import { plainToInstance } from 'class-transformer';
 
 import { toKSTDate } from 'src/shared/database';
 
-import { USER_RULES } from './core/rule';
-import { UserModel } from './core/user.model';
+import { USER_RULES } from './rule';
+import { UserModel } from './user.model';
 
 export class UpdateProfileDTO {
     @IsNotEmpty()

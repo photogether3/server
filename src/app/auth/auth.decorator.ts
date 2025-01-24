@@ -18,7 +18,7 @@ export function ApiRefreshTokenHeader() {
 export const RefreshToken = createParamDecorator(
     (data: unknown, ctx: ExecutionContext) => {
         const request: Request = ctx.switchToHttp().getRequest();
-        const refreshToken: string = request.headers['x-refresh-token'];
+        const refreshToken: string = request.headers['x-refresh-user-token'];
         if (!refreshToken) {
             throw new UnauthorizedException('리프레시토큰이 유효하지 않습니다.');
         }

@@ -2,10 +2,15 @@ import { Injectable } from '@nestjs/common';
 
 import { DrizzleService } from 'src/shared/database';
 
-import { IsEmailTakenResultDTO, UpdatePasswordToOtpDTO, UpdateProfileDTO, WithdrawDTO } from './user.dto';
-import { UserService } from './core/user.service';
-import { UserTokenService } from './token/user-token.service';
-import { UserModel } from './core/user.model';
+import {
+    IsEmailTakenResultDTO,
+    UpdatePasswordToOtpDTO,
+    UpdateProfileDTO,
+    UserModel,
+    UserService,
+    UserTokenService,
+    WithdrawDTO,
+} from '../domain';
 
 @Injectable()
 export class UserFacade {
@@ -29,18 +34,18 @@ export class UserFacade {
         await this.userService.updatePassword(user, dto.password);
     }
 
+    async updateProfile(user: UserModel, dto: UpdateProfileDTO) {
+        await this.drizzleService.runInTx(async () => {
+            await this.userService.updateProfile(user, dto.nickname, dto.bio);
+        });
+    }
+
     async withdraw(user: UserModel, dto: WithdrawDTO) {
         await this.userService.verifyOtp(user, dto.otp);
 
         await this.drizzleService.runInTx(async () => {
             await this.userTokenService.removeByUserId(user.id);
             await this.userService.remove(user);
-        });
-    }
-
-    async updateProfile(user: UserModel, dto: UpdateProfileDTO) {
-        await this.drizzleService.runInTx(async () => {
-            await this.userService.updateProfile(user, dto.nickname, dto.bio);
         });
     }
 }
