@@ -20,7 +20,7 @@ import { RouterModule } from './router.module';
         JwtModule,
         MailModule,
         DiscordModule,
-        FirebaseModule,
+        FirebaseModule.forRoot(),
         RouterModule,
     ],
     providers: [

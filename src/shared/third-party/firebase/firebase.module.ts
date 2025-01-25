@@ -1,21 +1,35 @@
-import { Global, Logger, Module } from '@nestjs/common';
+import { DynamicModule, Logger, Module, Provider } from '@nestjs/common';
 
-import { cert, initializeApp, ServiceAccount } from 'firebase-admin/app';
+import { App, cert, initializeApp, ServiceAccount } from 'firebase-admin/app';
 
-@Global()
-@Module({
-    imports: [],
-    providers: [],
-    exports: [],
-})
+import { FirebaseStorageService } from './firebase-storage.service';
+
+@Module({})
 export class FirebaseModule {
 
-    constructor() {
-        import('./firebase-admin-sdk.json').then((serviceAccount) => {
-            initializeApp({
-                credential: cert(serviceAccount as ServiceAccount),
-            });
-            Logger.debug(`Init Firebase Module`);
-        });
+    static forRoot(): DynamicModule {
+        const firebaseAppProvider: Provider = {
+            provide: 'FIREBASE_APP',
+            useFactory: async (): Promise<App> => {
+                const serviceAccount = await import('./firebase-admin-sdk.json');
+                Logger.debug(`Init Firebase Module`);
+                return initializeApp({
+                    credential: cert(serviceAccount as ServiceAccount),
+                });
+            },
+        };
+
+        return {
+            module: FirebaseModule,
+            global: true,
+            imports: [],
+            providers: [
+                firebaseAppProvider,
+                FirebaseStorageService,
+            ],
+            exports: [
+                FirebaseStorageService,
+            ],
+        };
     }
 }
