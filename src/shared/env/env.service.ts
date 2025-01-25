@@ -38,6 +38,13 @@ export class EnvService {
     };
   }
 
+  getFirebaseEnv() {
+      return {
+          storageUrl: this.configService.get<string>('FIREBASE_STORAGE_URL'),
+          storageBucket: this.configService.get<string>('FIREBASE_STORAGE_BUCKET'),
+      }
+  }
+
   getJwtEnv() {
     return {
       secret: this.configService.get<string>('ACCESS_TOKEN_SECRET'),
