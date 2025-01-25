@@ -1,10 +1,10 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestFactory } from '@nestjs/core';
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
+import { apiReference } from '@scalar/nestjs-api-reference';
 
 import { MainModule } from './main.module';
 import { EnvService } from './shared/env';
-import { apiReference } from '@scalar/nestjs-api-reference';
 
 async function bootstrap() {
     const app = await NestFactory.create(MainModule);
@@ -20,6 +20,10 @@ async function bootstrap() {
 
     app.setGlobalPrefix('api');
     app.enableVersioning();
+
+    app.useGlobalPipes(new ValidationPipe({
+        transform: true,
+    }));
 
     const envService = app.get(EnvService);
 
