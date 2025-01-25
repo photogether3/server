@@ -6,6 +6,7 @@ import { JwtModule } from './shared/jwt';
 import { MailModule } from './shared/mail';
 import { DatabaseModule } from './shared/database';
 import { DiscordModule } from './shared/third-party';
+import { FirebaseModule } from './shared/third-party/firebase';
 
 import { AppMiddleware } from './system/middlewares';
 import { AppExceptionFilter } from './system/exceptions';
@@ -19,6 +20,7 @@ import { RouterModule } from './router.module';
         JwtModule,
         MailModule,
         DiscordModule,
+        FirebaseModule,
         RouterModule,
     ],
     providers: [
