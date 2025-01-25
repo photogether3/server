@@ -3,6 +3,7 @@ import { DynamicModule, Logger, Module, Provider } from '@nestjs/common';
 import { App, cert, initializeApp, ServiceAccount } from 'firebase-admin/app';
 
 import { FirebaseStorageService } from './firebase-storage.service';
+import { provideFirebaseApp } from './providers/firebase-app.provider';
 
 @Module({})
 export class FirebaseModule {
@@ -24,7 +25,7 @@ export class FirebaseModule {
             global: true,
             imports: [],
             providers: [
-                firebaseAppProvider,
+                provideFirebaseApp(),
                 FirebaseStorageService,
             ],
             exports: [
