@@ -8,6 +8,8 @@ import { FavoriteModel } from './favorite.model';
 @Injectable()
 export class FavoriteRepository {
 
+    async;
+
     constructor(
         private readonly drizzleService: DrizzleService,
     ) {
@@ -22,7 +24,7 @@ export class FavoriteRepository {
         return results.map(x => FavoriteModel.fromDrizzleModel(x));
     }
 
-    async findFavorite(userId: string, favoriteId: string) {
+    async findFavoritesByUserIdWithCategoryId(userId: string, favoriteId: string) {
         const results = await this.drizzleService.db
             .select()
             .from(favorites)

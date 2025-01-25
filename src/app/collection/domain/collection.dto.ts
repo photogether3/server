@@ -1,7 +1,32 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { IsIn, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import { Type } from 'class-transformer';
 
-import { PaginationDTO } from 'src/shared/base';
+import { CollectionSortBy, SortOrders } from '../infrastructure';
+
+export class GetCollectionsOptionDTO {
+    @IsOptional()
+    @IsNumber()
+    @Type(() => Number)
+    @ApiProperty({ description: '페이지 번호', default: 1 })
+    readonly page: number = 1;
+
+    @IsOptional()
+    @IsNumber()
+    @Type(() => Number)
+    @ApiProperty({ description: '페이지 번호', default: 10 })
+    readonly perPage: number = 10;
+
+    @IsOptional()
+    @IsIn(Object.values(CollectionSortBy))
+    @ApiProperty({ description: '정렬대상', enum: CollectionSortBy, default: CollectionSortBy.CREATED_AT })
+    readonly sortBy: CollectionSortBy;
+
+    @IsOptional()
+    @IsIn(Object.values(SortOrders))
+    @ApiProperty({ description: '정렬방식', enum: SortOrders, default: SortOrders.DESC })
+    readonly sortOrder: SortOrders = SortOrders.DESC;
+}
 
 export class CreateCollectionDTO {
     @IsNotEmpty({ message: '제목을 입력해 주세요.' })
@@ -15,22 +40,3 @@ export class CreateCollectionDTO {
 
 export class UpdateCollectionDTO extends CreateCollectionDTO {
 }
-
-/** @Response */
-
-export class CollectionResultDTO {
-    @ApiProperty({ description: '제목' })
-    readonly title: string;
-
-    @ApiProperty({ description: '전체 아이템 개수' })
-    readonly totalItemCount: number;
-
-    @ApiProperty({ description: '일부 이미지 URL' })
-    readonly imageUrls: string[];
-}
-
-export class CollectionPaginationDTO extends PaginationDTO<CollectionResultDTO> {
-    @ApiProperty({ type: [CollectionResultDTO] })
-    readonly items: CollectionResultDTO[];
-}
-

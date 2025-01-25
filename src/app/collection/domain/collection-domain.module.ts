@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { CollectionService } from './collection.service';
-import { CollectionRepository } from './collection.repository';
+import { CollectionRepository } from '../infrastructure';
 
 @Module({
     providers: [CollectionService, CollectionRepository],
