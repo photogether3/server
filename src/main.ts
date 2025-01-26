@@ -28,10 +28,10 @@ async function bootstrap() {
     const envService = app.get(EnvService);
 
     const config = new DocumentBuilder()
-        .setTitle('Alexandria Lib')
-        .setDescription('사진첩 덜어내기 API 문서')
+        .setTitle('사진첩 덜어내기')
+        .setDescription('API 문서')
         .addBearerAuth()
-        .setVersion('1.0')
+        .setVersion('0.7.8')
         .build();
 
     const document = SwaggerModule.createDocument(app, config);
