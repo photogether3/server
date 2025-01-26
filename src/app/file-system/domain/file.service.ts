@@ -16,6 +16,13 @@ export class FileService {
     }
 
     /**
+     * @todo 파일그룹을 조회합니다.
+     */
+    async getFileGroup(userId: string, fileGroupId: string) {
+        const result = await this.fileGroupRepository.findFileGroup(userId, fileGroupId);
+    }
+
+    /**
      * @todo 파일그룹모델과 하위 파일아이템들을 생성하고 DB에 저장합니다.
      * @warning 다수 도메인 모델의 생성을 제어합니다.
      * @warning 외부 트랜잭션 처리가 필요합니다.

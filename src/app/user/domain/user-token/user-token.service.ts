@@ -1,7 +1,7 @@
 import {BadRequestException, Injectable} from "@nestjs/common";
 
 import {UserTokenModel} from "./user-token.model";
-import {UserTokenRepository} from "./user-token.repository";
+import { UserTokenRepository } from '../../infrastructure';
 
 @Injectable()
 export class UserTokenService {

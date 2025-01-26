@@ -25,10 +25,6 @@ export class UserTokenModel extends OrmModel {
         } as UserTokenModel);
     }
 
-    static fromDrizzleModel(param: any) {
-        return plainToInstance(UserTokenModel, param as UserTokenModel);
-    }
-
     withUpdateRefreshToken(refreshToken: string) {
         const now = new Date();
         return plainToInstance(UserTokenModel, {

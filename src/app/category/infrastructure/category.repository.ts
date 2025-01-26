@@ -1,20 +1,14 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { and, asc, eq, inArray, isNull } from 'drizzle-orm';
 
-import { categories, DrizzleService, favorites } from 'src/shared/database';
-
-import { CategoryModel } from './category.model';
+import { categories, DrizzleRepository, favorites } from 'src/shared/database';
+import { CategoryModel } from '../domain/category.model';
 
 @Injectable()
-export class CategoryRepository {
-
-    constructor(
-        private readonly drizzleService: DrizzleService,
-    ) {
-    }
+export class CategoryRepository extends DrizzleRepository {
 
     async findCategories() {
-        const results = await this.drizzleService.db
+        const results = await this.db
             .select()
             .from(categories)
             .where(isNull(categories.deletedAt))
@@ -22,12 +16,13 @@ export class CategoryRepository {
             .catch(err => {
                 throw new InternalServerErrorException(err);
             });
-
-        return results.map(x => CategoryModel.fromDrizzleModel(x));
+        return results.map(x =>
+            this.fromDrizzleModel(CategoryModel, x),
+        );
     }
 
     async findCategoriesByUserId(userId: string) {
-        const results = await this.drizzleService.db
+        const results = await this.db
             .select()
             .from(categories)
             .leftJoin(favorites, and(
@@ -35,18 +30,20 @@ export class CategoryRepository {
             ))
             .where(and(
                 eq(favorites.userId, userId),
-                isNull(categories.deletedAt)
+                isNull(categories.deletedAt),
             ))
             .orderBy(asc(categories.name))
             .catch(err => {
                 throw new InternalServerErrorException(err);
             });
 
-        return results.map(x => CategoryModel.fromDrizzleModel(x.categories));
+        return results.map(x =>
+            this.fromDrizzleModel(CategoryModel, x.categories),
+        );
     }
 
     async getCategoriesWithFavoriteStatus(userId: string) {
-        return await this.drizzleService.db
+        return await this.db
             .select()
             .from(categories)
             .leftJoin(favorites, and(
@@ -60,7 +57,7 @@ export class CategoryRepository {
     }
 
     async findCategoriesByIds(categoryIds: string[]) {
-        const results = await this.drizzleService.db
+        const results = await this.db
             .select()
             .from(categories)
             .where(
@@ -74,12 +71,13 @@ export class CategoryRepository {
                 throw new InternalServerErrorException(err);
             });
 
-        return results.map(x => CategoryModel.fromDrizzleModel(x));
+        return results.map(x =>
+            this.fromDrizzleModel(CategoryModel, x),
+        );
     }
 
-
     async findCategoryById(categoryId: string) {
-        const results = await this.drizzleService.db
+        const result = await this.db
             .select()
             .from(categories)
             .where(and(
@@ -87,16 +85,16 @@ export class CategoryRepository {
                 isNull(categories.deletedAt),
             ))
             .limit(1)
+            .get()
             .catch(err => {
                 throw new InternalServerErrorException(err);
             });
-        if (results.length === 0) return null;
 
-        return CategoryModel.fromDrizzleModel(results.shift());
+        return this.fromDrizzleModel(CategoryModel, result);
     }
 
     async save(category: CategoryModel) {
-        await this.drizzleService.db
+        await this.db
             .insert(categories)
             .values(category.toPlainObject())
             .onConflictDoUpdate({

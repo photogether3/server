@@ -1,9 +1,21 @@
-import {Global, Module} from "@nestjs/common";
-import {DrizzleService} from "./drizzle.service";
+import { Global, Module } from '@nestjs/common';
+
+import { DrizzleTxService } from './drizzle-tx.service';
+import { DRIZZLE_ORM_TOKEN, provideDrizzleOrm } from './providers/drizzle.provider';
+import { DrizzleRepository } from './drizzle.repository';
 
 @Global()
 @Module({
-    providers: [DrizzleService],
-    exports: [DrizzleService],
+    providers: [
+        provideDrizzleOrm(),
+        DrizzleTxService,
+        DrizzleRepository,
+    ],
+    exports: [
+        DRIZZLE_ORM_TOKEN,
+        DrizzleTxService,
+        DrizzleRepository,
+    ],
 })
-export class DatabaseModule {}
+export class DatabaseModule {
+}

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { DrizzleService } from 'src/shared/database';
+import { DrizzleTxService } from 'src/shared/database';
 
 import { CategoryService, FavoriteService } from '../../category/domain';
 
@@ -13,13 +13,15 @@ import {
     UserTokenService,
     WithdrawDTO,
 } from '../domain';
+import { FileService } from '../../file-system/domain';
 
 @Injectable()
 export class UserFacade {
 
     constructor(
-        private readonly drizzleService: DrizzleService,
+        private readonly drizzleService: DrizzleTxService,
         private readonly categoryService: CategoryService,
+        private readonly fileService: FileService,
         private readonly favoriteService: FavoriteService,
         private readonly userService: UserService,
         private readonly userTokenService: UserTokenService,
@@ -43,6 +45,11 @@ export class UserFacade {
             await this.userService.updateProfile(user, dto.nickname, dto.bio);
             await this.categoryService.verifyCategories(dto.categoryIds);
             await this.favoriteService.createOrUpdate(user.id, dto.categoryIds);
+
+            if (dto?.fileGroupId) {
+                await this.fileService.getFileGroup(user.id, dto.fileGroupId);
+                // await this.fileService.getFileItem(user.id, dto.filePath);
+            }
         });
     }
 

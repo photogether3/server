@@ -22,10 +22,6 @@ export class CollectionModel extends OrmModel {
         } as CollectionModel);
     }
 
-    static fromDrizzleModel(param: any) {
-        return plainToInstance(CollectionModel, param as CollectionModel);
-    }
-
     withUpdate(title: string, categoryId: string) {
         return plainToInstance(CollectionModel, {
             ...this,

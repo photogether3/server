@@ -17,6 +17,9 @@ export class FileResultDTO {
     @ApiProperty({ description: '파일 URL' })
     readonly fileUrl: string;
 
+    @ApiProperty({ description: '파일 Path' })
+    readonly filePath: string;
+
     @ApiProperty({ description: '원본 파일 이름' })
     readonly originalFileName: string;
 

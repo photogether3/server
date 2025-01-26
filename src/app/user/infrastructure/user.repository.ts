@@ -1,20 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { and, eq, isNull } from 'drizzle-orm';
 
-import { DrizzleService, users } from 'src/shared/database';
+import { DrizzleRepository, users } from 'src/shared/database';
 
-import { UserModel } from './user.model';
+import { UserModel } from '../domain';
 
 @Injectable()
-export class UserRepository {
-
-    constructor(
-        private readonly drizzleService: DrizzleService,
-    ) {
-    }
+export class UserRepository extends DrizzleRepository {
 
     async findUserById(userId: string) {
-        const results = await this.drizzleService.db
+        const result = await this.db
             .select()
             .from(users)
             .where(
@@ -22,16 +17,12 @@ export class UserRepository {
                     eq(users.id, userId),
                     isNull(users.deletedAt),
                 ),
-            )
-            .limit(1);
-        if (results.length === 0) return null;
-
-        const entity = results.shift();
-        return UserModel.fromDrizzleModel(entity);
+            ).get();
+        return this.fromDrizzleModel(UserModel, result);
     }
 
     async findUserByEmail(email: string) {
-        const results = await this.drizzleService.db
+        const result = await this.db
             .select()
             .from(users)
             .where(
@@ -39,16 +30,12 @@ export class UserRepository {
                     eq(users.email, email),
                     isNull(users.deletedAt),
                 ),
-            )
-            .limit(1);
-
-        if (results.length === 0) return null;
-
-        return UserModel.fromDrizzleModel(results.shift());
+            ).get();
+        return this.fromDrizzleModel(UserModel, result);
     }
 
     async save(user: UserModel) {
-        await this.drizzleService.db
+        await this.db
             .insert(users)
             .values(user.toPlainObject())
             .onConflictDoUpdate({

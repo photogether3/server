@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { FavoriteModel } from './favorite.model';
-import { FavoriteRepository } from './favorite.repository';
+import { FavoriteRepository } from '../../infrastructure';
 
 @Injectable()
 export class FavoriteService {

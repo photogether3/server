@@ -5,7 +5,7 @@ import { extname } from 'path';
 
 import { FirebaseStorageService } from 'src/shared/third-party/firebase';
 import { EnvService } from 'src/shared/env';
-import { DrizzleService } from 'src/shared/database';
+import { DrizzleTxService } from 'src/shared/database';
 
 import { CreateFileDTO, FileResultDTO, FileService } from '../domain';
 
@@ -19,7 +19,7 @@ export class FileFacade {
 
     constructor(
         private readonly envService: EnvService,
-        private readonly drizzleService: DrizzleService,
+        private readonly drizzleService: DrizzleTxService,
         private readonly firebaseStorage: FirebaseStorageService,
         private readonly fileService: FileService,
     ) {
@@ -27,7 +27,7 @@ export class FileFacade {
     }
 
     async creates(userId: string, files: Express.Multer.File[]) {
-        await this.drizzleService.runInTx(async () => {
+        return await this.drizzleService.runInTx(async () => {
             const dtos = await this.uploadFiles(files);
             const fileGroup = await this.fileService.creates(userId, dtos);
 
@@ -35,6 +35,7 @@ export class FileFacade {
                 fileGroupId: fileGroup.fileGroupId,
                 originalFileName: dto.originalFileName,
                 fileUrl: `${this.publicUrl}/${dto.filePath}`,
+                filePath: dto.filePath,
                 rank: dto.rank,
             } as FileResultDTO));
         });

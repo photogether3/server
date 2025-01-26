@@ -16,10 +16,6 @@ export class FavoriteModel extends OrmModel {
         } as FavoriteModel);
     }
 
-    static fromDrizzleModel(param: any) {
-        return plainToInstance(FavoriteModel, param as FavoriteModel);
-    }
-
     withRemove() {
         const now = new Date();
         return plainToInstance(FavoriteModel, {
@@ -28,7 +24,3 @@ export class FavoriteModel extends OrmModel {
         } as FavoriteModel);
     }
 }
-
-/**
- * Param Interfaces
- */

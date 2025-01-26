@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, Length, Matches } from 'class-validator';
+import { IsNotEmpty, IsOptional, Length, Matches } from 'class-validator';
 
 import { USER_RULES } from './rule';
 
@@ -15,6 +15,10 @@ export class UpdateProfileDTO {
     @IsNotEmpty()
     @ApiProperty({ description: '카테고리 ID 목록' })
     readonly categoryIds: string[];
+
+    @IsOptional()
+    @ApiProperty({ description: '프로필 이미지 임시 파일 경로' })
+    readonly fileGroupId?: string;
 }
 
 export class UpdatePasswordToOtpDTO {

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { DrizzleService } from 'src/shared/database';
+import { DrizzleTxService } from 'src/shared/database';
 
 import { CategoryService, CreateOrUpdateFavoriteDTO, FavoriteService } from '../../domain';
 
@@ -8,7 +8,7 @@ import { CategoryService, CreateOrUpdateFavoriteDTO, FavoriteService } from '../
 export class FavoriteFacade {
 
     constructor(
-        private readonly drizzleService: DrizzleService,
+        private readonly drizzleService: DrizzleTxService,
         private readonly categoryService: CategoryService,
         private readonly favoriteService: FavoriteService,
     ) {

@@ -3,7 +3,7 @@ import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/
 import { CustomBadRequestException, CustomExceptions } from 'src/shared/error';
 
 import { UserModel } from './user.model';
-import { UserRepository } from './user.repository';
+import { UserRepository } from '../infrastructure';
 
 @Injectable()
 export class UserService {

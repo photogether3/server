@@ -1,11 +1,12 @@
-import {plainToInstance} from "class-transformer";
-import {nanoid} from "nanoid";
+import { plainToInstance } from 'class-transformer';
+import { nanoid } from 'nanoid';
 
-import {OrmModel} from "src/shared/database";
+import { OrmModel } from 'src/shared/database';
 
-import {comparePassword, generateOTP, generateRandomNickname, hashPassword} from "./utils";
+import { comparePassword, generateOTP, generateRandomNickname, hashPassword } from './utils';
 
 export class UserModel extends OrmModel {
+    static OTP_EXPIRED_TIME = 60 * 1000 * 5; // 5분
     readonly id: string;
     readonly email: string;
     readonly password: string;
@@ -14,8 +15,6 @@ export class UserModel extends OrmModel {
     readonly otp: string;
     readonly otpExpiryDate: Date;
     readonly isEmailVerified: boolean;
-
-    static OTP_EXPIRED_TIME = 60 * 1000 * 5; // 5분
 
     static from(param: Pick<UserModel, 'email' | 'password'>) {
         const now = new Date();
@@ -31,10 +30,6 @@ export class UserModel extends OrmModel {
             updatedAt: now,
             deletedAt: null,
         } as UserModel);
-    }
-
-    static fromDrizzleModel(param: any) {
-        return plainToInstance(UserModel, param as UserModel);
     }
 
     validatePassword(password: string) {
@@ -54,7 +49,7 @@ export class UserModel extends OrmModel {
             ...this,
             otp: generateOTP(),
             otpExpiryDate: new Date(Date.now() + UserModel.OTP_EXPIRED_TIME),
-            updatedAt: new Date()
+            updatedAt: new Date(),
         } as UserModel);
     }
 
@@ -63,7 +58,7 @@ export class UserModel extends OrmModel {
             ...this,
             otp: null,
             otpExpiryDate: null,
-            updatedAt: new Date()
+            updatedAt: new Date(),
         } as UserModel);
     }
 
@@ -71,7 +66,7 @@ export class UserModel extends OrmModel {
         return plainToInstance(UserModel, {
             ...this,
             isEmailVerified: true,
-            updatedAt: new Date()
+            updatedAt: new Date(),
         } as UserModel);
     }
 
@@ -79,7 +74,7 @@ export class UserModel extends OrmModel {
         return plainToInstance(UserModel, {
             ...this,
             password: hashPassword(password),
-            updatedAt: new Date()
+            updatedAt: new Date(),
         } as UserModel);
     }
 
@@ -87,8 +82,8 @@ export class UserModel extends OrmModel {
         const now = new Date();
         return plainToInstance(UserModel, {
             ...this,
-            email: this.email+ '__' + now.getTime(),
-            deletedAt: now
+            email: this.email + '__' + now.getTime(),
+            deletedAt: now,
         } as UserModel);
     }
 
@@ -97,7 +92,7 @@ export class UserModel extends OrmModel {
             ...this,
             nickname,
             bio,
-            updatedAt: new Date()
+            updatedAt: new Date(),
         });
     }
 }

@@ -1,44 +1,37 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { and, eq, or } from 'drizzle-orm';
 
-import { DrizzleService, favorites } from 'src/shared/database';
+import { DrizzleRepository, favorites } from 'src/shared/database';
 
-import { FavoriteModel } from './favorite.model';
+import { FavoriteModel } from '../domain/favorite/favorite.model';
 
 @Injectable()
-export class FavoriteRepository {
-
-    async;
-
-    constructor(
-        private readonly drizzleService: DrizzleService,
-    ) {
-    }
+export class FavoriteRepository extends DrizzleRepository {
 
     async findFavoritesByUserId(userId: string) {
-        const results = await this.drizzleService.db
+        const results = await this.db
             .select()
             .from(favorites)
             .where(eq(favorites.userId, userId));
 
-        return results.map(x => FavoriteModel.fromDrizzleModel(x));
+        return results.map(x =>
+            this.fromDrizzleModel(FavoriteModel, x),
+        );
     }
 
     async findFavoritesByUserIdWithCategoryId(userId: string, favoriteId: string) {
-        const results = await this.drizzleService.db
+        const result = await this.db
             .select()
             .from(favorites)
             .where(and(
                 eq(favorites.userId, userId),
                 eq(favorites.categoryId, favoriteId),
-            ));
-        if (results.length === 0) return null;
-
-        return FavoriteModel.fromDrizzleModel(results.shift());
+            )).get();
+        return this.fromDrizzleModel(FavoriteModel, result);
     }
 
     async saves(_favorites: FavoriteModel[]) {
-        await this.drizzleService.db
+        await this.db
             .insert(favorites)
             .values(
                 _favorites.map(favorite => favorite.toPlainObject()),
@@ -56,7 +49,7 @@ export class FavoriteRepository {
             ),
         );
 
-        await this.drizzleService.db
+        await this.db
             .delete(favorites)
             .where(or(...conditions));
     }

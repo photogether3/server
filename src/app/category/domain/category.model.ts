@@ -17,10 +17,6 @@ export class CategoryModel extends OrmModel {
         } as CategoryModel);
     }
 
-    static fromDrizzleModel(param: any) {
-        return plainToInstance(CategoryModel, param as CategoryModel);
-    }
-
     withRemove() {
         return plainToInstance(CategoryModel, {
             ...this,
