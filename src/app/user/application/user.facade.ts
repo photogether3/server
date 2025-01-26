@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { DrizzleTxService } from 'src/shared/database';
+import { DrizzleService } from 'src/shared/database';
 
 import { CategoryService, FavoriteService } from '../../category/domain';
 
@@ -19,7 +19,7 @@ import { FileService } from '../../file-system/domain';
 export class UserFacade {
 
     constructor(
-        private readonly drizzleService: DrizzleTxService,
+        private readonly drizzleService: DrizzleService,
         private readonly categoryService: CategoryService,
         private readonly fileService: FileService,
         private readonly favoriteService: FavoriteService,

@@ -1,6 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 
-import { DrizzleTxService } from './drizzle-tx.service';
+import { DrizzleService } from './drizzle.service';
 import { DRIZZLE_ORM_TOKEN, provideDrizzleOrm } from './providers/drizzle.provider';
 import { DrizzleRepository } from './drizzle.repository';
 
@@ -8,12 +8,12 @@ import { DrizzleRepository } from './drizzle.repository';
 @Module({
     providers: [
         provideDrizzleOrm(),
-        DrizzleTxService,
+        DrizzleService,
         DrizzleRepository,
     ],
     exports: [
         DRIZZLE_ORM_TOKEN,
-        DrizzleTxService,
+        DrizzleService,
         DrizzleRepository,
     ],
 })

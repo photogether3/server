@@ -5,7 +5,7 @@ import { extname } from 'path';
 
 import { FirebaseStorageService } from 'src/shared/third-party/firebase';
 import { EnvService } from 'src/shared/env';
-import { DrizzleTxService } from 'src/shared/database';
+import { DrizzleService } from 'src/shared/database';
 
 import { CreateFileDTO, FileResultDTO, FileService } from '../domain';
 
@@ -19,7 +19,7 @@ export class FileFacade {
 
     constructor(
         private readonly envService: EnvService,
-        private readonly drizzleService: DrizzleTxService,
+        private readonly drizzleService: DrizzleService,
         private readonly firebaseStorage: FirebaseStorageService,
         private readonly fileService: FileService,
     ) {
