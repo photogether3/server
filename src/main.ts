@@ -31,7 +31,7 @@ async function bootstrap() {
         .setTitle('사진첩 덜어내기')
         .setDescription('API 문서')
         .addBearerAuth()
-        .setVersion('0.7.8')
+        .setVersion('0.7.9')
         .build();
 
     const document = SwaggerModule.createDocument(app, config);
