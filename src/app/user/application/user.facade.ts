@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 
-import { DrizzleService } from 'src/shared/database';
+import { DrizzleService, toKSTDate } from 'src/shared/database';
 
 import { CategoryService, FavoriteService } from '../../category/domain';
+import { FileManager } from '../../file-system/domain';
 
 import {
     IsEmailTakenResultDTO,
+    ProfileResultDTO,
     UpdatePasswordToOtpDTO,
     UpdateProfileDTO,
     UserModel,
@@ -13,15 +15,15 @@ import {
     UserTokenService,
     WithdrawDTO,
 } from '../domain';
-import { FileService } from '../../file-system/domain';
+import { UpdateProfileWithFileDTO } from './dto';
 
 @Injectable()
 export class UserFacade {
 
     constructor(
         private readonly drizzleService: DrizzleService,
+        private readonly fileManager: FileManager,
         private readonly categoryService: CategoryService,
-        private readonly fileService: FileService,
         private readonly favoriteService: FavoriteService,
         private readonly userService: UserService,
         private readonly userTokenService: UserTokenService,
@@ -33,6 +35,23 @@ export class UserFacade {
         return { isDuplicated } as IsEmailTakenResultDTO;
     }
 
+    async getProfile(user: UserModel) {
+        let dto: ProfileResultDTO = {
+            id: user.id,
+            nickname: user.nickname,
+            bio: user.bio,
+            email: user.email,
+            createdAt: toKSTDate(user.createdAt),
+            updatedAt: toKSTDate(user.updatedAt),
+            imageUrl: null,
+        };
+        if (user.fileGroupId) {
+            const imageUrl = await this.fileManager.getFileUrl(user.id, user.fileGroupId);
+            dto = { ...dto, imageUrl };
+        }
+        return dto;
+    }
+
     async updatePassword(dto: UpdatePasswordToOtpDTO) {
         const user = await this.userService.getUserByEmailOrThrow(dto.email);
         await this.userService.verifyOtp(user, dto.otp);
@@ -40,16 +59,19 @@ export class UserFacade {
         await this.userService.updatePassword(user, dto.password);
     }
 
-    async updateProfile(user: UserModel, dto: UpdateProfileDTO) {
-        await this.drizzleService.runInTx(async () => {
-            await this.userService.updateProfile(user, dto.nickname, dto.bio);
-            await this.categoryService.verifyCategories(dto.categoryIds);
-            await this.favoriteService.createOrUpdate(user.id, dto.categoryIds);
+    async updateProfile(user: UserModel, _dto: UpdateProfileWithFileDTO) {
+        const { file, nickname, bio, categoryIds } = _dto;
 
-            if (dto?.fileGroupId) {
-                await this.fileService.getFileGroup(user.id, dto.fileGroupId);
-                // await this.fileService.getFileItem(user.id, dto.filePath);
+        await this.drizzleService.runInTx(async () => {
+            let updateProfileDto: UpdateProfileDTO = { nickname, bio, fileGroupId: null };
+            if (file) {
+                const { fileGroupId } = await this.fileManager.upload(user.id, file);
+                updateProfileDto = { ...updateProfileDto, fileGroupId };
             }
+            await this.userService.updateProfile(user, updateProfileDto);
+
+            await this.categoryService.verifyCategories(categoryIds);
+            await this.favoriteService.createOrUpdate(user.id, categoryIds);
         });
     }
 

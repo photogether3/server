@@ -74,7 +74,7 @@ export class CategoryService {
     async verifyCategories(categoryIds: string[]): Promise<void> {
         const results = await this.categoryRepository.findCategoriesByIds(categoryIds);
         if (results.length !== categoryIds.length) {
-            throw new BadRequestException('잘못된 데이터입니다.');
+            throw new BadRequestException('잘못된 카테고리 데이터입니다.');
         }
     }
 

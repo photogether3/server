@@ -4,13 +4,15 @@ import { CustomBadRequestException, CustomExceptions } from 'src/shared/error';
 
 import { UserModel } from './user.model';
 import { UserRepository } from '../infrastructure';
+import { UpdateProfileDTO } from './user.dto';
 
 @Injectable()
 export class UserService {
 
     constructor(
-        private readonly userRepository: UserRepository
-    ) {}
+        private readonly userRepository: UserRepository,
+    ) {
+    }
 
     /**
      * @todo 유저ID를 통해 유저를 조회합니다.
@@ -142,12 +144,11 @@ export class UserService {
      * - 닉네임, 자기소개
      * - 업데이트 이후 유저모델을 반환합니다.
      */
-    async updateProfile(user: UserModel, nickname: string, bio: string) {
-        user = user.withUpdateProfile(nickname, bio);
+    async updateProfile(user: UserModel, dto: UpdateProfileDTO) {
+        user = user.withUpdateProfile(dto);
         await this.userRepository.save(user);
         return user;
     }
-
 
     /**
      * @todo 유저의 비밀번호를 변경합니다.

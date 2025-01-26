@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { CreateFileDTO } from './file.dto';
 import { FileFlags } from './file.type';
@@ -20,6 +20,31 @@ export class FileService {
      */
     async getFileGroup(userId: string, fileGroupId: string) {
         const result = await this.fileGroupRepository.findFileGroup(userId, fileGroupId);
+    }
+
+    /**
+     * @todo 파일아이템을 조회합니다.
+     * @throw 파일아이템이 없으면 에러처리합니다.
+     */
+    async getFileItem(userId: string, fileGroupId: string) {
+        const result = await this.fileItemRepository.findFileItem(userId, fileGroupId);
+        if (!result) {
+            throw new BadRequestException('파일을 찾을 수 없습니다.');
+        }
+        return result;
+    }
+
+    /**
+     * @todo 파일그룹모델과 하위 파일아이템을 생성하고 DB에 저장합니다.
+     * @warning 다수 도메인 모델의 생성을 제어합니다.
+     * @warning 외부 트랜잭션 처리가 필요합니다.
+     */
+    async create(userId: string, metadata: CreateFileDTO, flag: FileFlags): Promise<FileGroupModel> {
+        const fileGroup = FileGroupModel.from(userId, flag);
+        const fileItem = FileItemModel.from(fileGroup.fileGroupId, userId, metadata);
+        await this.fileGroupRepository.save(fileGroup);
+        await this.fileItemRepository.save(fileItem);
+        return fileGroup;
     }
 
     /**

@@ -4,10 +4,12 @@ import { nanoid } from 'nanoid';
 import { OrmModel } from 'src/shared/database';
 
 import { comparePassword, generateOTP, generateRandomNickname, hashPassword } from './utils';
+import { UpdateProfileDTO } from './user.dto';
 
 export class UserModel extends OrmModel {
     static OTP_EXPIRED_TIME = 60 * 1000 * 5; // 5분
     readonly id: string;
+    readonly fileGroupId: string;
     readonly email: string;
     readonly password: string;
     readonly nickname: string;
@@ -87,11 +89,12 @@ export class UserModel extends OrmModel {
         } as UserModel);
     }
 
-    withUpdateProfile(nickname: string, bio: string) {
+    withUpdateProfile(dto: UpdateProfileDTO) {
         return plainToInstance(UserModel, {
             ...this,
-            nickname,
-            bio,
+            nickname: dto.nickname,
+            bio: dto.bio,
+            fileGroupId: dto.fileGroupId,
             updatedAt: new Date(),
         });
     }

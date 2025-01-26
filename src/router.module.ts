@@ -3,7 +3,6 @@ import { RouterModule as NestRouterModule, Routes } from '@nestjs/core';
 
 import { CollectionModule } from './app/collection/application';
 import { PostModule } from './app/post';
-import { FileModule } from './app/file-system/application';
 import { AuthModule } from './app/auth/application';
 import { UserModule } from './app/user/application';
 import { CategoryModule } from './app/category/application';
@@ -29,10 +28,6 @@ const routes: Routes = [
         path: 'posts',
         module: PostModule,
     },
-    {
-        path: 'files',
-        module: FileModule,
-    },
 ];
 
 @Module({
@@ -43,7 +38,6 @@ const routes: Routes = [
         CategoryModule,
         CollectionModule,
         PostModule,
-        FileModule,
     ],
 })
 export class RouterModule {

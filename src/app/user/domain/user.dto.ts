@@ -1,24 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, Length, Matches } from 'class-validator';
+import { IsNotEmpty, Length, Matches } from 'class-validator';
 
 import { USER_RULES } from './rule';
 
+
 export class UpdateProfileDTO {
-    @IsNotEmpty()
-    @ApiProperty({ description: '닉네임' })
     readonly nickname: string;
-
-    @IsNotEmpty()
-    @ApiProperty({ description: '자기소개' })
     readonly bio: string;
-
-    @IsNotEmpty()
-    @ApiProperty({ description: '카테고리 ID 목록' })
-    readonly categoryIds: string[];
-
-    @IsOptional()
-    @ApiProperty({ description: '프로필 이미지 임시 파일 경로' })
-    readonly fileGroupId?: string;
+    readonly fileGroupId: string;
 }
 
 export class UpdatePasswordToOtpDTO {
@@ -80,6 +69,9 @@ export class ProfileResultDTO {
 
     @ApiProperty({ description: '이메일' })
     readonly email: string;
+
+    @ApiProperty({ description: '프로필 이미지 URL' })
+    readonly imageUrl: string;
 
     @ApiProperty({ description: '생성일' })
     readonly createdAt: Date;

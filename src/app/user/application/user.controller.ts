@@ -1,7 +1,18 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Put } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-
-import { toKSTDate } from 'src/shared/database';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    HttpCode,
+    HttpStatus,
+    Param,
+    Patch,
+    Put,
+    UploadedFile,
+    UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { Public } from '../../auth/framework';
 
@@ -11,12 +22,12 @@ import {
     ResetDataDTO,
     UpdatePasswordDTO,
     UpdatePasswordToOtpDTO,
-    UpdateProfileDTO,
     UserModel,
     WithdrawDTO,
 } from '../domain';
 import { UserFacade } from './user.facade';
 import { UserParam } from '../framework';
+import { UpdateProfileWithFileDTO } from './dto';
 
 @Controller({ version: '1' })
 @ApiTags('사용자 정보')
@@ -40,20 +51,20 @@ export class UserController {
     @ApiOperation({ summary: '프로필 조회' })
     @ApiResponse({ type: ProfileResultDTO })
     async getProfile(@UserParam() user: UserModel) {
-        return {
-            id: user.id,
-            nickname: user.nickname,
-            bio: user.bio,
-            email: user.email,
-            createdAt: toKSTDate(user.createdAt),
-            updatedAt: toKSTDate(user.updatedAt),
-        } as ProfileResultDTO;
+        return await this.userFacade.getProfile(user);
     }
 
     @Put('me')
     @ApiBearerAuth()
     @ApiOperation({ summary: '프로필 수정' })
-    async updateProfile(@UserParam() user: UserModel, @Body() dto: UpdateProfileDTO) {
+    @ApiConsumes('multipart/form-data')
+    @UseInterceptors(FileInterceptor('file'))
+    async updateProfile(
+        @UserParam() user: UserModel,
+        @Body() dto: UpdateProfileWithFileDTO,
+        @UploadedFile() file: Express.Multer.File,
+    ) {
+        dto.file = file;
         return this.userFacade.updateProfile(user, dto);
     }
 
