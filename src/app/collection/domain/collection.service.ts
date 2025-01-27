@@ -1,8 +1,13 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 
-import { CollectionModel, CreateCollectionParam } from './collection.model';
-import { GetCollectionsOptionDTO, UpdateCollectionDTO } from './collection.dto';
-import { CollectionPaginationDTO, CollectionRepository, FindCollectionsOptionDTO } from '../infrastructure';
+import { CollectionModel } from './collection.model';
+import { CollectionRepository } from '../infrastructure';
+import {
+    CollectionPaginationDto,
+    CreateCollectionDto,
+    GetCollectionsOptionDto,
+    UpdateCollectionDto,
+} from './dto';
 
 @Injectable()
 export class CollectionService {
@@ -15,13 +20,10 @@ export class CollectionService {
     /**
      * @todo 유저의 사진첩목록을 페이징처리하여 조회합니다.
      */
-    async getCollections(userId: string, dto: GetCollectionsOptionDTO): Promise<CollectionPaginationDTO> {
-        const { page, perPage } = dto;
-        const offset = (page - 1) * perPage;
-        const params: FindCollectionsOptionDTO = { ...dto, userId, offset };
-        const result = await this.collectionRepository.findPagedCollections(params);
+    async getCollections(dto: GetCollectionsOptionDto): Promise<CollectionPaginationDto> {
+        const result = await this.collectionRepository.findPagedCollections(dto);
         if (result.totalItemCount === 0) {
-            return CollectionPaginationDTO.fromNullData();
+            return CollectionPaginationDto.fromNullData();
         }
         return result;
     }
@@ -41,7 +43,7 @@ export class CollectionService {
     /**
      * @todo 사진첩 모델을 생성하고 DB에 저장합니다.
      */
-    async create(param: CreateCollectionParam): Promise<CollectionModel> {
+    async create(param: CreateCollectionDto): Promise<CollectionModel> {
         const collection = CollectionModel.from(param);
         await this.collectionRepository.save(collection);
         return collection;
@@ -50,9 +52,8 @@ export class CollectionService {
     /**
      * @todo 사진첩 모델을 업데이트, DB에 저장합니다.
      */
-    async update(collection: CollectionModel, dto: UpdateCollectionDTO): Promise<CollectionModel> {
-        const { title, categoryId } = dto;
-        collection = collection.withUpdate(title, categoryId);
+    async update(collection: CollectionModel, dto: UpdateCollectionDto): Promise<CollectionModel> {
+        collection = collection.withUpdate(dto);
         await this.collectionRepository.save(collection);
         return collection;
     }

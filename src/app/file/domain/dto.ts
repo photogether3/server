@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateFileDTO {
+export class CreateFileDto {
     readonly originalFileName: string;
     readonly fileName: string;
     readonly filePath: string;
@@ -10,7 +10,7 @@ export class CreateFileDTO {
 
 /////////////////////////////Response////////////////////////////////////
 
-export class FileResultDTO {
+export class FileResultDto {
     @ApiProperty({ description: '파일 그룹 ID' })
     readonly fileGroupId: string;
 

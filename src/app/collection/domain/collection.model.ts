@@ -1,7 +1,9 @@
 import { plainToInstance } from 'class-transformer';
+import { nanoid } from 'nanoid';
 
 import { OrmModel } from 'src/shared/database';
-import { nanoid } from 'nanoid';
+
+import { CreateCollectionDto, UpdateCollectionDto } from './dto';
 
 export class CollectionModel extends OrmModel {
 
@@ -10,34 +12,24 @@ export class CollectionModel extends OrmModel {
     readonly userId: string;
     readonly categoryId: string;
 
-    static from(param: CreateCollectionParam) {
+    static from(dto: CreateCollectionDto) {
         return plainToInstance(CollectionModel, {
             collectionId: nanoid(30),
-            title: param.title,
-            userId: param.userId,
-            categoryId: param.categoryId,
+            title: dto.title,
+            userId: dto.userId,
+            categoryId: dto.categoryId,
             createdAt: new Date(),
             updatedAt: new Date(),
             deletedAt: null,
         } as CollectionModel);
     }
 
-    withUpdate(title: string, categoryId: string) {
+    withUpdate(dto: UpdateCollectionDto) {
         return plainToInstance(CollectionModel, {
             ...this,
-            title,
-            categoryId,
+            title: dto.title,
+            categoryId: dto.categoryId,
             updatedAt: new Date(),
         } as CollectionModel);
     }
-}
-
-/**
- * Param interfaces
- */
-
-export interface CreateCollectionParam {
-    title: string;
-    userId: string;
-    categoryId: string;
 }

@@ -5,8 +5,9 @@ import { Public } from '../../auth/framework';
 import { UserParam } from '../../user/framework';
 import { UserModel } from '../../user/domain';
 
-import { CategoryResultDTO, CategoryWithFavoriteStatusResultDTO, CreateCategoryDTO } from '../domain';
+import { CategoryResultDto, CategoryWithFavoriteStatusResultDto } from '../domain';
 import { CategoryFacade } from './category.facade';
+import { CreateCategoryBodyDto } from './request-dto';
 
 @Controller({ version: '1' })
 @ApiTags('카테고리')
@@ -20,7 +21,7 @@ export class CategoryController {
     @Public()
     @Get()
     @ApiOperation({ summary: '전체 카테고리 목록 조회' })
-    @ApiResponse({ type: [CategoryResultDTO] })
+    @ApiResponse({ type: [CategoryResultDto] })
     async getCategories() {
         return await this.categoryFacade.getCategories();
     }
@@ -28,7 +29,7 @@ export class CategoryController {
     @Get('with-favorite-status')
     @ApiBearerAuth()
     @ApiOperation({ summary: '전체 카테고리 별 관심사 여부 조회' })
-    @ApiResponse({ type: [CategoryWithFavoriteStatusResultDTO] })
+    @ApiResponse({ type: [CategoryWithFavoriteStatusResultDto] })
     async getCategoryWithFavoriteStatus(@UserParam() user: UserModel) {
         return await this.categoryFacade.getCategoryWithFavoriteStatus(user.id);
     }
@@ -36,8 +37,8 @@ export class CategoryController {
     @Public()
     @Post()
     @ApiOperation({ summary: '카테고리 생성 (테스트, 관리자용)' })
-    async create(@Body() dto: CreateCategoryDTO) {
-        return await this.categoryFacade.create(dto);
+    async create(@Body() body: CreateCategoryBodyDto) {
+        return await this.categoryFacade.create(body);
     }
 
     @Public()

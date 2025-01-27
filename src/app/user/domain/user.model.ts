@@ -4,7 +4,7 @@ import { nanoid } from 'nanoid';
 import { OrmModel } from 'src/shared/database';
 
 import { comparePassword, generateOTP, generateRandomNickname, hashPassword } from './utils';
-import { UpdateProfileDTO } from './user.dto';
+import { UpdateProfileDto } from './dto';
 
 export class UserModel extends OrmModel {
     static OTP_EXPIRED_TIME = 60 * 1000 * 5; // 5분
@@ -89,7 +89,7 @@ export class UserModel extends OrmModel {
         } as UserModel);
     }
 
-    withUpdateProfile(dto: UpdateProfileDTO) {
+    withUpdateProfile(dto: UpdateProfileDto) {
         return plainToInstance(UserModel, {
             ...this,
             nickname: dto.nickname,

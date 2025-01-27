@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 /** @Response */
 
-export abstract class PaginationDTO<T> {
+export abstract class PaginationDto<T> {
 
     @ApiProperty({ description: '총 아이템 개수' })
     readonly totalItemCount: number;
@@ -27,7 +27,7 @@ export abstract class PaginationDTO<T> {
             totalPageCount: 0,
             currentPage: 1,
             perPage: 0,
-            items: []
-        } as PaginationDTO<any>;
+            items: [],
+        } as PaginationDto<any>;
     }
 }

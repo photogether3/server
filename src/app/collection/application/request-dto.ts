@@ -2,9 +2,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsIn, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { CollectionSortBy, SortOrders } from '../infrastructure';
+import { CollectionSortBy, SortOrders } from '../domain';
 
-export class GetCollectionsOptionDTO {
+export class GetCollectionsQueryDto {
     @IsOptional()
     @IsNumber()
     @Type(() => Number)
@@ -28,7 +28,7 @@ export class GetCollectionsOptionDTO {
     readonly sortOrder: SortOrders = SortOrders.DESC;
 }
 
-export class CreateCollectionDTO {
+export class CreateCollectionBodyDto {
     @IsNotEmpty({ message: '제목을 입력해 주세요.' })
     @ApiProperty({ description: '제목' })
     readonly title: string;
@@ -38,5 +38,12 @@ export class CreateCollectionDTO {
     readonly categoryId: string;
 }
 
-export class UpdateCollectionDTO extends CreateCollectionDTO {
+export class UpdateCollectionBodyDto {
+    @IsNotEmpty({ message: '제목을 입력해 주세요.' })
+    @ApiProperty({ description: '제목' })
+    readonly title: string;
+
+    @IsNotEmpty({ message: '카테고리 ID를 입력해 주세요.' })
+    @ApiProperty({ description: '관심사 ID' })
+    readonly categoryId: string;
 }

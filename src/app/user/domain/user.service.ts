@@ -4,7 +4,7 @@ import { CustomBadRequestException, CustomExceptions } from 'src/shared/error';
 
 import { UserModel } from './user.model';
 import { UserRepository } from '../infrastructure';
-import { UpdateProfileDTO } from './user.dto';
+import { UpdateProfileDto } from './dto';
 
 @Injectable()
 export class UserService {
@@ -144,7 +144,7 @@ export class UserService {
      * - 닉네임, 자기소개
      * - 업데이트 이후 유저모델을 반환합니다.
      */
-    async updateProfile(user: UserModel, dto: UpdateProfileDTO) {
+    async updateProfile(user: UserModel, dto: UpdateProfileDto) {
         user = user.withUpdateProfile(dto);
         await this.userRepository.save(user);
         return user;

@@ -4,8 +4,9 @@ import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagg
 import { UserParam } from '../../../user/framework';
 import { UserModel } from '../../../user/domain';
 
-import { CategoryResultDTO, CreateOrUpdateFavoriteDTO } from '../../domain';
+import { CategoryResultDto } from '../../domain';
 import { FavoriteFacade } from './favorite.facade';
+import { CreateOrUpdateFavoriteBodyDto } from './request-dto';
 
 @Controller({ path: 'favorites', version: '1' })
 @ApiTags('관심 카테고리')
@@ -19,7 +20,7 @@ export class FavoriteController {
 
     @Get()
     @ApiOperation({ summary: '관심있는 카테고리 목록 조회' })
-    @ApiResponse({ type: [CategoryResultDTO] })
+    @ApiResponse({ type: [CategoryResultDto] })
     async getFavoriteCategories(@UserParam() user: UserModel) {
         return await this.favoriteFacade.getFavoriteCategories(user.id);
     }
@@ -28,8 +29,8 @@ export class FavoriteController {
     @ApiOperation({ summary: '관심 카테고리 일괄 등록 또는 변경' })
     async createOrUpdate(
         @UserParam() user: UserModel,
-        @Body() dto: CreateOrUpdateFavoriteDTO,
+        @Body() body: CreateOrUpdateFavoriteBodyDto,
     ) {
-        return await this.favoriteFacade.createOrUpdate(user.id, dto);
+        return await this.favoriteFacade.createOrUpdate(user.id, body);
     }
 }

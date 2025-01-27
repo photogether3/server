@@ -2,7 +2,7 @@ import { plainToInstance } from 'class-transformer';
 
 import { OrmModel } from 'src/shared/database';
 
-import { CreateFileDTO } from '../file.dto';
+import { CreateFileDto } from '../dto';
 
 export class FileItemModel extends OrmModel {
     readonly fileGroupId: string;
@@ -13,7 +13,7 @@ export class FileItemModel extends OrmModel {
     readonly originalFileName: string;
     readonly mimeType: string;
 
-    static from(fileGroupId: string, userId: string, dto: CreateFileDTO) {
+    static from(fileGroupId: string, userId: string, dto: CreateFileDto) {
         const now = new Date();
         return plainToInstance(FileItemModel, {
             fileGroupId,

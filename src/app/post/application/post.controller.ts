@@ -18,13 +18,13 @@ import { UserParam } from '../../user/framework';
 import { UserModel } from '../../user/domain';
 
 import {
-    CreatePostDTO,
-    GetPostsDTO,
-    MovePostsDTO,
+    CreatePostBodyDto,
+    GetPostsQueryDto,
+    MovePostsBodyDto,
     PostPaginationResultDTO,
-    RemovePostsDTO,
-    UpdatePostDTO,
-} from './post.dto';
+    RemovePostsBodyDto,
+    UpdatePostBodyDto,
+} from './request-dto';
 import { PostFacade } from './post.facade';
 
 @Controller({ version: '1' })
@@ -40,7 +40,7 @@ export class PostController {
     @Get()
     @ApiOperation({ summary: '게시물 목록 조회 [Draft]' })
     @ApiResponse({ type: PostPaginationResultDTO })
-    async getPosts(@Query() dto: GetPostsDTO) {
+    async getPosts(@Query() dto: GetPostsQueryDto) {
         return [];
     }
 
@@ -50,7 +50,7 @@ export class PostController {
     @UseInterceptors(FileInterceptor('file'))
     async create(
         @UserParam() user: UserModel,
-        @Body() dto: CreatePostDTO,
+        @Body() dto: CreatePostBodyDto,
         @UploadedFile() file: Express.Multer.File,
     ) {
         dto.file = file;
@@ -62,7 +62,7 @@ export class PostController {
     async update(
         @Param('postId') postId: string,
         @UserParam() user: UserModel,
-        @Body() dto: UpdatePostDTO,
+        @Body() dto: UpdatePostBodyDto,
     ) {
         return;
     }
@@ -71,7 +71,7 @@ export class PostController {
     @ApiOperation({ summary: '게시물 단건/일괄 다른 사진첩으로 이동 [Draft]' })
     async moveToOtherCollection(
         @UserParam() user: UserModel,
-        @Body() dto: MovePostsDTO,
+        @Body() dto: MovePostsBodyDto,
     ) {
         return;
     }
@@ -80,7 +80,7 @@ export class PostController {
     @ApiOperation({ summary: '게시물 단건/일괄 삭제 [Draft]' })
     async remove(
         @UserParam() user: UserModel,
-        @Body() dto: RemovePostsDTO,
+        @Body() dto: RemovePostsBodyDto,
     ) {
         return;
     }

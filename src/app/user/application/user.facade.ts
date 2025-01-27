@@ -6,16 +6,14 @@ import { CategoryService, FavoriteService } from '../../category/domain';
 import { FileManager } from '../../file/application';
 
 import {
-    IsEmailTakenResultDTO,
-    ProfileResultDTO,
-    UpdatePasswordToOtpDTO,
-    UpdateProfileDTO,
+    IsEmailTakenResultDto,
+    ProfileResultDto,
+    UpdateProfileDto,
     UserModel,
     UserService,
     UserTokenService,
-    WithdrawDTO,
 } from '../domain';
-import { UpdateProfileWithFileDTO } from './dto';
+import { UpdatePasswordToOtpBodyDto, UpdateProfileBodyDto, WithdrawBodyDto } from './request-dto';
 
 @Injectable()
 export class UserFacade {
@@ -32,11 +30,11 @@ export class UserFacade {
 
     async isEmailTaken(email: string) {
         const isDuplicated = await this.userService.isEmailTaken(email);
-        return { isDuplicated } as IsEmailTakenResultDTO;
+        return { isDuplicated } as IsEmailTakenResultDto;
     }
 
     async getProfile(user: UserModel) {
-        let dto: ProfileResultDTO = {
+        let dto: ProfileResultDto = {
             id: user.id,
             nickname: user.nickname,
             bio: user.bio,
@@ -52,18 +50,18 @@ export class UserFacade {
         return dto;
     }
 
-    async updatePassword(dto: UpdatePasswordToOtpDTO) {
-        const user = await this.userService.getUserByEmailOrThrow(dto.email);
-        await this.userService.verifyOtp(user, dto.otp);
+    async updatePassword(body: UpdatePasswordToOtpBodyDto) {
+        const user = await this.userService.getUserByEmailOrThrow(body.email);
+        await this.userService.verifyOtp(user, body.otp);
         await this.userService.updateOtp(user, true);
-        await this.userService.updatePassword(user, dto.password);
+        await this.userService.updatePassword(user, body.password);
     }
 
-    async updateProfile(user: UserModel, _dto: UpdateProfileWithFileDTO) {
-        const { file, nickname, bio, categoryIds } = _dto;
+    async updateProfile(user: UserModel, body: UpdateProfileBodyDto) {
+        const { file, nickname, bio, categoryIds } = body;
 
         await this.drizzleService.runInTx(async () => {
-            let updateProfileDto: UpdateProfileDTO = { nickname, bio, fileGroupId: null };
+            let updateProfileDto: UpdateProfileDto = { nickname, bio, fileGroupId: null };
             if (file) {
                 const { fileGroupId } = await this.fileManager.upload(user.id, file);
                 updateProfileDto = { ...updateProfileDto, fileGroupId };
@@ -75,8 +73,8 @@ export class UserFacade {
         });
     }
 
-    async withdraw(user: UserModel, dto: WithdrawDTO) {
-        await this.userService.verifyOtp(user, dto.otp);
+    async withdraw(user: UserModel, body: WithdrawBodyDto) {
+        await this.userService.verifyOtp(user, body.otp);
 
         await this.drizzleService.runInTx(async () => {
             await this.userTokenService.removeByUserId(user.id);

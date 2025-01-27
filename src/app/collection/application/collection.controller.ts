@@ -5,8 +5,8 @@ import { UserParam } from '../../user/framework';
 import { UserModel } from '../../user/domain';
 
 import { CollectionFacade } from './collection.facade';
-import { CreateCollectionDTO, GetCollectionsOptionDTO, UpdateCollectionDTO } from '../domain';
-import { CollectionPaginationDTO } from '../infrastructure';
+import { CreateCollectionBodyDto, GetCollectionsQueryDto, UpdateCollectionBodyDto } from './request-dto';
+import { CollectionPaginationDto } from '../domain';
 
 @Controller({ version: '1' })
 @ApiTags('사진첩')
@@ -20,21 +20,21 @@ export class CollectionController {
 
     @Get()
     @ApiOperation({ summary: '사진첩 목록 조회' })
-    @ApiResponse({ type: CollectionPaginationDTO })
+    @ApiResponse({ type: CollectionPaginationDto })
     async getCollections(
         @UserParam() user: UserModel,
-        @Query() dto: GetCollectionsOptionDTO,
+        @Query() body: GetCollectionsQueryDto,
     ) {
-        return await this.collectionFacade.getCollections(user.id, dto);
+        return await this.collectionFacade.getCollections(user.id, body);
     }
 
     @Post()
     @ApiOperation({ summary: '사진첩 생성' })
     async create(
         @UserParam() user: UserModel,
-        @Body() dto: CreateCollectionDTO,
+        @Body() body: CreateCollectionBodyDto,
     ) {
-        return this.collectionFacade.create(user.id, dto);
+        return this.collectionFacade.create(user.id, body);
     }
 
     @Put(':collectionId')
@@ -42,8 +42,8 @@ export class CollectionController {
     async update(
         @UserParam() user: UserModel,
         @Param('collectionId') collectionId: string,
-        @Body() dto: UpdateCollectionDTO,
+        @Body() body: UpdateCollectionBodyDto,
     ) {
-        return this.collectionFacade.update(user.id, collectionId, dto);
+        return this.collectionFacade.update(user.id, collectionId, body);
     }
 }

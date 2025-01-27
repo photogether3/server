@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { USER_RULES } from '../../user/domain';
 
-export class LoginDTO {
+export class LoginBodyDto {
     @IsNotEmpty({ message: '이메일은 필수 입력 항목입니다.' })
     @Matches(USER_RULES.email.regex, { message: USER_RULES.email.regexErrMsg })
     @ApiProperty({ description: '이메일', example: 'test@gmail.com' })
@@ -14,7 +14,7 @@ export class LoginDTO {
     readonly password: string;
 }
 
-export class RegisterDTO {
+export class RegisterBodyDto {
 
     @IsNotEmpty({ message: '이메일은 필수 입력 항목입니다.' })
     @Matches(USER_RULES.email.regex, { message: USER_RULES.email.regexErrMsg })
@@ -28,7 +28,7 @@ export class RegisterDTO {
     readonly password: string;
 }
 
-export class GenerateOtpDTO {
+export class GenerateOtpBodyDto {
 
     @IsNotEmpty({ message: '이메일은 필수 입력 항목입니다.' })
     @Matches(USER_RULES.email.regex, { message: USER_RULES.email.regexErrMsg })
@@ -36,7 +36,7 @@ export class GenerateOtpDTO {
     readonly email: string;
 }
 
-export class VerifyOtpDTO {
+export class VerifyOtpBodyDto {
 
     @IsNotEmpty({ message: '이메일은 필수 입력 항목입니다.' })
     @Matches(USER_RULES.email.regex, { message: USER_RULES.email.regexErrMsg })

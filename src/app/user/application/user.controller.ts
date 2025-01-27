@@ -16,18 +16,10 @@ import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '
 
 import { Public } from '../../auth/framework';
 
-import {
-    IsEmailTakenResultDTO,
-    ProfileResultDTO,
-    ResetDataDTO,
-    UpdatePasswordDTO,
-    UpdatePasswordToOtpDTO,
-    UserModel,
-    WithdrawDTO,
-} from '../domain';
+import { IsEmailTakenResultDto, ProfileResultDto, UserModel } from '../domain';
 import { UserFacade } from './user.facade';
+import { ResetDataBodyDto, UpdatePasswordBodyDto, UpdatePasswordToOtpBodyDto, UpdateProfileBodyDto, WithdrawBodyDto } from './request-dto';
 import { UserParam } from '../framework';
-import { UpdateProfileWithFileDTO } from './dto';
 
 @Controller({ version: '1' })
 @ApiTags('사용자 정보')
@@ -41,7 +33,7 @@ export class UserController {
     @Public()
     @Get('emails/:email/duplicated')
     @ApiOperation({ summary: '이메일 중복 검증' })
-    @ApiResponse({ type: IsEmailTakenResultDTO })
+    @ApiResponse({ type: IsEmailTakenResultDto })
     async isEmailTaken(@Param('email') email: string) {
         return this.userFacade.isEmailTaken(email);
     }
@@ -49,7 +41,7 @@ export class UserController {
     @Get('me')
     @ApiBearerAuth()
     @ApiOperation({ summary: '프로필 조회' })
-    @ApiResponse({ type: ProfileResultDTO })
+    @ApiResponse({ type: ProfileResultDto })
     async getProfile(@UserParam() user: UserModel) {
         return await this.userFacade.getProfile(user);
     }
@@ -61,24 +53,24 @@ export class UserController {
     @UseInterceptors(FileInterceptor('file'))
     async updateProfile(
         @UserParam() user: UserModel,
-        @Body() dto: UpdateProfileWithFileDTO,
+        @Body() body: UpdateProfileBodyDto,
         @UploadedFile() file: Express.Multer.File,
     ) {
-        dto.file = file;
-        return this.userFacade.updateProfile(user, dto);
+        body.file = file;
+        return this.userFacade.updateProfile(user, body);
     }
 
     @Public()
     @Patch('password')
     @ApiOperation({ summary: 'OTP인증 후 비밀번호 변경' })
-    async updatePasswordFromOtp(@Body() dto: UpdatePasswordToOtpDTO) {
-        await this.userFacade.updatePassword(dto);
+    async updatePasswordFromOtp(@Body() body: UpdatePasswordToOtpBodyDto) {
+        await this.userFacade.updatePassword(body);
     }
 
     @Patch('me/password')
     @ApiBearerAuth()
     @ApiOperation({ summary: '비밀번호 변경 [Draft]' })
-    async updatePassword(@Body() dto: UpdatePasswordDTO) {
+    async updatePassword(@Body() body: UpdatePasswordBodyDto) {
         return;
     }
 
@@ -86,7 +78,7 @@ export class UserController {
     @ApiBearerAuth()
     @HttpCode(HttpStatus.NO_CONTENT)
     @ApiOperation({ summary: 'OTP 인증 후 기록초기화 [Draft]' })
-    async resetData(@UserParam() user: UserModel, @Body() dto: ResetDataDTO) {
+    async resetData(@UserParam() user: UserModel, @Body() body: ResetDataBodyDto) {
         return;
     }
 
@@ -94,7 +86,7 @@ export class UserController {
     @ApiBearerAuth()
     @HttpCode(HttpStatus.NO_CONTENT)
     @ApiOperation({ summary: 'OTP 인증 후 회원탈퇴 [Draft]' })
-    async withdraw(@UserParam() user: UserModel, @Body() dto: WithdrawDTO) {
-        await this.userFacade.withdraw(user, dto);
+    async withdraw(@UserParam() user: UserModel, @Body() body: WithdrawBodyDto) {
+        await this.userFacade.withdraw(user, body);
     }
 }

@@ -6,7 +6,7 @@ import { JwtResourceDTO } from 'src/shared/jwt/types';
 import { UserModel } from '../../user/domain';
 import { UserParam } from '../../user/framework';
 
-import { GenerateOtpDTO, LoginDTO, RegisterDTO, VerifyOtpDTO } from './auth.dto';
+import { GenerateOtpBodyDto, LoginBodyDto, RegisterBodyDto, VerifyOtpBodyDto } from './request-dto';
 import { AuthFacade } from './auth.facade';
 import { ApiRefreshTokenHeader, Public, RefreshToken } from '../framework';
 
@@ -24,30 +24,30 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: '로그인' })
     @ApiResponse({ type: JwtResourceDTO })
-    async login(@Body() dto: LoginDTO) {
-        return await this.authFacade.login(dto);
+    async login(@Body() body: LoginBodyDto) {
+        return await this.authFacade.login(body);
     }
 
     @Public()
     @Post('register')
     @ApiOperation({ summary: '회원가입' })
-    async register(@Body() dto: RegisterDTO) {
-        return await this.authFacade.register(dto);
+    async register(@Body() body: RegisterBodyDto) {
+        return await this.authFacade.register(body);
     }
 
     @Public()
     @Post('otp/generate')
     @ApiOperation({ summary: 'OTP 발급' })
-    async generateOtp(@Body() dto: GenerateOtpDTO) {
-        return await this.authFacade.generateOtp(dto);
+    async generateOtp(@Body() body: GenerateOtpBodyDto) {
+        return await this.authFacade.generateOtp(body);
     }
 
     @Public()
     @Post('otp/verify')
     @ApiOperation({ summary: 'OTP 검증 및 토큰 발급' })
     @ApiResponse({ type: JwtResourceDTO })
-    async verifyOtp(@Body() dto: VerifyOtpDTO) {
-        return await this.authFacade.verifyOtp(dto);
+    async verifyOtp(@Body() body: VerifyOtpBodyDto) {
+        return await this.authFacade.verifyOtp(body);
     }
 
     @Public()

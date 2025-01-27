@@ -3,8 +3,7 @@ import { and, eq, sql } from 'drizzle-orm';
 
 import { collections, DrizzleRepository } from 'src/shared/database';
 
-import { CollectionPaginationDTO, CollectionResultDTO, FindCollectionsOptionDTO } from './dto';
-import { CollectionModel } from '../domain';
+import { CollectionModel, CollectionPaginationDto, CollectionResultDto, GetCollectionsOptionDto } from '../domain';
 
 @Injectable()
 export class CollectionRepository extends DrizzleRepository {
@@ -12,7 +11,7 @@ export class CollectionRepository extends DrizzleRepository {
     /**
      * @warning 다른 도메인 모듈의 테이블을 참조합니다.
      */
-    async findPagedCollections(dto: FindCollectionsOptionDTO) {
+    async findPagedCollections(dto: GetCollectionsOptionDto) {
         const { userId, perPage, page, offset, sortOrder, sortBy } = dto;
 
         // @formatter:off
@@ -32,7 +31,7 @@ export class CollectionRepository extends DrizzleRepository {
             imageUrls: [],
             title: x.title,
             totalItemCount: 0,
-        } as CollectionResultDTO));
+        } as CollectionResultDto));
 
         return {
             totalPageCount,
@@ -40,7 +39,7 @@ export class CollectionRepository extends DrizzleRepository {
             currentPage: page,
             perPage,
             items,
-        } as CollectionPaginationDTO;
+        } as CollectionPaginationDto;
     }
 
     async findCollection(userId:string, collectionId:string) {

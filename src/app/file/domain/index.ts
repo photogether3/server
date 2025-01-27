@@ -1,4 +1,4 @@
-export * from './file.dto';
+export * from './dto';
 export * from './file-domain.module';
 export * from './file.service';
 export * from './models/file-group.model';

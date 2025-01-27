@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import { PaginationDTO, RequestScopes } from 'src/shared/base';
+import { PaginationDto, RequestScopes } from 'src/shared/base';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 
-export class GetPostsDTO {
+export class GetPostsQueryDto {
     @ApiProperty({ description: '조회범위', enum: RequestScopes, default: RequestScopes.ALL })
     readonly scope: RequestScopes = RequestScopes.ALL;
 }
@@ -18,7 +18,7 @@ export class CreatePost__Metadata {
     readonly isPublic: boolean;
 }
 
-export class UpdatePostDTO {
+export class UpdatePostBodyDto {
     @IsOptional()
     @ApiProperty({ description: '제목', example: '제목입니다.' })
     readonly title: string;
@@ -40,19 +40,19 @@ export class UpdatePostDTO {
     file: Express.Multer.File;
 }
 
-export class CreatePostDTO extends UpdatePostDTO {
+export class CreatePostBodyDto extends UpdatePostBodyDto {
     @IsNotEmpty()
     @ApiProperty({ description: '사진첩 ID' })
     readonly collectionId: string;
 }
 
-export class MovePostsDTO {
+export class MovePostsBodyDto {
     @IsNotEmpty()
     @ApiProperty({ description: '사진첩 ID 목록' })
     readonly collectionIds: string[];
 }
 
-export class RemovePostsDTO extends MovePostsDTO {
+export class RemovePostsBodyDto extends MovePostsBodyDto {
 }
 
 /////////////////////////////////////Response////////////////////////////////////////
@@ -81,7 +81,7 @@ export class PostResult__Collection {
     readonly title: boolean;
 }
 
-export class PostResultDTO {
+export class PostResultDto {
     @ApiProperty({ description: '게시물 ID' })
     readonly postId: string;
 
@@ -107,7 +107,7 @@ export class PostResultDTO {
     readonly metadataList: CreatePost__Metadata[];
 }
 
-export class PostPaginationResultDTO extends PaginationDTO<PostResultDTO> {
-    @ApiProperty({ type: [PostResultDTO] })
-    readonly items: PostResultDTO[];
+export class PostPaginationResultDTO extends PaginationDto<PostResultDto> {
+    @ApiProperty({ type: [PostResultDto] })
+    readonly items: PostResultDto[];
 }

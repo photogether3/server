@@ -6,7 +6,7 @@ import { nanoid } from 'nanoid';
 import { FirebaseStorageService } from 'src/shared/third-party/firebase';
 import { EnvService } from 'src/shared/env';
 
-import { CreateFileDTO, FileGroupModel, FileService } from '../domain';
+import { CreateFileDto, FileGroupModel, FileService } from '../domain';
 import { FileFlags } from '../domain/file.type';
 
 @Injectable()
@@ -52,6 +52,6 @@ export class FileManager {
             filePath: fullPath,
             mimeType,
             rank,
-        } as CreateFileDTO;
+        } as CreateFileDto;
     }
 }

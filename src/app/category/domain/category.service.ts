@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { CategoryModel } from './category.model';
-import { CategoryResultDTO, CategoryWithFavoriteStatusResultDTO, CreateCategoryDTO } from './category.dto';
+import { CategoryResultDto, CategoryWithFavoriteStatusResultDto } from './dto';
 import { CategoryRepository } from '../infrastructure';
 
 @Injectable()
@@ -22,36 +22,36 @@ export class CategoryService {
     /**
      * @todo 가공된 카테고리 목록을 조회합니다.
      */
-    async getCategoryResults(): Promise<CategoryResultDTO[]> {
+    async getCategoryResults(): Promise<CategoryResultDto[]> {
         const results = await this.categoryRepository.findCategories();
         return results.map(x => ({
             categoryId: x.categoryId,
             name: x.name,
-        }) as CategoryResultDTO);
+        }) as CategoryResultDto);
     }
 
     /**
      * @todo 유저의 관심있는 카테고리 목록을 조회합니다.
      */
-    async getCategoriesByUserId(userId: string): Promise<CategoryResultDTO[]> {
+    async getCategoriesByUserId(userId: string): Promise<CategoryResultDto[]> {
         const results = await this.categoryRepository.findCategoriesByUserId(userId);
         return results.map(x => ({
             categoryId: x.categoryId,
             name: x.name,
-        }) as CategoryResultDTO);
+        }) as CategoryResultDto);
     }
 
     /**
      * @todo 관심사여부를 포함한 전체 카테고리 목록을 조회합니다.
      */
-    async getCategoriesWithFavoriteStatus(userId: string): Promise<CategoryWithFavoriteStatusResultDTO[]> {
+    async getCategoriesWithFavoriteStatus(userId: string): Promise<CategoryWithFavoriteStatusResultDto[]> {
         const results = await this.categoryRepository.getCategoriesWithFavoriteStatus(userId);
         return results.map(({ categories, favorites }) => {
             return {
                 categoryId: categories.categoryId,
                 name: categories.name,
                 isFavorite: !!favorites,
-            } as CategoryWithFavoriteStatusResultDTO;
+            } as CategoryWithFavoriteStatusResultDto;
         });
     }
 
@@ -81,8 +81,8 @@ export class CategoryService {
     /**
      * @todo 카테고리 모델을 생성, DB에 저장합니다.
      */
-    async create(dto: CreateCategoryDTO): Promise<CategoryModel> {
-        const category = CategoryModel.from(dto.categoryId, dto.name);
+    async create(categoryId: string, name: string): Promise<CategoryModel> {
+        const category = CategoryModel.from(categoryId, name);
         await this.categoryRepository.save(category);
         return category;
     }

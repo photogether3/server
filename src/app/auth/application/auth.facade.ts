@@ -6,7 +6,7 @@ import { DiscordColors, DiscordWebHookService } from 'src/shared/third-party';
 
 import { UserModel, UserService, UserTokenService } from '../../user/domain';
 
-import { GenerateOtpDTO, LoginDTO, RegisterDTO, VerifyOtpDTO } from './auth.dto';
+import { GenerateOtpBodyDto, LoginBodyDto, RegisterBodyDto, VerifyOtpBodyDto } from './request-dto';
 
 @Injectable()
 export class AuthFacade {
@@ -20,29 +20,29 @@ export class AuthFacade {
     ) {
     }
 
-    async login(dto: LoginDTO) {
-        const user = await this.userService.verifyCredentials(dto.email, dto.password);
+    async login(body: LoginBodyDto) {
+        const user = await this.userService.verifyCredentials(body.email, body.password);
         await this.userService.verifyActiveUser(user);
         const tokens = this.jwtUtilService.getTokens(user.id);
         await this.userTokenService.createOrUpdate(user.id, tokens.refreshToken);
         return tokens;
     }
 
-    async register(dto: RegisterDTO) {
-        await this.userService.verifyDuplicateEmail(dto.email);
-        await this.userService.create(dto.email, dto.password);
+    async register(body: RegisterBodyDto) {
+        await this.userService.verifyDuplicateEmail(body.email);
+        await this.userService.create(body.email, body.password);
         await this.discordWebHook.sendMessage('[회원가입 알림] 새로운 유저가 등장했어요. 😍', DiscordColors.INFO);
     }
 
-    async generateOtp(dto: GenerateOtpDTO) {
-        let user = await this.userService.getUserByEmailOrThrow(dto.email);
+    async generateOtp(body: GenerateOtpBodyDto) {
+        let user = await this.userService.getUserByEmailOrThrow(body.email);
         user = await this.userService.updateOtp(user);
         await this.mailService.sendOtpCode(user.email, user.otp);
     }
 
-    async verifyOtp(dto: VerifyOtpDTO) {
-        let user = await this.userService.getUserByEmailOrThrow(dto.email);
-        user = await this.userService.verifyOtp(user, dto.otp);
+    async verifyOtp(body: VerifyOtpBodyDto) {
+        let user = await this.userService.getUserByEmailOrThrow(body.email);
+        user = await this.userService.verifyOtp(user, body.otp);
         user = await this.userService.updateOtp(user, true);
         user = await this.userService.updateEmailVerified(user);
         const tokens = this.jwtUtilService.getTokens(user.id);

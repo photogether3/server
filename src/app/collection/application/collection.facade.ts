@@ -2,13 +2,8 @@ import { Injectable } from '@nestjs/common';
 
 import { FavoriteService } from '../../category/domain';
 
-import {
-    CollectionService,
-    CreateCollectionDTO,
-    CreateCollectionParam,
-    GetCollectionsOptionDTO,
-    UpdateCollectionDTO,
-} from '../domain';
+import { CreateCollectionBodyDto, GetCollectionsQueryDto, UpdateCollectionBodyDto } from './request-dto';
+import { CollectionService, CreateCollectionDto, GetCollectionsOptionDto, UpdateCollectionDto } from '../domain';
 
 @Injectable()
 export class CollectionFacade {
@@ -19,19 +14,24 @@ export class CollectionFacade {
     ) {
     }
 
-    async getCollections(userId: string, dto: GetCollectionsOptionDTO) {
-        return this.collectionService.getCollections(userId, dto);
+    async getCollections(userId: string, body: GetCollectionsQueryDto) {
+        const { page, perPage } = body;
+        const offset = (page - 1) * perPage;
+        const dto: GetCollectionsOptionDto = { ...body, userId, offset };
+        return this.collectionService.getCollections(dto);
     }
 
-    async create(userId: string, dto: CreateCollectionDTO) {
-        await this.favoriteService.getFavorite(userId, dto.categoryId);
-        const param: CreateCollectionParam = { userId, ...dto };
+    async create(userId: string, body: CreateCollectionBodyDto) {
+        await this.favoriteService.getFavorite(userId, body.categoryId);
+        const param: CreateCollectionDto = { userId, ...body };
         await this.collectionService.create(param);
     }
 
-    async update(userId: string, collectionId: string, dto: UpdateCollectionDTO) {
+    async update(userId: string, collectionId: string, body: UpdateCollectionBodyDto) {
         const collection = await this.collectionService.getCollection(userId, collectionId);
-        await this.favoriteService.getFavorite(userId, dto.categoryId);
+        await this.favoriteService.getFavorite(userId, body.categoryId);
+
+        const dto: UpdateCollectionDto = { ...body };
         await this.collectionService.update(collection, dto);
     }
 }

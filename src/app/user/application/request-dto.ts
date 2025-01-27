@@ -1,16 +1,31 @@
+import { IsNotEmpty, IsOptional, Length, Matches } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, Length, Matches } from 'class-validator';
 
-import { USER_RULES } from './rule';
+import { USER_RULES } from '../domain';
 
-
-export class UpdateProfileDTO {
+export class UpdateProfileBodyDto {
+    @IsNotEmpty()
+    @ApiProperty({ description: '닉네임' })
     readonly nickname: string;
+
+    @IsNotEmpty()
+    @ApiProperty({ description: '자기소개' })
     readonly bio: string;
-    readonly fileGroupId: string;
+
+    @IsNotEmpty()
+    @ApiProperty({ description: '카테고리 ID 목록', type: String })
+    readonly categoryIds: string[];
+
+    @IsOptional()
+    @ApiProperty({
+        description: '프로필 이미지 파일',
+        type: 'string',
+        format: 'binary',
+    })
+    file: Express.Multer.File;
 }
 
-export class UpdatePasswordToOtpDTO {
+export class UpdatePasswordToOtpBodyDto {
     @IsNotEmpty({ message: 'OTP 코드가 비어있습니다.' })
     @Length(6, 6, { message: 'OTP는 6자리입니다.' })
     @ApiProperty({ description: 'OTP 코드', example: '123456' })
@@ -28,7 +43,7 @@ export class UpdatePasswordToOtpDTO {
     readonly password: string;
 }
 
-export class UpdatePasswordDTO {
+export class UpdatePasswordBodyDto {
     @IsNotEmpty({ message: '현재 비밀번호를 입력해 주세요.' })
     @ApiProperty({ description: '현재 비밀번호', example: '1q2w3e1!@' })
     readonly currentPassword: string;
@@ -40,43 +55,12 @@ export class UpdatePasswordDTO {
     readonly newPassword: string;
 }
 
-export class ResetDataDTO {
+export class ResetDataBodyDto {
     @IsNotEmpty({ message: 'OTP 코드가 비어있습니다.' })
     @Length(6, 6, { message: 'OTP는 6자리입니다.' })
     @ApiProperty({ description: 'OTP 코드', example: '123456' })
     readonly otp: string;
 }
 
-export class WithdrawDTO extends ResetDataDTO {
-}
-
-/** @Response */
-
-export class IsEmailTakenResultDTO {
-    @ApiProperty({ description: '중복여부' })
-    readonly isDuplicated: boolean;
-}
-
-export class ProfileResultDTO {
-    @ApiProperty({ description: '사용자 ID' })
-    readonly id: string;
-
-    @ApiProperty({ description: '닉네임' })
-    readonly nickname: string;
-
-    @ApiProperty({ description: '자기소개' })
-    readonly bio: string;
-
-    @ApiProperty({ description: '이메일' })
-    readonly email: string;
-
-    @ApiProperty({ description: '프로필 이미지 URL' })
-    readonly imageUrl: string;
-
-    @ApiProperty({ description: '생성일' })
-    readonly createdAt: Date;
-
-    @ApiProperty({ description: '수정일' })
-    readonly updatedAt: Date;
-
+export class WithdrawBodyDto extends ResetDataBodyDto {
 }

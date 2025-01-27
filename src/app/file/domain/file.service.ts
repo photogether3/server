@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 
-import { CreateFileDTO } from './file.dto';
+import { CreateFileDto } from './dto';
 import { FileFlags } from './file.type';
 import { FileGroupModel } from './models/file-group.model';
 import { FileItemModel } from './models/file-item.model';
@@ -39,7 +39,7 @@ export class FileService {
      * @warning 다수 도메인 모델의 생성을 제어합니다.
      * @warning 외부 트랜잭션 처리가 필요합니다.
      */
-    async create(userId: string, metadata: CreateFileDTO, flag: FileFlags): Promise<FileGroupModel> {
+    async create(userId: string, metadata: CreateFileDto, flag: FileFlags): Promise<FileGroupModel> {
         const fileGroup = FileGroupModel.from(userId, flag);
         const fileItem = FileItemModel.from(fileGroup.fileGroupId, userId, metadata);
         await this.fileGroupRepository.save(fileGroup);
@@ -52,7 +52,7 @@ export class FileService {
      * @warning 다수 도메인 모델의 생성을 제어합니다.
      * @warning 외부 트랜잭션 처리가 필요합니다.
      */
-    async creates(userId: string, dtos: CreateFileDTO[], flag: FileFlags = FileFlags.TEMP): Promise<FileGroupModel> {
+    async creates(userId: string, dtos: CreateFileDto[], flag: FileFlags = FileFlags.TEMP): Promise<FileGroupModel> {
         const fileGroup = FileGroupModel.from(userId, flag);
         const fileItems = dtos.map(dto =>
             FileItemModel.from(fileGroup.fileGroupId, userId, dto),
