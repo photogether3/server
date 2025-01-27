@@ -2,14 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { extname } from 'path';
 import { format } from 'date-fns';
 import { nanoid } from 'nanoid';
-import { CreateFileDTO } from './file.dto';
 
 import { FirebaseStorageService } from 'src/shared/third-party/firebase';
 import { EnvService } from 'src/shared/env';
 
-import { FileService } from './file.service';
-import { FileFlags } from './file.type';
-import { FileGroupModel } from './models/file-group.model';
+import { CreateFileDTO, FileGroupModel, FileService } from '../domain';
+import { FileFlags } from '../domain/file.type';
 
 @Injectable()
 export class FileManager {

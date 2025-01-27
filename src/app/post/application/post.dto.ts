@@ -19,10 +19,6 @@ export class CreatePost__Metadata {
 }
 
 export class UpdatePostDTO {
-    @IsNotEmpty()
-    @ApiProperty({ description: '이미지 URL', example: 'http://draft-image.png' })
-    readonly imageUrl: string;
-
     @IsOptional()
     @ApiProperty({ description: '제목', example: '제목입니다.' })
     readonly title: string;
@@ -34,6 +30,14 @@ export class UpdatePostDTO {
     @IsNotEmpty()
     @ApiProperty({ description: '매타데이터 목록', type: [CreatePost__Metadata] })
     readonly metadataList: CreatePost__Metadata[];
+
+    @IsNotEmpty()
+    @ApiProperty({
+        description: '게시물 이미지 파일',
+        type: 'string',
+        format: 'binary',
+    })
+    file: Express.Multer.File;
 }
 
 export class CreatePostDTO extends UpdatePostDTO {
@@ -51,7 +55,7 @@ export class MovePostsDTO {
 export class RemovePostsDTO extends MovePostsDTO {
 }
 
-/** @Response */
+/////////////////////////////////////Response////////////////////////////////////////
 
 export class PostResult__Metadata {
     @ApiProperty({ description: '메타데이터 텍스트', example: '추출데이터1' })

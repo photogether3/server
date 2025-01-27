@@ -1,8 +1,21 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    Patch,
+    Post,
+    Put,
+    Query,
+    UploadedFile,
+    UseInterceptors,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 
-import { UserParam } from '../user/framework';
-import { UserModel } from '../user/domain';
+import { UserParam } from '../../user/framework';
+import { UserModel } from '../../user/domain';
 
 import {
     CreatePostDTO,
@@ -12,11 +25,17 @@ import {
     RemovePostsDTO,
     UpdatePostDTO,
 } from './post.dto';
+import { PostFacade } from './post.facade';
 
 @Controller({ version: '1' })
 @ApiTags('게시물 정보')
 @ApiBearerAuth()
 export class PostController {
+
+    constructor(
+        private readonly postFacade: PostFacade,
+    ) {
+    }
 
     @Get()
     @ApiOperation({ summary: '게시물 목록 조회 [Draft]' })
@@ -27,11 +46,15 @@ export class PostController {
 
     @Post()
     @ApiOperation({ summary: '게시물 생성 [Draft]' })
+    @ApiConsumes('multipart/form-data')
+    @UseInterceptors(FileInterceptor('file'))
     async create(
         @UserParam() user: UserModel,
         @Body() dto: CreatePostDTO,
+        @UploadedFile() file: Express.Multer.File,
     ) {
-        return;
+        dto.file = file;
+        return await this.postFacade.create(user.id, dto);
     }
 
     @Put(':postId')

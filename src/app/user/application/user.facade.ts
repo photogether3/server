@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { DrizzleService, toKSTDate } from 'src/shared/database';
 
 import { CategoryService, FavoriteService } from '../../category/domain';
-import { FileManager } from '../../file/domain';
+import { FileManager } from '../../file/application';
 
 import {
     IsEmailTakenResultDTO,

@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 
 import { FileService } from './file.service';
-import { FileManager } from './file.manager';
 import { FileGroupRepository, FileItemRepository } from '../infastructure';
 
 @Module({
@@ -10,11 +9,9 @@ import { FileGroupRepository, FileItemRepository } from '../infastructure';
         FileGroupRepository,
         FileItemRepository,
         FileService,
-        FileManager,
     ],
     exports: [
         FileService,
-        FileManager,
     ],
 })
 export class FileDomainModule {

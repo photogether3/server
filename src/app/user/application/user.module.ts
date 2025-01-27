@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { CategoryDomainModule } from '../../category/domain';
-import { FileDomainModule } from '../../file/domain';
+import { FileModule } from '../../file/application';
 
 import { UserController } from './user.controller';
 import { UserFacade } from './user.facade';
@@ -10,7 +10,7 @@ import { UserDomainModule } from '../domain';
 @Module({
     imports: [
         CategoryDomainModule,
-        FileDomainModule,
+        FileModule,
         UserDomainModule,
     ],
     controllers: [UserController],
