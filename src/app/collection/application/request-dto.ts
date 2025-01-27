@@ -1,31 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsIn, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsIn, IsNotEmpty, IsOptional } from 'class-validator';
 
-import { CollectionSortBy, SortOrders } from '../domain';
+import { GetBaseQueryDto } from 'src/shared/base';
 
-export class GetCollectionsQueryDto {
-    @IsOptional()
-    @IsNumber()
-    @Type(() => Number)
-    @ApiProperty({ description: '페이지 번호', default: 1 })
-    readonly page: number = 1;
+import { CollectionSortBy } from '../domain';
 
-    @IsOptional()
-    @IsNumber()
-    @Type(() => Number)
-    @ApiProperty({ description: '페이지 번호', default: 10 })
-    readonly perPage: number = 10;
-
+export class GetCollectionsQueryDto extends GetBaseQueryDto {
     @IsOptional()
     @IsIn(Object.values(CollectionSortBy))
     @ApiProperty({ description: '정렬대상', enum: CollectionSortBy, default: CollectionSortBy.CREATED_AT })
-    readonly sortBy: CollectionSortBy;
-
-    @IsOptional()
-    @IsIn(Object.values(SortOrders))
-    @ApiProperty({ description: '정렬방식', enum: SortOrders, default: SortOrders.DESC })
-    readonly sortOrder: SortOrders = SortOrders.DESC;
+    override sortBy: CollectionSortBy;
 }
 
 export class CreateCollectionBodyDto {

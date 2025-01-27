@@ -1,6 +1,31 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsIn, IsNumber, IsOptional } from 'class-validator';
+import { Type } from 'class-transformer';
 
-/** @Response */
+import { BaseSortOrders } from './base.enum';
+
+export abstract class GetBaseQueryDto {
+    @IsOptional()
+    @IsNumber()
+    @Type(() => Number)
+    @ApiProperty({ description: '페이지 번호', default: 1 })
+    readonly page: number = 1;
+
+    @IsOptional()
+    @IsNumber()
+    @Type(() => Number)
+    @ApiProperty({ description: '페이지 번호', default: 10 })
+    readonly perPage: number = 10;
+
+    @IsOptional()
+    @IsIn(Object.values(BaseSortOrders))
+    @ApiProperty({ description: '정렬방식', enum: BaseSortOrders, default: BaseSortOrders.DESC })
+    readonly sortOrder: BaseSortOrders = BaseSortOrders.DESC;
+
+    abstract sortBy: any;
+}
+
+/////////////////////////////////Response///////////////////////////////////////
 
 export abstract class PaginationDto<T> {
 

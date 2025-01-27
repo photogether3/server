@@ -2,12 +2,8 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { CollectionModel } from './collection.model';
 import { CollectionRepository } from '../infrastructure';
-import {
-    CollectionPaginationDto,
-    CreateCollectionDto,
-    GetCollectionsOptionDto,
-    UpdateCollectionDto,
-} from './dto';
+import { CollectionPaginationDto, CreateCollectionDto, UpdateCollectionDto } from './dto';
+import { GetCollectionsQueryDto } from '../application/request-dto';
 
 @Injectable()
 export class CollectionService {
@@ -20,12 +16,8 @@ export class CollectionService {
     /**
      * @todo 유저의 사진첩목록을 페이징처리하여 조회합니다.
      */
-    async getCollections(dto: GetCollectionsOptionDto): Promise<CollectionPaginationDto> {
-        const result = await this.collectionRepository.findPagedCollections(dto);
-        if (result.totalItemCount === 0) {
-            return CollectionPaginationDto.fromNullData();
-        }
-        return result;
+    async getCollections(userId: string, dto: GetCollectionsQueryDto): Promise<CollectionPaginationDto> {
+        return await this.collectionRepository.findPagedCollections(userId, dto);
     }
 
     /**

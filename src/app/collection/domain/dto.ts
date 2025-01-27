@@ -1,17 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import { PaginationDto } from 'src/shared/base';
+import { PaginationDto, BaseSortOrders } from 'src/shared/base';
 
-import { CollectionSortBy, SortOrders } from './enum';
+import { CollectionSortBy } from './enum';
 
-export class GetCollectionsOptionDto {
-    readonly userId: string;
-    readonly page: number;
-    readonly offset: number;
-    readonly perPage: number;
-    readonly sortBy: CollectionSortBy;
-    readonly sortOrder: SortOrders;
-}
+// export class GetCollectionsOptionDto {
+//     readonly userId: string;
+//     readonly page: number;
+//     readonly offset: number;
+//     readonly perPage: number;
+//     readonly sortBy: CollectionSortBy;
+//     readonly sortOrder: SortOrders;
+// }
 
 export class CreateCollectionDto {
     readonly title: string;

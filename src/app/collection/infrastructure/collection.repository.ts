@@ -2,8 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { and, eq, sql } from 'drizzle-orm';
 
 import { collections, DrizzleRepository } from 'src/shared/database';
+import { PaginationUtil } from 'src/shared/base';
 
-import { CollectionModel, CollectionPaginationDto, CollectionResultDto, GetCollectionsOptionDto } from '../domain';
+import { CollectionModel, CollectionPaginationDto, CollectionResultDto } from '../domain';
+import { GetCollectionsQueryDto } from '../application/request-dto';
 
 @Injectable()
 export class CollectionRepository extends DrizzleRepository {
@@ -11,8 +13,10 @@ export class CollectionRepository extends DrizzleRepository {
     /**
      * @warning 다른 도메인 모듈의 테이블을 참조합니다.
      */
-    async findPagedCollections(dto: GetCollectionsOptionDto) {
-        const { userId, perPage, page, offset, sortOrder, sortBy } = dto;
+    async findPagedCollections(userId: string, dto: GetCollectionsQueryDto) {
+        const { perPage, page, sortOrder, sortBy } = dto;
+
+        const paginationUtil = new PaginationUtil(page, perPage);
 
         // @formatter:off
         const result = await this.db.run(sql`
@@ -21,11 +25,13 @@ export class CollectionRepository extends DrizzleRepository {
             WHERE c.user_id = ${userId}
             ORDER BY c.${sql.raw(sortBy)} ${sql.raw(sortOrder)}
             LIMIT ${perPage}
-            OFFSET ${offset}
+            OFFSET ${paginationUtil.offset}
         `);
 
-        const totalItemCount = result.rows[0].total_count;
-        const totalPageCount = Math.ceil(totalItemCount / perPage);
+        if (result.rows.length === 0) {
+            return CollectionPaginationDto.fromNullData();
+        }
+
         const items = result.rows.map(x => ({
             collectionId: x.collection_id,
             imageUrls: [],
@@ -33,13 +39,8 @@ export class CollectionRepository extends DrizzleRepository {
             totalItemCount: 0,
         } as CollectionResultDto));
 
-        return {
-            totalPageCount,
-            totalItemCount,
-            currentPage: page,
-            perPage,
-            items,
-        } as CollectionPaginationDto;
+        const totalItemCount = result.rows[0].total_count;
+        return paginationUtil.generate<CollectionResultDto>(totalItemCount, items);
     }
 
     async findCollection(userId:string, collectionId:string) {

@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { FavoriteService } from '../../category/domain';
 
 import { CreateCollectionBodyDto, GetCollectionsQueryDto, UpdateCollectionBodyDto } from './request-dto';
-import { CollectionService, CreateCollectionDto, GetCollectionsOptionDto, UpdateCollectionDto } from '../domain';
+import { CollectionService, CreateCollectionDto, UpdateCollectionDto } from '../domain';
 
 @Injectable()
 export class CollectionFacade {
@@ -15,10 +15,7 @@ export class CollectionFacade {
     }
 
     async getCollections(userId: string, body: GetCollectionsQueryDto) {
-        const { page, perPage } = body;
-        const offset = (page - 1) * perPage;
-        const dto: GetCollectionsOptionDto = { ...body, userId, offset };
-        return this.collectionService.getCollections(dto);
+        return this.collectionService.getCollections(userId, body);
     }
 
     async create(userId: string, body: CreateCollectionBodyDto) {

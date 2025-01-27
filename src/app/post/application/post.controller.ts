@@ -14,17 +14,20 @@ import {
 import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 
+import { FormDataTranslator } from 'src/shared/validations';
+
 import { UserParam } from '../../user/framework';
 import { UserModel } from '../../user/domain';
 
 import {
     CreatePostBodyDto,
+    CreatePostMetadataBodyDto,
     GetPostsQueryDto,
     MovePostsBodyDto,
     PostPaginationResultDTO,
     RemovePostsBodyDto,
     UpdatePostBodyDto,
-} from './request-dto';
+} from '../domain';
 import { PostFacade } from './post.facade';
 
 @Controller({ version: '1' })
@@ -40,8 +43,11 @@ export class PostController {
     @Get()
     @ApiOperation({ summary: '게시물 목록 조회 [Draft]' })
     @ApiResponse({ type: PostPaginationResultDTO })
-    async getPosts(@Query() dto: GetPostsQueryDto) {
-        return [];
+    async getPosts(
+        @UserParam() user: UserModel,
+        @Query() dto: GetPostsQueryDto,
+    ) {
+        return this.postFacade.getPosts(user.id, dto);
     }
 
     @Post()
@@ -54,7 +60,11 @@ export class PostController {
         @UploadedFile() file: Express.Multer.File,
     ) {
         dto.file = file;
-        return await this.postFacade.create(user.id, dto);
+        const metadataDtos = await FormDataTranslator.jsonStringifyToDtos(
+            CreatePostMetadataBodyDto,
+            dto.metadataStringify,
+        );
+        return await this.postFacade.create(user.id, dto, metadataDtos);
     }
 
     @Put(':postId')

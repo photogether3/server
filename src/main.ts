@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { apiReference } from '@scalar/nestjs-api-reference';
 
+import { validationExceptionFactory } from './shared/validations';
 import { MainModule } from './main.module';
 import { EnvService } from './shared/env';
 
@@ -23,6 +24,8 @@ async function bootstrap() {
 
     app.useGlobalPipes(new ValidationPipe({
         transform: true,
+        whitelist: true,
+        exceptionFactory: (errors) => validationExceptionFactory(errors),
     }));
 
     const envService = app.get(EnvService);
