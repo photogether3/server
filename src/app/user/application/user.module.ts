@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { CategoryDomainModule } from '../../category/domain';
-import { FileDomainModule } from '../../file-system/domain';
+import { FileDomainModule } from '../../file/domain';
 
 import { UserController } from './user.controller';
 import { UserFacade } from './user.facade';
