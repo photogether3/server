@@ -1,7 +1,5 @@
 # Alexandria Lib - Server
 
-![image](https://github.com/dev-goraebap/jwt-auth-seed_BE/blob/develop/public/readme-01.jpg)
-
 ## API 데모 문서
 - https://alexandrialib-api-azikzwlurq-du.a.run.app/api
 
@@ -11,9 +9,10 @@
 - 레이어드 아키택처의 개념 사용
 
 ### 물리적 구조
-- [FSD](https://feature-sliced.design/kr/) 아키택처를 사용하여 물리적인 패키지 구조 적용
-- 기존의 레이어를 그대로 사용하지 않고 System -> App -> Features -> Shared 레이어 구조를 적용
-- System, Shared는 각각 최상위 레이어, 최하위 레이어로 슬라이스 대신 세그먼트가 직접 구성되므로 서로 참조 가능하고 그 외엔 불가능
+
+src/features 패키지 하위 구성
+
+![image](https://github.com/photogether3/server/blob/main/public/readme-feature-structure.jpg)
 
 ### 실험적 기능
 제어를 담당하는 클래스외에 도메인모델, DTO 와 같은 클래스들은 속성들을 private 하게 관리하지 않음
