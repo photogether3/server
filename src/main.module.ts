@@ -11,7 +11,7 @@ import { FirebaseModule } from './shared/third-party/firebase';
 import { AppMiddleware } from './system/middlewares';
 import { AppExceptionFilter } from './system/exceptions';
 
-import { RouterModule } from './router.module';
+import { FeaturesModule } from './features/features.module';
 
 @Module({
     imports: [
@@ -21,7 +21,7 @@ import { RouterModule } from './router.module';
         MailModule,
         DiscordModule,
         FirebaseModule.forRoot(),
-        RouterModule,
+        FeaturesModule,
     ],
     providers: [
         { provide: APP_FILTER, useClass: AppExceptionFilter },
