@@ -34,7 +34,7 @@ async function bootstrap() {
         .setTitle('사진첩 덜어내기')
         .setDescription('API 문서')
         .addBearerAuth()
-        .setVersion('0.8.0')
+        .setVersion('0.8.1')
         .build();
 
     const document = SwaggerModule.createDocument(app, config);
@@ -43,7 +43,6 @@ async function bootstrap() {
         apiReference({
             theme: 'elysiajs',
             spec: {
-                url: 'http://localhost:4200',
                 content: document,
             },
         }),
