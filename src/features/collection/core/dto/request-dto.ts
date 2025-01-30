@@ -7,7 +7,7 @@ import { CollectionSortBy } from '../enum';
 
 export class GetCollectionsQueryDto extends GetBaseQueryDto {
     @IsOptional()
-    @IsIn(Object.values(GetCollectionsQueryDto))
+    @IsIn(Object.values(CollectionSortBy))
     @ApiProperty({ description: '정렬대상', enum: CollectionSortBy, default: CollectionSortBy.CREATED_AT })
     override sortBy: CollectionSortBy;
 }

@@ -41,7 +41,7 @@ export class PostController {
     }
 
     @Get()
-    @ApiOperation({ summary: '게시물 목록 조회 [Draft]' })
+    @ApiOperation({ summary: '게시물 목록 조회' })
     @ApiResponse({ type: PostPaginationResultDTO })
     async getPosts(
         @UserParam() user: UserModel,
@@ -51,7 +51,7 @@ export class PostController {
     }
 
     @Post()
-    @ApiOperation({ summary: '게시물 생성 [Draft]' })
+    @ApiOperation({ summary: '게시물 생성' })
     @ApiConsumes('multipart/form-data')
     @UseInterceptors(FileInterceptor('file'))
     async create(

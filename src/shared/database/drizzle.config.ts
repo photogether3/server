@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
 export default {
-    schema: './src/shared/database/schema',
+    schema: './src/shared/database/schema/index.ts',
     out: './src/shared/database/migrations',
     dialect: 'turso',
     casing: 'snake_case',

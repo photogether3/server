@@ -4,3 +4,4 @@ export * from './utils';
 export * from './drizzle.service';
 export * from './database.module';
 export * from './drizzle.repository';
+export * from './providers/drizzle.provider';

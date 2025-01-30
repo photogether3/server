@@ -3,6 +3,7 @@ import { IsIn, IsNotEmpty, IsOptional } from 'class-validator';
 
 import { BaseSortBy, GetBaseQueryDto, PaginationDto } from 'src/shared/base';
 import { CreatePostMetadataBodyDto } from './post-metadata.dto';
+import { PostViewModel } from '../readonly/post.view-model';
 
 export class GetPostsQueryDto extends GetBaseQueryDto {
     @IsOptional()
@@ -81,57 +82,7 @@ export class RemovePostsBodyDto extends MovePostsBodyDto {
 
 /////////////////////////////////////Response////////////////////////////////////////
 
-export class PostResult__Metadata {
-    @ApiProperty({ description: '메타데이터 텍스트', example: '추출데이터1' })
-    readonly content: string;
-
-    @ApiProperty({ description: '공개여부', example: true })
-    readonly isPublic: boolean;
-}
-
-export class PostResult__Favorite {
-    @ApiProperty({ description: '관심사 ID' })
-    readonly favoriteId: string;
-
-    @ApiProperty({ description: '이름' })
-    readonly name: boolean;
-}
-
-export class PostResult__Collection {
-    @ApiProperty({ description: '컬랙션 ID' })
-    readonly collectionId: string;
-
-    @ApiProperty({ description: '제목' })
-    readonly title: boolean;
-}
-
-export class PostResultDto {
-    @ApiProperty({ description: '게시물 ID' })
-    readonly postId: string;
-
-    @ApiProperty({ description: '제목' })
-    readonly title: string;
-
-    @ApiProperty({ description: '내용' })
-    readonly content: string;
-
-    @ApiProperty({ description: '생성일' })
-    readonly createdAt: Date;
-
-    @ApiProperty({ description: '수정일' })
-    readonly updatedAt: Date;
-
-    @ApiProperty({ description: '관심사 정보', type: PostResult__Favorite })
-    readonly favorite: PostResult__Favorite;
-
-    @ApiProperty({ description: '사진첩 정보', type: PostResult__Collection })
-    readonly collection: PostResult__Collection;
-
-    @ApiProperty({ description: '메타데이터 목록', type: [PostResult__Metadata] })
-    readonly metadataList: CreatePostMetadataBodyDto[];
-}
-
-export class PostPaginationResultDTO extends PaginationDto<PostResultDto> {
-    @ApiProperty({ type: [PostResultDto] })
-    readonly items: PostResultDto[];
+export class PostPaginationResultDTO extends PaginationDto<PostViewModel> {
+    @ApiProperty({ type: [PostViewModel] })
+    readonly items: PostViewModel[];
 }

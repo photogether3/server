@@ -10,7 +10,7 @@ export class DrizzleRepository {
 
     constructor(
         @Inject(DRIZZLE_ORM_TOKEN)
-        private readonly _db: LibSQLDatabase,
+        protected readonly _db: LibSQLDatabase,
     ) {
     }
 
