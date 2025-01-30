@@ -12,7 +12,9 @@ import {
     GetPostsQueryDto,
     PostMetadataService,
     PostService,
+    RemovePostsBodyDto,
 } from '../core';
+import { PostQueryRepository } from '../infra';
 
 @Injectable()
 export class PostFacade {
@@ -23,11 +25,12 @@ export class PostFacade {
         private readonly collectionService: CollectionService,
         private readonly postMetadataService: PostMetadataService,
         private readonly postService: PostService,
+        private readonly postQueryRepository: PostQueryRepository,
     ) {
     }
 
-    async getPosts(userId: string, dto: GetPostsQueryDto) {
-        return await this.postService.getPosts(userId, dto);
+    async getPostViews(userId: string, dto: GetPostsQueryDto) {
+        return await this.postQueryRepository.filePostViews(userId, dto);
     }
 
     async create(userId: string, _dto: CreatePostBodyDto, metadataDtos: CreatePostMetadataBodyDto[]) {
@@ -38,11 +41,16 @@ export class PostFacade {
         return await this.drizzleService.runInTx(async () => {
             let createPostDto: CreatePostDto = { ...dto, fileGroupId: null };
             if (_dto.file) {
-                const { fileGroupId } = await this.fileManager.upload(userId, file);
+                const { fileGroupId } = await this.fileManager.upload(file);
                 createPostDto = { ...dto, fileGroupId };
             }
             const post = await this.postService.create(userId, createPostDto);
             await this.postMetadataService.creates(post.postId, metadataDtos);
         });
+    }
+
+    async removes(userId: string, dto: RemovePostsBodyDto) {
+        const post = await this.postService.getPostsByUserIdWithPostIds(userId, dto.postIds);
+        await this.postService.removes(post);
     }
 }

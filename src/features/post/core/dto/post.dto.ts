@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsIn, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsArray, IsIn, IsNotEmpty, IsOptional } from 'class-validator';
 
 import { BaseSortBy, GetBaseQueryDto, PaginationDto } from 'src/shared/base';
 import { CreatePostMetadataBodyDto } from './post-metadata.dto';
-import { PostViewModel } from '../readonly/post.view-model';
+import { PostViewModel } from '../../infra';
 
 export class GetPostsQueryDto extends GetBaseQueryDto {
     @IsOptional()
@@ -73,8 +73,9 @@ export class UpdatePostBodyDto {
 
 export class MovePostsBodyDto {
     @IsNotEmpty()
+    @IsArray()
     @ApiProperty({ description: '게시물 ID 목록' })
-    readonly postId: string[];
+    readonly postIds: string[];
 }
 
 export class RemovePostsBodyDto extends MovePostsBodyDto {

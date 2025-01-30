@@ -44,11 +44,11 @@ export class PostController {
     @Get()
     @ApiOperation({ summary: '게시물 목록 조회' })
     @ApiResponse({ type: PostPaginationResultDTO })
-    async getPosts(
+    async getPostViews(
         @UserParam() user: UserModel,
         @Query() dto: GetPostsQueryDto,
     ) {
-        return this.postFacade.getPosts(user.id, dto);
+        return this.postFacade.getPostViews(user.id, dto);
     }
 
     @Post()
@@ -91,11 +91,11 @@ export class PostController {
     }
 
     @Delete()
-    @ApiOperation({ summary: '게시물 단건/일괄 삭제 [Draft]' })
+    @ApiOperation({ summary: '게시물 단건/일괄 삭제' })
     async remove(
         @UserParam() user: UserModel,
         @Body() dto: RemovePostsBodyDto,
     ) {
-        return;
+        return this.postFacade.removes(user.id, dto);
     }
 }

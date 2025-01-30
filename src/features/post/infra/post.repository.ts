@@ -1,49 +1,23 @@
-import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
-import { eq, sql } from 'drizzle-orm';
-import { LibSQLDatabase } from 'drizzle-orm/libsql';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { and, eq, inArray, isNull } from 'drizzle-orm';
 
-import { DRIZZLE_ORM_TOKEN, DrizzleRepository, posts, postViews } from 'src/shared/database';
-import { PaginationUtil } from 'src/shared/base';
-import { EnvService } from 'src/shared/env';
+import { DrizzleRepository, posts } from 'src/shared/database';
 
-import { GetPostsQueryDto, PostModel, PostPaginationResultDTO, PostViewModel } from '../core';
+import { PostModel } from '../core';
 
 @Injectable()
 export class PostRepository extends DrizzleRepository {
 
-    private readonly publicUrl: string;
-
-    constructor(
-        @Inject(DRIZZLE_ORM_TOKEN)
-        protected readonly _db: LibSQLDatabase,
-        private readonly envService: EnvService,
-    ) {
-        super(_db);
-        this.publicUrl = this.envService.getFirebaseEnv().storageUrl;
-    }
-
-    async findPosts(userId: string, dto: GetPostsQueryDto) {
-        const { perPage, page, sortOrder, sortBy } = dto;
-        const paginationUtil = new PaginationUtil(page, perPage);
-
+    async findPostsByUserIdWithPostIds(userId: string, postIds: string[]) {
         const results = await this.db
             .select()
-            .from(postViews)
-            .where(eq(postViews.userId, userId))
-            // @formatter:off
-            .orderBy(sql`${sql.raw(sortBy)} ${sql.raw(sortOrder)}`)
-            .limit(perPage)
-            .offset(paginationUtil.offset);
-
-        if (results.length === 0) {
-            return PostPaginationResultDTO.fromNullData();
-        }
-
-        const items = results.map(x =>
-            PostViewModel.fromPersistence(x, this.publicUrl)
-        );
-        const totalItemCount = results[0].totalCount;
-        return paginationUtil.generate<PostViewModel>(totalItemCount, items);
+            .from(posts)
+            .where(and(
+                eq(posts.userId, userId),
+                inArray(posts.postId, postIds),
+                isNull(posts.deletedAt),
+            ));
+        return results.map(x => this.fromDrizzleModel(PostModel, x));
     }
 
     async save(post: PostModel) {
@@ -53,5 +27,14 @@ export class PostRepository extends DrizzleRepository {
             .catch(err => {
                 throw new InternalServerErrorException(err);
             });
+    }
+
+    async removes(_posts: PostModel[]) {
+        await this.db
+            .update(posts)
+            .set(<any>{
+                deletedAt: new Date(),
+            })
+            .where(inArray(posts.postId, _posts.map(x => x.postId)));
     }
 }

@@ -1,13 +1,11 @@
 import { int, sqliteTable, sqliteView, text } from 'drizzle-orm/sqlite-core';
 import { sql } from 'drizzle-orm';
-
-import { categories, users } from '../schema';
 import { defaultTimestamps } from './base';
 
 export const collections = sqliteTable('collections', {
     collectionId: text({ length: 30 }).notNull().primaryKey(),
-    userId: text().notNull().references(() => users.id),
-    categoryId: text().notNull().references(() => categories.categoryId),
+    userId: text().notNull(), // text().notNull().references(() => users.id),
+    categoryId: text().notNull(), // text().notNull().references(() => categories.categoryId),
     title: text({ length: 50 }).notNull(),
     ...defaultTimestamps,
 });

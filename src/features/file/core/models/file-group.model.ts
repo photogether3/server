@@ -6,14 +6,12 @@ import { nanoid } from 'nanoid';
 export class FileGroupModel extends OrmModel {
 
     readonly fileGroupId: string;
-    readonly userId: string;
     readonly flag: string;
 
-    static from(userId: string, flag: FileFlags) {
+    static from(flag: FileFlags) {
         const now = new Date();
         return plainToInstance(FileGroupModel, {
             fileGroupId: nanoid(30),
-            userId,
             flag,
             createdAt: now,
             updatedAt: now,

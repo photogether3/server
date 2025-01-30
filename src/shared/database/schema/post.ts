@@ -2,15 +2,12 @@ import { int, primaryKey, sqliteTable, sqliteView, text } from 'drizzle-orm/sqli
 import { sql } from 'drizzle-orm';
 
 import { defaultTimestamps } from './base';
-import { users } from './user';
-import { collections } from './collection';
-import { fileGroups } from './file';
 
 export const posts = sqliteTable('posts', {
     postId: text({ length: 30 }).notNull().primaryKey(),
-    userId: text().notNull().references(() => users.id),
-    collectionId: text().notNull().references(() => collections.collectionId),
-    fileGroupId: text().references(() => fileGroups.fileGroupId),
+    userId: text().notNull(), // text().notNull().references(() => users.id),
+    collectionId: text().notNull(), // text().notNull().references(() => collections.collectionId),
+    fileGroupId: text(), // text().references(() => fileGroups.fileGroupId),
     title: text({ length: 50 }),
     content: text({ length: 200 }),
     ...defaultTimestamps,

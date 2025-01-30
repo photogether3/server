@@ -1,11 +1,10 @@
 import { int, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core';
 
 import { defaultTimestamps } from './base';
-import { fileGroups } from './file';
 
 export const users = sqliteTable('users', {
     id: text({ length: 30 }).primaryKey(),
-    fileGroupId: text().references(() => fileGroups.fileGroupId),
+    fileGroupId: text(), // text().references(() => fileGroups.fileGroupId),
     nickname: text({ length: 20 }).notNull(),
     bio: text({ length: 50 }),
     email: text({ length: 50 }).notNull().unique(),

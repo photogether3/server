@@ -24,17 +24,17 @@ export class FileManager {
         this.publicUrl = this.envService.getFirebaseEnv().storageUrl;
     }
 
-    async getFileUrl(userId: string, fileGroupId: string): Promise<string> {
-        const fileItem = await this.fileService.getFileItem(userId, fileGroupId);
+    async getFileUrl(fileGroupId: string): Promise<string> {
+        const fileItem = await this.fileService.getFileItem(fileGroupId);
         return `${this.publicUrl}/${fileItem.filePath}`;
     }
 
-    async upload(userId: string, file: Express.Multer.File): Promise<FileGroupModel | null> {
+    async upload(file: Express.Multer.File): Promise<FileGroupModel | null> {
         if (!file) return null;
 
         const metadata = this.getFileMetadata(file);
         await this.firebaseStorage.upload(metadata.filePath, file);
-        return await this.fileService.create(userId, metadata, FileFlags.PROFILE);
+        return await this.fileService.create(metadata, FileFlags.PROFILE);
     }
 
     private getFileMetadata(file: Express.Multer.File, rank: number = 1) {

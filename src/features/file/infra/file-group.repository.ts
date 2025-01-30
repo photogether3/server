@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { and, eq } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 
 import { DrizzleRepository, fileGroups } from 'src/shared/database';
 
@@ -8,14 +8,11 @@ import { FileGroupModel } from '../core';
 @Injectable()
 export class FileGroupRepository extends DrizzleRepository {
 
-    async findFileGroup(userId: string, fileGroupId: string) {
+    async findFileGroup(fileGroupId: string) {
         const result = await this.db
             .select()
             .from(fileGroups)
-            .where(and(
-                eq(fileGroups.userId, userId),
-                eq(fileGroups.fileGroupId, fileGroupId),
-            ))
+            .where(eq(fileGroups.fileGroupId, fileGroupId))
             .get();
         if (!result) return null;
 

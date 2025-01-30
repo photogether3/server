@@ -26,4 +26,11 @@ export class PostModel extends OrmModel {
             deletedAt: null,
         } as PostModel);
     }
+
+    withRemove() {
+        return plainToInstance(PostModel, {
+            ...this,
+            deletedAt: new Date(),
+        });
+    }
 }

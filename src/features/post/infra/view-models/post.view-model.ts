@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CreatePostMetadataBodyDto } from '../dto/post-metadata.dto';
-import { toKSTDate } from '../../../../shared/database';
+
+import { toKSTDate } from 'src/shared/database';
 
 export class PostViewModel__Metadata {
     @ApiProperty({ description: '메타데이터 텍스트', example: '추출데이터1' })
@@ -52,7 +52,7 @@ export class PostViewModel {
     readonly collection?: PostViewModel__Collection;
 
     @ApiProperty({ description: '메타데이터 목록', type: [PostViewModel__Metadata] })
-    readonly metadataList: CreatePostMetadataBodyDto[];
+    readonly metadataList: PostViewModel__Metadata[];
 
     static fromPersistence(x: any, publicUrl: string) {
         let metadataJson: any[] = JSON.parse(x.metadata);

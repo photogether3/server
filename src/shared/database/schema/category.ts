@@ -10,7 +10,7 @@ export const categories = sqliteTable('categories', {
 });
 
 export const favorites = sqliteTable('favorites', {
-    userId: text().notNull().references(() => users.id, { onDelete: 'cascade' }),
+    userId: text().notNull(), //text().notNull().references(() => users.id, { onDelete: 'cascade' }),
     categoryId: text().notNull().references(() => categories.categoryId, { onDelete: 'cascade' }),
     ...defaultTimestamps,
 }, (table) => ({

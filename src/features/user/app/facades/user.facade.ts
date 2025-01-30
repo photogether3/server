@@ -46,7 +46,7 @@ export class UserFacade {
             imageUrl: null,
         };
         if (user.fileGroupId) {
-            const imageUrl = await this.fileManager.getFileUrl(user.id, user.fileGroupId);
+            const imageUrl = await this.fileManager.getFileUrl(user.fileGroupId);
             dto = { ...dto, imageUrl };
         }
         return dto;
@@ -65,7 +65,7 @@ export class UserFacade {
         await this.drizzleService.runInTx(async () => {
             let updateProfileDto: UpdateProfileDto = { nickname, bio, fileGroupId: null };
             if (file) {
-                const { fileGroupId } = await this.fileManager.upload(user.id, file);
+                const { fileGroupId } = await this.fileManager.upload(file);
                 updateProfileDto = { ...updateProfileDto, fileGroupId };
             }
             await this.userService.updateProfile(user, updateProfileDto);
