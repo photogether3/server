@@ -72,13 +72,13 @@ export class PostController {
     }
 
     @Put(':postId')
-    @ApiOperation({ summary: '게시물 수정 [Draft]' })
+    @ApiOperation({ summary: '게시물 수정' })
     async update(
         @Param('postId') postId: string,
         @UserParam() user: UserModel,
         @Body() dto: UpdatePostBodyDto,
     ) {
-        return;
+        return await this.postFacade.update(postId, user.id, dto);
     }
 
     @Patch('move')

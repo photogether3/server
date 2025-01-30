@@ -13,6 +13,7 @@ import {
     PostMetadataService,
     PostService,
     RemovePostsBodyDto,
+    UpdatePostBodyDto,
 } from '../core';
 import { PostQueryRepository } from '../infra';
 
@@ -46,6 +47,17 @@ export class PostFacade {
             }
             const post = await this.postService.create(userId, createPostDto);
             await this.postMetadataService.creates(post.postId, metadataDtos);
+        });
+    }
+
+    async update(postId: string, userId: string, dto: UpdatePostBodyDto) {
+        const { metadataList, ...updatePostDto } = dto;
+        const post = await this.postService.getPostByUserIdWithPostId(userId, postId);
+
+        return await this.drizzleService.runInTx(async () => {
+            await this.postService.update(post, updatePostDto);
+            await this.postMetadataService.removes(post.postId);
+            await this.postMetadataService.creates(post.postId, metadataList);
         });
     }
 

@@ -1,9 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsIn, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsArray, IsIn, IsNotEmpty, IsOptional, ValidateNested } from 'class-validator';
 
 import { BaseSortBy, GetBaseQueryDto, PaginationDto } from 'src/shared/base';
 import { CreatePostMetadataBodyDto } from './post-metadata.dto';
 import { PostViewModel } from '../../infra';
+import { Type } from 'class-transformer';
 
 export class GetPostsQueryDto extends GetBaseQueryDto {
     @IsOptional()
@@ -58,17 +59,17 @@ export class UpdatePostBodyDto {
     @ApiProperty({ description: '내용', example: '내용입니다.' })
     readonly content: string;
 
-    @IsNotEmpty()
+    @IsOptional()
+    @IsArray()
+    @Type(() => CreatePostMetadataBodyDto)
+    @ValidateNested({ each: true })
     @ApiProperty({ description: '매타데이터 목록', type: [CreatePostMetadataBodyDto] })
     readonly metadataList: CreatePostMetadataBodyDto[];
+}
 
-    @IsNotEmpty()
-    @ApiProperty({
-        description: '게시물 이미지 파일',
-        type: 'string',
-        format: 'binary',
-    })
-    file: Express.Multer.File;
+export class UpdatePostDto {
+    readonly title: string;
+    readonly content: string;
 }
 
 export class MovePostsBodyDto {

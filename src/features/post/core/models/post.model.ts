@@ -2,7 +2,7 @@ import { plainToInstance } from 'class-transformer';
 import { nanoid } from 'nanoid';
 
 import { OrmModel } from 'src/shared/database';
-import { CreatePostDto } from '../dto/post.dto';
+import { CreatePostDto, UpdatePostDto } from '../dto/post.dto';
 
 export class PostModel extends OrmModel {
     readonly postId: string;
@@ -31,6 +31,15 @@ export class PostModel extends OrmModel {
         return plainToInstance(PostModel, {
             ...this,
             deletedAt: new Date(),
+        });
+    }
+
+    withUpdate(dto: UpdatePostDto) {
+        return plainToInstance(PostModel, {
+            ...this,
+            title: dto.title,
+            content: dto.content,
+            updatedAt: new Date(),
         });
     }
 }

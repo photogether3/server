@@ -22,4 +22,11 @@ export class PostMetadataService {
         await this.postMetadataRepository.saves(metadataModels);
         return metadataModels;
     }
+
+    /**
+     * @todo 포스트 ID에 해당하는 메타데이터들을 삭제합니다.
+     */
+    async removes(postId: string): Promise<void> {
+        await this.postMetadataRepository.removes(postId);
+    }
 }

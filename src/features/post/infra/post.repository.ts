@@ -20,10 +20,28 @@ export class PostRepository extends DrizzleRepository {
         return results.map(x => this.fromDrizzleModel(PostModel, x));
     }
 
+    async findPostByUserIdWithPostId(userId: string, postId: string) {
+        const result = await this.db
+            .select()
+            .from(posts)
+            .where(and(
+                eq(posts.userId, userId),
+                eq(posts.postId, postId),
+                isNull(posts.deletedAt),
+            ))
+            .get();
+        if (!result) return null;
+        return this.fromDrizzleModel(PostModel, result);
+    }
+
     async save(post: PostModel) {
         await this.db
             .insert(posts)
             .values(post.toPlainObject())
+            .onConflictDoUpdate({
+                target: posts.postId,
+                set: post.toPlainObject(),
+            })
             .catch(err => {
                 throw new InternalServerErrorException(err);
             });
