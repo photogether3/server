@@ -33,12 +33,12 @@ export class AppExceptionFilter implements ExceptionFilter {
             errorMessage = exception.message;
             this.logger.error(`[${status}] ${errorMessage} - Request IP: ${clientIp}`, exception.stack);
 
-            await this.discordWebHook.sendError('🚨 시스템 에러 리포트', {
-                endPoint: request.url,
-                method: request.method,
-                errMsg: errorMessage,
-                errCode: status,
-            }, DiscordColors.ERROR);
+            // await this.discordWebHook.sendError('🚨 시스템 에러 리포트', {
+            //     endPoint: request.url,
+            //     method: request.method,
+            //     errMsg: errorMessage,
+            //     errCode: status,
+            // }, DiscordColors.ERROR);
         }
 
         response

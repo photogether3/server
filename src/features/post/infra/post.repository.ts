@@ -47,6 +47,18 @@ export class PostRepository extends DrizzleRepository {
             });
     }
 
+    async updateCollectionId(_posts: PostModel[]) {
+        await this.db
+            .update(posts)
+            .set(<any>{
+                collectionId: _posts[0].collectionId,
+            })
+            .where(inArray(posts.postId, _posts.map(x => x.postId)))
+            .catch(err => {
+                throw new InternalServerErrorException(err);
+            });
+    }
+
     async removes(_posts: PostModel[]) {
         await this.db
             .update(posts)
@@ -55,4 +67,5 @@ export class PostRepository extends DrizzleRepository {
             })
             .where(inArray(posts.postId, _posts.map(x => x.postId)));
     }
+
 }

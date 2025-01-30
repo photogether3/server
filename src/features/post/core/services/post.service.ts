@@ -63,4 +63,13 @@ export class PostService {
         posts = posts.map(x => x.withRemove());
         await this.postRepository.removes(posts);
     }
+
+    /**
+     * @todo 게시물의 컬랙션 ID를 변경합니다.
+     */
+    async movePosts(collectionId: string, posts: PostModel[]): Promise<PostModel[]> {
+        posts = posts.map(x => x.withUpdateCollectionId(collectionId));
+        await this.postRepository.updateCollectionId(posts);
+        return posts;
+    }
 }

@@ -42,4 +42,12 @@ export class PostModel extends OrmModel {
             updatedAt: new Date(),
         });
     }
+
+    withUpdateCollectionId(collectionId: string) {
+        return plainToInstance(PostModel, {
+            ...this,
+            collectionId,
+            updatedAt: new Date(),
+        });
+    }
 }

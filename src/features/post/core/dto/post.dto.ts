@@ -77,9 +77,17 @@ export class MovePostsBodyDto {
     @IsArray()
     @ApiProperty({ description: '게시물 ID 목록' })
     readonly postIds: string[];
+
+    @IsNotEmpty()
+    @ApiProperty({ description: '사진첩 ID' })
+    readonly collectionId: string;
 }
 
-export class RemovePostsBodyDto extends MovePostsBodyDto {
+export class RemovePostsBodyDto {
+    @IsNotEmpty()
+    @IsArray()
+    @ApiProperty({ description: '게시물 ID 목록' })
+    readonly postIds: string[];
 }
 
 /////////////////////////////////////Response////////////////////////////////////////

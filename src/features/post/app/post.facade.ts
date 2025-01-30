@@ -10,6 +10,7 @@ import {
     CreatePostDto,
     CreatePostMetadataBodyDto,
     GetPostsQueryDto,
+    MovePostsBodyDto,
     PostMetadataService,
     PostService,
     RemovePostsBodyDto,
@@ -59,6 +60,13 @@ export class PostFacade {
             await this.postMetadataService.removes(post.postId);
             await this.postMetadataService.creates(post.postId, metadataList);
         });
+    }
+
+    async movePosts(userId: string, dto: MovePostsBodyDto) {
+        const { collectionId, postIds } = dto;
+        await this.collectionService.getCollection(userId, collectionId);
+        const posts = await this.postService.getPostsByUserIdWithPostIds(userId, postIds);
+        await this.postService.movePosts(collectionId, posts);
     }
 
     async removes(userId: string, dto: RemovePostsBodyDto) {

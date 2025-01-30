@@ -82,12 +82,12 @@ export class PostController {
     }
 
     @Patch('move')
-    @ApiOperation({ summary: '게시물 단건/일괄 다른 사진첩으로 이동 [Draft]' })
+    @ApiOperation({ summary: '게시물 단건/일괄 다른 사진첩으로 이동' })
     async moveToOtherCollection(
         @UserParam() user: UserModel,
         @Body() dto: MovePostsBodyDto,
     ) {
-        return;
+        return await this.postFacade.movePosts(user.id, dto);
     }
 
     @Delete()
