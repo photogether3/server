@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { and, eq, sql } from 'drizzle-orm';
 
-import { collections, DrizzleRepository } from 'src/shared/database';
+import { collections, collectionViews, DrizzleRepository } from 'src/shared/database';
 import { PaginationUtil } from 'src/shared/base';
 
-import { CollectionModel, CollectionPaginationDto, CollectionResultDto, GetCollectionsQueryDto } from '../core';
+import { CollectionModel, CollectionPaginationDto, GetCollectionsQueryDto } from '../core';
+import { CollectionViewModel } from '../core/collection.view-model';
 
 @Injectable()
 export class CollectionRepository extends DrizzleRepository {
@@ -18,28 +19,32 @@ export class CollectionRepository extends DrizzleRepository {
         const paginationUtil = new PaginationUtil(page, perPage);
 
         // @formatter:off
-        const result = await this.db.run(sql`
-            SELECT COUNT(*) OVER (PARTITION BY c.user_id) AS total_count, c.*
-            FROM collections c
-            WHERE c.user_id = ${userId}
-            ORDER BY c.${sql.raw(sortBy)} ${sql.raw(sortOrder)}
-            LIMIT ${perPage}
-            OFFSET ${paginationUtil.offset}
-        `);
+        const results = await this.db
+            .select()
+            .from(collectionViews)
+            .where(eq(collectionViews.userId, userId))
+            // @formatter:off
+            .orderBy(sql`${sql.raw(sortBy)} ${sql.raw(sortOrder)}`)
+            .limit(perPage)
+            .offset(paginationUtil.offset);
 
-        if (result.rows.length === 0) {
+        if (results.length === 0) {
             return CollectionPaginationDto.fromNullData();
         }
 
-        const items = result.rows.map(x => ({
-            collectionId: x.collection_id,
-            imageUrls: [],
-            title: x.title,
-            totalItemCount: 0,
-        } as CollectionResultDto));
+        console.log(results);
 
-        const totalItemCount = result.rows[0].total_count;
-        return paginationUtil.generate<CollectionResultDto>(totalItemCount, items);
+        // const items = results.map(x => ({
+        //     collectionId: x.collectionId,
+        //     imageUrls: [],
+        //     title: x.title,
+        //     totalItemCount: 0,
+        // } as CollectionResultDto));
+        const items = results.map(x =>
+            CollectionViewModel.fromPersistence(x)
+        );
+        const totalItemCount = results[0].totalCount;
+        return paginationUtil.generate<CollectionViewModel>(totalItemCount, items);
     }
 
     async findCollection(userId:string, collectionId:string) {

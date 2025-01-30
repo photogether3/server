@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 import { PaginationDto } from 'src/shared/base';
+import { CollectionViewModel } from '../collection.view-model';
 
 // export class GetCollectionsOptionDto {
 //     readonly userId: string;
@@ -24,21 +25,7 @@ export class UpdateCollectionDto {
 
 ///////////////////////////////////Response///////////////////////////////////////
 
-export class CollectionResultDto {
-    @ApiProperty({ description: '사진첩 ID' })
-    readonly collectionId: string;
-
-    @ApiProperty({ description: '제목' })
-    readonly title: string;
-
-    @ApiProperty({ description: '전체 아이템 개수' })
-    readonly totalItemCount: number;
-
-    @ApiProperty({ description: '일부 이미지 URL' })
-    readonly imageUrls: string[];
-}
-
-export class CollectionPaginationDto extends PaginationDto<CollectionResultDto> {
-    @ApiProperty({ type: [CollectionResultDto] })
-    readonly items: CollectionResultDto[];
+export class CollectionPaginationDto extends PaginationDto<CollectionViewModel> {
+    @ApiProperty({ type: [CollectionViewModel] })
+    readonly items: CollectionViewModel[];
 }

@@ -69,10 +69,11 @@ export const postViews = sqliteView('post_views', {
        )
     ) AS metadata
     FROM posts a
-    LEFT JOIN post_metadatas b ON b.post_id = a.post_id
-    LEFT JOIN file_items c ON c.file_group_id = a.file_group_id
-    LEFT JOIN collections d ON d.collection_id = a.collection_id
-    LEFT JOIN categories e ON e.category_id = d.category_id
+    LEFT JOIN post_metadatas b ON b.post_id = a.post_id AND b.deleted_at IS NULL
+    LEFT JOIN file_items c ON c.file_group_id = a.file_group_id AND c.deleted_at IS NULL
+    LEFT JOIN collections d ON d.collection_id = a.collection_id AND d.deleted_at IS NULL
+    LEFT JOIN categories e ON e.category_id = d.category_id AND e.deleted_at IS NULL
+    WHERE a.deleted_at IS NULL
     GROUP BY a.post_id, a.title, a.content, a.created_at, a.updated_at, c.file_path, collection, category
 `);
 

@@ -1,4 +1,5 @@
 import {
+    BadRequestException,
     Body,
     Controller,
     Delete,
@@ -59,6 +60,9 @@ export class PostController {
         @Body() dto: CreatePostBodyDto,
         @UploadedFile() file: Express.Multer.File,
     ) {
+        if (!file) {
+            throw new BadRequestException('파일을 등록해 주세요.');
+        }
         dto.file = file;
         const metadataDtos = await FormDataTranslator.jsonStringifyToDtos(
             CreatePostMetadataBodyDto,

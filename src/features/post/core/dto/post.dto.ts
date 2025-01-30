@@ -73,8 +73,8 @@ export class UpdatePostBodyDto {
 
 export class MovePostsBodyDto {
     @IsNotEmpty()
-    @ApiProperty({ description: '사진첩 ID 목록' })
-    readonly collectionIds: string[];
+    @ApiProperty({ description: '게시물 ID 목록' })
+    readonly postId: string[];
 }
 
 export class RemovePostsBodyDto extends MovePostsBodyDto {

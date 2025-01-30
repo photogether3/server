@@ -10,7 +10,7 @@ export class PostViewModel__Metadata {
     readonly isPublic: boolean;
 }
 
-export class PostViewModel__Favorite {
+export class PostViewModel__Category {
     @ApiProperty({ description: '카테고리 ID' })
     readonly categoryId: string;
 
@@ -45,8 +45,8 @@ export class PostViewModel {
     @ApiProperty({ description: '수정일' })
     readonly updatedAt: Date;
 
-    @ApiProperty({ description: '카테고리 정보', type: PostViewModel__Favorite })
-    readonly category?: PostViewModel__Favorite;
+    @ApiProperty({ description: '카테고리 정보', type: PostViewModel__Category })
+    readonly category?: PostViewModel__Category;
 
     @ApiProperty({ description: '사진첩 정보', type: PostViewModel__Collection })
     readonly collection?: PostViewModel__Collection;
