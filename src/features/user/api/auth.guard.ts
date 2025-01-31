@@ -4,7 +4,7 @@ import { Request } from 'express';
 
 import { JwtUtilService } from 'src/shared/jwt';
 
-import { UserService } from '../core';
+import { UserService } from '../app';
 
 /**
  * @description

@@ -1,11 +1,18 @@
 import { Module } from '@nestjs/common';
 
+import { CategoryModule } from 'src/features/category/app';
+
+import { CollectionModule } from '../app';
 import { CollectionController } from './collection.controller';
-import { CollectionAppModule } from '../app';
+import { CollectionFacade } from './collection.facade';
 
 @Module({
-    imports: [CollectionAppModule],
+    imports: [
+        CategoryModule,
+        CollectionModule
+    ],
     controllers: [CollectionController],
+    providers: [CollectionFacade]
 })
 export class CollectionApiModule {
 }

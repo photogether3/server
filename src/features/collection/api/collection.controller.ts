@@ -1,15 +1,15 @@
 import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import { CollectionFacade } from '../app';
 import {
     CollectionPaginationDto,
     CreateCollectionBodyDto,
     GetCollectionsQueryDto,
     UpdateCollectionBodyDto,
-} from '../core';
+} from '../app';
 import { UserParam } from '../../user/api';
-import { UserModel } from '../../user/core';
+import { UserModel } from '../../user/app';
+import { CollectionFacade } from './collection.facade';
 
 @Controller({ path: 'collections', version: '1' })
 @ApiTags('사진첩')

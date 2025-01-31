@@ -1,21 +1,30 @@
 import { Module } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
 
-import { UserAppModule } from '../app';
-import { AuthGuard } from './auth.guard';
+import { CategoryModule } from 'src/features/category/app';
+
+import { UserModule } from '../app';
 import { AuthController } from './controllers/auth.controller';
 import { UserController } from './controllers/user.controller';
+import { UserFacade } from './facades/user.facade';
+import { AuthFacade } from './facades/auth.facade';
+import { FileModule } from '../../file/app';
 
 @Module({
     imports: [
-        UserAppModule,
+        CategoryModule,
+        FileModule,
+        UserModule,
     ],
     controllers: [
         AuthController,
         UserController,
     ],
     providers: [
-        { provide: APP_GUARD, useClass: AuthGuard },
+        AuthFacade,
+        UserFacade,
+    ],
+    exports: [
+        UserModule,
     ],
 })
 export class UserApiModule {

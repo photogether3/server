@@ -1,17 +1,23 @@
 import { Module } from '@nestjs/common';
 
-import { CategoryAppModule } from '../app';
-import { CategoryController } from './category.controller';
-import { FavoriteController } from './favorite.controller';
+import { CategoryModule } from '../app';
+import { CategoryController } from './controllers/category.controller';
+import { FavoriteController } from './controllers/favorite.controller';
+import { CategoryFacade } from './facades/category.facade';
+import { FavoriteFacade } from './facades/favorite.facade';
 
 @Module({
     imports: [
-        CategoryAppModule,
+        CategoryModule,
     ],
     controllers: [
         CategoryController,
         FavoriteController,
     ],
+    providers: [
+        CategoryFacade,
+        FavoriteFacade
+    ]
 })
 export class CategoryApiModule {
 }

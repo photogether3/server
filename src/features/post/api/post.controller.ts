@@ -18,7 +18,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { FormDataTranslator } from 'src/shared/validations';
 
 import { UserParam } from '../../user/api';
-import { UserModel } from '../../user/core';
+import { UserModel } from '../../user/app';
 
 import {
     CreatePostBodyDto,
@@ -28,8 +28,9 @@ import {
     PostPaginationResultDTO,
     RemovePostsBodyDto,
     UpdatePostBodyDto,
-} from '../core';
-import { PostFacade } from '../app';
+} from 'src/features/post/app';
+
+import { PostFacade } from './post.facade';
 
 @Controller({ version: '1' })
 @ApiTags('게시물 정보')

@@ -10,8 +10,7 @@ import { FirebaseModule } from './shared/third-party/firebase';
 
 import { AppMiddleware } from './system/middlewares';
 import { AppExceptionFilter } from './system/exceptions';
-
-import { FeaturesModule } from './features/features.module';
+import { ApisModule } from './apis.module';
 
 @Module({
     imports: [
@@ -21,10 +20,7 @@ import { FeaturesModule } from './features/features.module';
         MailModule,
         DiscordModule,
         FirebaseModule.forRoot(),
-        FeaturesModule,
-    ],
-    providers: [
-        { provide: APP_FILTER, useClass: AppExceptionFilter },
+        ApisModule,
     ],
 })
 export class MainModule implements NestModule {

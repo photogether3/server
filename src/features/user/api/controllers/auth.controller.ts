@@ -3,8 +3,8 @@ import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagg
 
 import { JwtResourceDTO } from 'src/shared/jwt/types';
 
-import { GenerateOtpBodyDto, LoginBodyDto, RegisterBodyDto, UserModel, VerifyOtpBodyDto } from '../../core';
-import { AuthFacade } from '../../app';
+import { GenerateOtpBodyDto, LoginBodyDto, RegisterBodyDto, UserModel, VerifyOtpBodyDto } from '../../app';
+import { AuthFacade } from '../facades/auth.facade';
 import { Public } from '../auth.guard';
 import { ApiRefreshTokenHeader, RefreshToken } from '../decorators/auth.decorator';
 import { UserParam } from '../decorators/user.decorator';

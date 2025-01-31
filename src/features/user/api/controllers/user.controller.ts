@@ -1,6 +1,7 @@
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
+    BadRequestException,
     Body,
     Controller,
     Delete,
@@ -23,8 +24,8 @@ import {
     UpdateProfileBodyDto,
     UserModel,
     WithdrawBodyDto,
-} from '../../core';
-import { UserFacade } from '../../app';
+} from '../../app';
+import { UserFacade } from '../facades/user.facade';
 import { UserParam } from '../decorators/user.decorator';
 import { Public } from '../auth.guard';
 
@@ -64,21 +65,27 @@ export class UserController {
         @UploadedFile() file: Express.Multer.File,
     ) {
         body.file = file;
-        return this.userFacade.updateProfile(user, body);
+        let categoryIds: string[] = [];
+        try {
+            categoryIds = JSON.parse(body.categoryIds);
+        } catch (err) {
+            throw new BadRequestException('카테고리 데이터 변환에 실패하였습니다.');
+        }
+        return this.userFacade.updateProfile(user, body, categoryIds);
     }
 
     @Public()
     @Patch('password')
     @ApiOperation({ summary: 'OTP인증 후 비밀번호 변경' })
     async updatePasswordFromOtp(@Body() body: UpdatePasswordToOtpBodyDto) {
-        await this.userFacade.updatePassword(body);
+        await this.userFacade.updatePasswordByOtp(body);
     }
 
     @Patch('me/password')
     @ApiBearerAuth()
-    @ApiOperation({ summary: '비밀번호 변경 [Draft]' })
-    async updatePassword(@Body() body: UpdatePasswordBodyDto) {
-        return;
+    @ApiOperation({ summary: '비밀번호 변경' })
+    async updatePassword(@UserParam() user: UserModel, @Body() body: UpdatePasswordBodyDto) {
+        return await this.userFacade.updatePassword(user, body);
     }
 
     @Delete('me/reset')
@@ -92,7 +99,7 @@ export class UserController {
     @Delete('me/withdraw')
     @ApiBearerAuth()
     @HttpCode(HttpStatus.NO_CONTENT)
-    @ApiOperation({ summary: 'OTP 인증 후 회원탈퇴 [Draft]' })
+    @ApiOperation({ summary: 'OTP 인증 후 회원탈퇴' })
     async withdraw(@UserParam() user: UserModel, @Body() body: WithdrawBodyDto) {
         await this.userFacade.withdraw(user, body);
     }
