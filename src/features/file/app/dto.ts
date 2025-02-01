@@ -10,7 +10,7 @@ export class CreateFileDto {
 
 /////////////////////////////Response////////////////////////////////////
 
-export class FileResultDto {
+export class ResFileDto {
     @ApiProperty({ description: '파일 그룹 ID' })
     readonly fileGroupId: string;
 

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { DrizzleService } from 'src/shared/database';
 
-import { CategoryService, ReqCreateOrUpdateFavoriteDto, FavoriteService } from '../../app';
+import { CategoryService, FavoriteService, ReqCreateOrUpdateFavoriteDto } from 'src/features/category/app';
 
 @Injectable()
 export class FavoriteFacade {

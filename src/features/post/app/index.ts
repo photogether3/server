@@ -5,3 +5,4 @@ export * from './models/post-metadata.model';
 export * from './services/post.service';
 export * from './services/post-metadata.service';
 export * from './post.module';
+export * from './repositories/post.query.repository';

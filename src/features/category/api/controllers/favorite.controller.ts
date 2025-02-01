@@ -3,8 +3,8 @@ import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagg
 
 import { UserParam } from 'src/features/user/api';
 import { UserModel } from 'src/features/user/app';
+import { ReqCreateOrUpdateFavoriteDto, ResCategoryDto } from 'src/features/category/app';
 
-import { ResCategoryDto, ReqCreateOrUpdateFavoriteDto } from '../../app';
 import { FavoriteFacade } from '../facades/favorite.facade';
 
 @Controller({ path: 'favorites', version: '1' })

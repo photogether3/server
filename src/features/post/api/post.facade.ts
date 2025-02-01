@@ -4,7 +4,6 @@ import { DrizzleService } from 'src/shared/database';
 
 import { FileManager } from 'src/features/file/app';
 import { CollectionService } from 'src/features/collection/app';
-
 import {
     CreatePostBodyDto,
     CreatePostDto,
@@ -12,11 +11,11 @@ import {
     GetPostsQueryDto,
     MovePostsBodyDto,
     PostMetadataService,
+    PostQueryRepository,
     PostService,
     RemovePostsBodyDto,
     UpdatePostBodyDto,
 } from 'src/features/post/app';
-import { PostQueryRepository } from '../app/repositories/post.query.repository';
 
 @Injectable()
 export class PostFacade {

@@ -24,7 +24,8 @@ import {
     UpdateProfileBodyDto,
     UserModel,
     WithdrawBodyDto,
-} from '../../app';
+} from 'src/features/user/app';
+
 import { UserFacade } from '../facades/user.facade';
 import { UserParam } from '../decorators/user.decorator';
 import { Public } from '../auth.guard';

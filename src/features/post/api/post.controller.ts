@@ -17,9 +17,8 @@ import { FileInterceptor } from '@nestjs/platform-express';
 
 import { FormDataTranslator } from 'src/shared/validations';
 
-import { UserParam } from '../../user/api';
-import { UserModel } from '../../user/app';
-
+import { UserParam } from 'src/features/user/api';
+import { UserModel } from 'src/features/user/app';
 import {
     CreatePostBodyDto,
     CreatePostMetadataBodyDto,
