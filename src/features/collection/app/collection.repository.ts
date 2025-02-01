@@ -4,10 +4,9 @@ import { and, eq, sql } from 'drizzle-orm';
 import { collections, collectionViews, DrizzleRepository } from 'src/shared/database';
 import { PaginationUtil } from 'src/shared/base';
 
-import { GetCollectionsQueryDto } from './dto/request-dto';
-import { CollectionPaginationDto } from './dto/dto';
-import { CollectionViewModel } from './collection.view-model';
-import { CollectionModel } from './collection.model';
+import { CollectionPaginationDto, ReqGetCollectionsDto } from './dto';
+import { CollectionViewModel } from './models/collection.view-model';
+import { CollectionModel } from './models/collection.model';
 
 @Injectable()
 export class CollectionRepository extends DrizzleRepository {
@@ -15,7 +14,7 @@ export class CollectionRepository extends DrizzleRepository {
     /**
      * @warning 다른 도메인 모듈의 테이블을 참조합니다.
      */
-    async findPagedCollections(userId: string, dto: GetCollectionsQueryDto) {
+    async findPagedCollections(userId: string, dto: ReqGetCollectionsDto) {
         const { perPage, page, sortOrder, sortBy } = dto;
 
         const paginationUtil = new PaginationUtil(page, perPage);

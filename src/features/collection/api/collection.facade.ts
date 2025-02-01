@@ -1,15 +1,14 @@
 import { Injectable } from '@nestjs/common';
 
-import { FavoriteService } from '../../category/app';
-
 import {
     CollectionService,
-    CreateCollectionBodyDto,
     CreateCollectionDto,
-    GetCollectionsQueryDto,
-    UpdateCollectionBodyDto,
+    ReqCreateCollectionDto,
+    ReqGetCollectionsDto,
+    ReqUpdateCollectionDto,
     UpdateCollectionDto,
-} from '../app';
+} from 'src/features/collection/app';
+import { FavoriteService } from 'src/features/category/app';
 
 @Injectable()
 export class CollectionFacade {
@@ -20,21 +19,21 @@ export class CollectionFacade {
     ) {
     }
 
-    async getCollections(userId: string, body: GetCollectionsQueryDto) {
-        return this.collectionService.getCollections(userId, body);
+    async getCollections(userId: string, dto: ReqGetCollectionsDto) {
+        return this.collectionService.getCollections(userId, dto);
     }
 
-    async create(userId: string, body: CreateCollectionBodyDto) {
-        await this.favoriteService.getFavorite(userId, body.categoryId);
-        const param: CreateCollectionDto = { userId, ...body };
+    async create(userId: string, dto: ReqCreateCollectionDto) {
+        await this.favoriteService.getFavorite(userId, dto.categoryId);
+        const param: CreateCollectionDto = { userId, ...dto };
         await this.collectionService.create(param);
     }
 
-    async update(userId: string, collectionId: string, body: UpdateCollectionBodyDto) {
+    async update(userId: string, collectionId: string, _dto: ReqUpdateCollectionDto) {
         const collection = await this.collectionService.getCollection(userId, collectionId);
-        await this.favoriteService.getFavorite(userId, body.categoryId);
+        await this.favoriteService.getFavorite(userId, _dto.categoryId);
 
-        const dto: UpdateCollectionDto = { ...body };
+        const dto: UpdateCollectionDto = { ..._dto };
         await this.collectionService.update(collection, dto);
     }
 }

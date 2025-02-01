@@ -2,7 +2,8 @@ import { plainToInstance } from 'class-transformer';
 import { nanoid } from 'nanoid';
 
 import { OrmModel } from 'src/shared/database';
-import { CreateCollectionDto, UpdateCollectionDto } from './dto/dto';
+
+import { CreateCollectionDto, UpdateCollectionDto } from '../dto';
 
 export class CollectionModel extends OrmModel {
 

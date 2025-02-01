@@ -1,14 +1,15 @@
 import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+import { UserParam } from 'src/features/user/api';
+import { UserModel } from 'src/features/user/app';
 import {
     CollectionPaginationDto,
-    CreateCollectionBodyDto,
-    GetCollectionsQueryDto,
-    UpdateCollectionBodyDto,
-} from '../app';
-import { UserParam } from '../../user/api';
-import { UserModel } from '../../user/app';
+    ReqCreateCollectionDto,
+    ReqGetCollectionsDto,
+    ReqUpdateCollectionDto,
+} from 'src/features/collection/app';
+
 import { CollectionFacade } from './collection.facade';
 
 @Controller({ path: 'collections', version: '1' })
@@ -26,18 +27,18 @@ export class CollectionController {
     @ApiResponse({ type: CollectionPaginationDto })
     async getCollections(
         @UserParam() user: UserModel,
-        @Query() body: GetCollectionsQueryDto,
+        @Query() dto: ReqGetCollectionsDto,
     ) {
-        return await this.collectionFacade.getCollections(user.id, body);
+        return await this.collectionFacade.getCollections(user.id, dto);
     }
 
     @Post()
     @ApiOperation({ summary: '사진첩 생성' })
     async create(
         @UserParam() user: UserModel,
-        @Body() body: CreateCollectionBodyDto,
+        @Body() dto: ReqCreateCollectionDto,
     ) {
-        return this.collectionFacade.create(user.id, body);
+        return this.collectionFacade.create(user.id, dto);
     }
 
     @Put(':collectionId')
@@ -45,8 +46,8 @@ export class CollectionController {
     async update(
         @UserParam() user: UserModel,
         @Param('collectionId') collectionId: string,
-        @Body() body: UpdateCollectionBodyDto,
+        @Body() dto: ReqUpdateCollectionDto,
     ) {
-        return this.collectionFacade.update(user.id, collectionId, body);
+        return this.collectionFacade.update(user.id, collectionId, dto);
     }
 }
