@@ -3,8 +3,8 @@ import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagg
 
 import { Public, UserParam } from 'src/features/user/api';
 import { UserModel } from 'src/features/user/app';
+import { ReqCreateCategoryDto, ResCategoryDto, ResCategoryWithFavoriteStatusDto } from 'src/features/category/app';
 
-import { CategoryResultDto, CategoryWithFavoriteStatusResultDto, CreateCategoryBodyDto } from '../../app';
 import { CategoryFacade } from '../facades/category.facade';
 
 @Controller({ path: 'categories', version: '1' })
@@ -19,7 +19,7 @@ export class CategoryController {
     @Public()
     @Get()
     @ApiOperation({ summary: '전체 카테고리 목록 조회' })
-    @ApiResponse({ type: [CategoryResultDto] })
+    @ApiResponse({ type: [ResCategoryDto] })
     async getCategories() {
         return await this.categoryFacade.getCategories();
     }
@@ -27,7 +27,7 @@ export class CategoryController {
     @Get('with-favorite-status')
     @ApiBearerAuth()
     @ApiOperation({ summary: '전체 카테고리 별 관심사 여부 조회' })
-    @ApiResponse({ type: [CategoryWithFavoriteStatusResultDto] })
+    @ApiResponse({ type: [ResCategoryWithFavoriteStatusDto] })
     async getCategoryWithFavoriteStatus(@UserParam() user: UserModel) {
         return await this.categoryFacade.getCategoryWithFavoriteStatus(user.id);
     }
@@ -35,8 +35,8 @@ export class CategoryController {
     @Public()
     @Post()
     @ApiOperation({ summary: '카테고리 생성 (테스트, 관리자용)' })
-    async create(@Body() body: CreateCategoryBodyDto) {
-        return await this.categoryFacade.create(body);
+    async create(@Body() dto: ReqCreateCategoryDto) {
+        return await this.categoryFacade.create(dto);
     }
 
     @Public()

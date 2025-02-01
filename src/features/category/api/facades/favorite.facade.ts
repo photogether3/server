@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { DrizzleService } from 'src/shared/database';
 
-import { CategoryService, CreateOrUpdateFavoriteBodyDto, FavoriteService } from '../../app';
+import { CategoryService, ReqCreateOrUpdateFavoriteDto, FavoriteService } from '../../app';
 
 @Injectable()
 export class FavoriteFacade {
@@ -18,7 +18,7 @@ export class FavoriteFacade {
         return await this.categoryService.getCategoriesByUserId(userId);
     }
 
-    async createOrUpdate(userId: string, body: CreateOrUpdateFavoriteBodyDto) {
+    async createOrUpdate(userId: string, body: ReqCreateOrUpdateFavoriteDto) {
         return this.drizzleService.runInTx(async () => {
             const { categoriesIds } = body;
             await this.categoryService.verifyCategories(categoriesIds);

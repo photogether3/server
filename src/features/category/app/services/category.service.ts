@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { CategoryModel } from '../models/category.model';
-import { CategoryResultDto, CategoryWithFavoriteStatusResultDto } from '../dto/category.dto';
+import { ResCategoryDto, ResCategoryWithFavoriteStatusDto } from '../dto/category.dto';
 import { CategoryRepository } from '../repositoires/category.repository';
 
 @Injectable()
@@ -22,36 +22,36 @@ export class CategoryService {
     /**
      * @todo 가공된 카테고리 목록을 조회합니다.
      */
-    async getCategoryResults(): Promise<CategoryResultDto[]> {
+    async getCategoryResults(): Promise<ResCategoryDto[]> {
         const results = await this.categoryRepository.findCategories();
         return results.map(x => ({
             categoryId: x.categoryId,
             name: x.name,
-        }) as CategoryResultDto);
+        }) as ResCategoryDto);
     }
 
     /**
      * @todo 유저의 관심있는 카테고리 목록을 조회합니다.
      */
-    async getCategoriesByUserId(userId: string): Promise<CategoryResultDto[]> {
+    async getCategoriesByUserId(userId: string): Promise<ResCategoryDto[]> {
         const results = await this.categoryRepository.findCategoriesByUserId(userId);
         return results.map(x => ({
             categoryId: x.categoryId,
             name: x.name,
-        }) as CategoryResultDto);
+        }) as ResCategoryDto);
     }
 
     /**
      * @todo 관심사여부를 포함한 전체 카테고리 목록을 조회합니다.
      */
-    async getCategoriesWithFavoriteStatus(userId: string): Promise<CategoryWithFavoriteStatusResultDto[]> {
+    async getCategoriesWithFavoriteStatus(userId: string): Promise<ResCategoryWithFavoriteStatusDto[]> {
         const results = await this.categoryRepository.getCategoriesWithFavoriteStatus(userId);
         return results.map(({ categories, favorites }) => {
             return {
                 categoryId: categories.categoryId,
                 name: categories.name,
                 isFavorite: !!favorites,
-            } as CategoryWithFavoriteStatusResultDto;
+            } as ResCategoryWithFavoriteStatusDto;
         });
     }
 
