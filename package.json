@@ -1,6 +1,6 @@
 {
-    "name": "alexandria-lib-server",
-    "version": "0.8.4",
+    "name": "photogether-server",
+    "version": "0.8.5",
     "author": "dev.goraebap",
     "private": true,
     "license": "UNLICENSED",

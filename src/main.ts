@@ -31,10 +31,10 @@ async function bootstrap() {
     const envService = app.get(EnvService);
 
     const config = new DocumentBuilder()
-        .setTitle('사진첩 덜어내기')
+        .setTitle('Photogether')
         .setDescription('API 문서')
         .addBearerAuth()
-        .setVersion('0.8.4')
+        .setVersion('0.8.5')
         .build();
 
     const document = SwaggerModule.createDocument(app, config);
