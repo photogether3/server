@@ -31,7 +31,7 @@ async function bootstrap() {
     const envService = app.get(EnvService);
 
     const config = new DocumentBuilder()
-        .setTitle('Photogether')
+        .setTitle('Photogether 🎨')
         .setDescription('API 문서')
         .addBearerAuth()
         .setVersion('0.8.5')
