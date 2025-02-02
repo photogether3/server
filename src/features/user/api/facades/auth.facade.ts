@@ -4,6 +4,7 @@ import { JwtUtilService } from 'src/shared/jwt';
 import { MailService } from 'src/shared/mail';
 import { DiscordColors, DiscordWebHookService } from 'src/shared/third-party';
 
+import { CollectionService } from 'src/features/collection/app';
 import {
     GenerateOtpBodyDto,
     LoginBodyDto,
@@ -12,7 +13,7 @@ import {
     UserService,
     UserTokenService,
     VerifyOtpBodyDto,
-} from '../../app';
+} from 'src/features/user/app';
 
 @Injectable()
 export class AuthFacade {
@@ -21,6 +22,7 @@ export class AuthFacade {
         private readonly mailService: MailService,
         private readonly jwtUtilService: JwtUtilService,
         private readonly discordWebHook: DiscordWebHookService,
+        private readonly collectionService: CollectionService,
         private readonly userService: UserService,
         private readonly userTokenService: UserTokenService,
     ) {
@@ -36,7 +38,17 @@ export class AuthFacade {
 
     async register(body: RegisterBodyDto) {
         await this.userService.verifyDuplicateEmail(body.email);
-        await this.userService.create(body.email, body.password);
+        const user = await this.userService.create(body.email, body.password);
+        await this.collectionService.create({
+            userId: user.id,
+            categoryId: null,
+            title: '미분류',
+        });
+        await this.collectionService.create({
+            userId: user.id,
+            categoryId: null,
+            title: '휴지통',
+        });
         await this.discordWebHook.sendMessage('[회원가입 알림] 새로운 유저가 등장했어요. 😍', DiscordColors.INFO);
     }
 

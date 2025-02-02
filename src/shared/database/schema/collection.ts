@@ -5,7 +5,7 @@ import { defaultTimestamps } from './base';
 export const collections = sqliteTable('collections', {
     collectionId: text({ length: 30 }).notNull().primaryKey(),
     userId: text().notNull(), // text().notNull().references(() => users.id),
-    categoryId: text().notNull(), // text().notNull().references(() => categories.categoryId),
+    categoryId: text(), // text().notNull().references(() => categories.categoryId),
     title: text({ length: 50 }).notNull(),
     ...defaultTimestamps,
 });

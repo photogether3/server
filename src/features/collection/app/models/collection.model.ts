@@ -17,7 +17,7 @@ export class CollectionModel extends OrmModel {
             collectionId: nanoid(30),
             title: dto.title,
             userId: dto.userId,
-            categoryId: dto.categoryId,
+            categoryId: dto.categoryId ?? null,
             createdAt: new Date(),
             updatedAt: new Date(),
             deletedAt: null,

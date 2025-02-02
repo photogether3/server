@@ -34,8 +34,8 @@ export class CollectionService {
     /**
      * @todo 사진첩 모델을 생성하고 DB에 저장합니다.
      */
-    async create(param: CreateCollectionDto): Promise<CollectionModel> {
-        const collection = CollectionModel.from(param);
+    async create(dto: CreateCollectionDto): Promise<CollectionModel> {
+        const collection = CollectionModel.from(dto);
         await this.collectionRepository.save(collection);
         return collection;
     }
