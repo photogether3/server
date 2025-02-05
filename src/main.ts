@@ -1,11 +1,12 @@
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { NestFactory } from '@nestjs/core';
 import { Logger, ValidationPipe } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { apiReference } from '@scalar/nestjs-api-reference';
 
-import { validationExceptionFactory } from './shared/validations';
-import { MainModule } from './main.module';
 import { EnvService } from './shared/env';
+import { validationExceptionFactory } from './shared/validations';
+
+import { MainModule } from './main.module';
 
 async function bootstrap() {
     const app = await NestFactory.create(MainModule);
@@ -34,7 +35,7 @@ async function bootstrap() {
         .setTitle('Photogether 🎨')
         .setDescription('API 문서')
         .addBearerAuth()
-        .setVersion('0.8.5')
+        .setVersion('0.8.6')
         .build();
 
     const document = SwaggerModule.createDocument(app, config);
