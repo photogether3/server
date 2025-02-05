@@ -26,7 +26,7 @@ export class AppExceptionFilter implements ExceptionFilter {
 
         let errorMessage = exception.message ?? '';
         this.logger.error(`[${status}] ${errorMessage} - Request IP: ${clientIp}`, exception.stack);
-        if (status < 500 && this.appStatus === 'production') {
+        if (status > 500 && this.appStatus === 'production') {
             await this.discordWebHook.sendError('🚨 시스템 에러 리포트', {
                 endPoint: request.url,
                 method: request.method,
