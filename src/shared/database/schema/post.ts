@@ -27,6 +27,7 @@ export const postMetadatas = sqliteTable('post_metadatas', {
 export const postViews = sqliteView('post_views', {
     totalCount: int().notNull(),
     postId: text().notNull(),
+    collectionId: text().notNull(),
     userId: text().notNull(),
     title: text().notNull(),
     content: text().notNull(),
@@ -38,11 +39,11 @@ export const postViews = sqliteView('post_views', {
     collection: text(),
     metadata: text(),
 }).as(
-    // @formatter:off
     sql`
     SELECT
     COUNT(*) OVER (PARTITION BY a.user_id) AS total_count,
     a.post_id,
+    a.collection_id,
     a.title,
     a.content,
     a.user_id,

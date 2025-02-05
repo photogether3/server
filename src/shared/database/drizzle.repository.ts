@@ -1,9 +1,11 @@
+import { Inject, Injectable, Logger, Type } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
-import { Inject, Injectable, Type } from '@nestjs/common';
 import { LibSQLDatabase } from 'drizzle-orm/libsql';
+import { SQLiteSelect } from 'drizzle-orm/sqlite-core';
 
-import { DRIZZLE_ORM_TOKEN } from './providers/drizzle.provider';
+import { PaginationDto } from '../base';
 import { storage } from './drizzle-tx';
+import { DRIZZLE_ORM_TOKEN } from './providers/drizzle.provider';
 
 @Injectable()
 export class DrizzleRepository {
@@ -22,6 +24,34 @@ export class DrizzleRepository {
     get db() {
         if (!this._db) throw new Error('not connect to DB.');
         return storage.getStore()?.transaction ?? this._db;
+    }
+
+    /**
+     * @todo 다이나믹 쿼리빌더를 전달받아 페이징 기능을 수행합니다.
+     * @warning 첫번째 열(또는 모든 열)에 `totalCount` 컬럼이 존재하는걸 전재로 기능을 수행합니다.
+     */
+    async withPagination<T>(
+        qb: SQLiteSelect,
+        page: number = 1,
+        perPage: number = 10,
+        callback: (data: any) => T[]
+    ): Promise<PaginationDto<T>> {
+        const results = await qb.limit(perPage).offset((page - 1) * perPage);
+        if (results.length === 0) {
+            return PaginationDto.fromNullData();
+        }
+
+        Logger.log(results);
+
+        const items = callback(results);
+        const totalItemCount = results[0].totalCount;
+        return {
+            totalItemCount,
+            totalPageCount: Math.ceil(totalItemCount / perPage),
+            items,
+            perPage: perPage,
+            currentPage: page,
+        };
     }
 
     /**

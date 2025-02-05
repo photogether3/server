@@ -2,19 +2,18 @@ import { Injectable } from '@nestjs/common';
 
 import { DrizzleService } from 'src/shared/database';
 
-import { FileManager } from 'src/features/file/app';
 import { CollectionService } from 'src/features/collection/app';
+import { FileManager } from 'src/features/file/app';
 import {
     CreatePostBodyDto,
     CreatePostDto,
     CreatePostMetadataBodyDto,
-    GetPostsQueryDto,
     MovePostsBodyDto,
     PostMetadataService,
-    PostQueryRepository,
     PostService,
     RemovePostsBodyDto,
-    UpdatePostBodyDto,
+    ReqGetPostsDto,
+    UpdatePostBodyDto
 } from 'src/features/post/app';
 
 @Injectable()
@@ -26,12 +25,12 @@ export class PostFacade {
         private readonly collectionService: CollectionService,
         private readonly postMetadataService: PostMetadataService,
         private readonly postService: PostService,
-        private readonly postQueryRepository: PostQueryRepository,
     ) {
     }
 
-    async getPostViews(userId: string, dto: GetPostsQueryDto) {
-        return await this.postQueryRepository.filePostViews(userId, dto);
+    async getPostViews(userId: string, dto: ReqGetPostsDto) {
+        await this.collectionService.getCollection(userId, dto.collectionId);
+        return await this.postService.getPostViews(userId, dto); 
     }
 
     async create(userId: string, _dto: CreatePostBodyDto, metadataDtos: CreatePostMetadataBodyDto[]) {

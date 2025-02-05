@@ -6,11 +6,15 @@ import { BaseSortBy, GetBaseQueryDto, PaginationDto } from 'src/shared/base';
 import { CreatePostMetadataBodyDto } from './post-metadata.dto';
 import { PostViewModel } from '../view-models/post.view-model';
 
-export class GetPostsQueryDto extends GetBaseQueryDto {
+export class ReqGetPostsDto extends GetBaseQueryDto {
     @IsOptional()
     @IsIn(Object.values(BaseSortBy))
     @ApiProperty({ description: '정렬대상', enum: BaseSortBy, default: BaseSortBy.CREATED_AT })
     readonly sortBy: BaseSortBy;
+
+    @IsNotEmpty()
+    @ApiProperty({ description: '사진첩 ID' })
+    readonly collectionId: string;
 }
 
 export class CreatePostBodyDto {

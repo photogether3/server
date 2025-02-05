@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { eq, sql } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
 import { LibSQLDatabase } from 'drizzle-orm/libsql';
 
 import { DRIZZLE_ORM_TOKEN, DrizzleRepository, postViews } from 'src/shared/database';
 import { PaginationUtil } from 'src/shared/base';
 import { EnvService } from 'src/shared/env';
 
-import { GetPostsQueryDto, PostPaginationResultDTO } from '../dto/post.dto';
+import { ReqGetPostsDto, PostPaginationResultDTO } from '../dto/post.dto';
 import { PostViewModel } from '../view-models/post.view-model';
 
 @Injectable()
@@ -23,27 +23,23 @@ export class PostQueryRepository extends DrizzleRepository {
         this.publicUrl = this.envService.getFirebaseEnv().storageUrl;
     }
 
-    async filePostViews(userId: string, dto: GetPostsQueryDto) {
-        const { perPage, page, sortOrder, sortBy } = dto;
-        const paginationUtil = new PaginationUtil(page, perPage);
+    async findPostViews(userId: string, dto: ReqGetPostsDto) {
+        const { perPage, page, sortOrder, sortBy, collectionId } = dto;
 
-        const results = await this.db
+        const qb = this.db
             .select()
             .from(postViews)
-            .where(eq(postViews.userId, userId))
-            // @formatter:off
+            .where(and(
+                eq(postViews.userId, userId),
+                eq(postViews.collectionId, collectionId)
+            ))
             .orderBy(sql`${sql.raw(sortBy)} ${sql.raw(sortOrder)}`)
-            .limit(perPage)
-            .offset(paginationUtil.offset);
+            .$dynamic();
 
-        if (results.length === 0) {
-            return PostPaginationResultDTO.fromNullData();
-        }
-
-        const items = results.map(x =>
-            PostViewModel.fromPersistence(x, this.publicUrl)
+        return await this.withPagination<PostViewModel>(qb, page, perPage, (results) =>
+            results.map(x =>
+                PostViewModel.fromPersistence(x, this.publicUrl)
+            )
         );
-        const totalItemCount = results[0].totalCount;
-        return paginationUtil.generate<PostViewModel>(totalItemCount, items);
     }
 }

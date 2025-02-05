@@ -1,7 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 
-import { CreatePostDto, UpdatePostDto } from '../dto/post.dto';
+import { CreatePostDto, ReqGetPostsDto, UpdatePostDto } from '../dto/post.dto';
 import { PostModel } from '../models/post.model';
+import { PostQueryRepository } from '../repositories/post.query.repository';
 import { PostRepository } from '../repositories/post.repository';
 
 @Injectable()
@@ -9,7 +10,15 @@ export class PostService {
 
     constructor(
         private readonly postRepository: PostRepository,
+        private readonly postQueryRepository: PostQueryRepository,
     ) {
+    }
+
+    /**
+     * @todo 화면에서 조회하는 게시물 목록 데이터를 반환합니다.
+     */
+    async getPostViews(userId: string, dto: ReqGetPostsDto) {
+        return this.postQueryRepository.findPostViews(userId, dto);
     }
 
     /**
@@ -23,7 +32,6 @@ export class PostService {
         }
         return posts;
     }
-
 
     /**
      * @todo 유저ID와 게시물ID를 통해 게시물을 조회합니다.
@@ -45,7 +53,6 @@ export class PostService {
         await this.postRepository.save(post);
         return post;
     }
-
 
     /**
      * @todo 게시물 모델을 수정, DB에 저장합니다.

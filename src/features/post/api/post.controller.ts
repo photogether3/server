@@ -12,22 +12,22 @@ import {
     UploadedFile,
     UseInterceptors,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { FormDataTranslator } from 'src/shared/validations';
 
-import { UserParam } from 'src/features/user/api';
-import { UserModel } from 'src/features/user/app';
 import {
     CreatePostBodyDto,
     CreatePostMetadataBodyDto,
-    GetPostsQueryDto,
     MovePostsBodyDto,
     PostPaginationResultDTO,
     RemovePostsBodyDto,
+    ReqGetPostsDto,
     UpdatePostBodyDto,
 } from 'src/features/post/app';
+import { UserParam } from 'src/features/user/api';
+import { UserModel } from 'src/features/user/app';
 
 import { PostFacade } from './post.facade';
 
@@ -37,16 +37,15 @@ import { PostFacade } from './post.facade';
 export class PostController {
 
     constructor(
-        private readonly postFacade: PostFacade,
-    ) {
-    }
+        private readonly postFacade: PostFacade
+    ) { }
 
     @Get()
     @ApiOperation({ summary: '게시물 목록 조회' })
     @ApiResponse({ type: PostPaginationResultDTO })
     async getPostViews(
         @UserParam() user: UserModel,
-        @Query() dto: GetPostsQueryDto,
+        @Query() dto: ReqGetPostsDto,
     ) {
         return this.postFacade.getPostViews(user.id, dto);
     }
