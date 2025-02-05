@@ -3,7 +3,6 @@ import { and, eq, sql } from 'drizzle-orm';
 import { LibSQLDatabase } from 'drizzle-orm/libsql';
 
 import { DRIZZLE_ORM_TOKEN, DrizzleRepository, postViews } from 'src/shared/database';
-import { PaginationUtil } from 'src/shared/base';
 import { EnvService } from 'src/shared/env';
 
 import { ReqGetPostsDto, PostPaginationResultDTO } from '../dto/post.dto';

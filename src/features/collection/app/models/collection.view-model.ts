@@ -24,9 +24,13 @@ export class CollectionViewModel {
     @ApiProperty({ description: '일부 이미지 URL' })
     readonly imageUrls: string[];
 
-    static fromPersistence(param: any) {
+    static fromPersistence(param: any, publicUrl: string) {
         const filePaths: any[] = JSON.parse(param.filePaths);
-        const imageUrls = filePaths.map(x => x.filePath as string);
+        const imageUrls =
+            filePaths
+                .map(x => `${publicUrl}/${x.filePath as string}`)
+                .filter((x, i) => i < 3)
+
         return {
             collectionId: param.collectionId,
             title: param.title,

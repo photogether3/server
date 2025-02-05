@@ -1,15 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { and, eq, sql } from 'drizzle-orm';
+import { LibSQLDatabase } from 'drizzle-orm/libsql';
 
-import { collections, collectionViews, DrizzleRepository } from 'src/shared/database';
-import { PaginationUtil } from 'src/shared/base';
+import { collections, collectionViews, DRIZZLE_ORM_TOKEN, DrizzleRepository } from 'src/shared/database';
+import { EnvService } from 'src/shared/env';
 
-import { CollectionPaginationDto, ReqGetCollectionsDto } from './dto';
-import { CollectionViewModel } from './models/collection.view-model';
+import { ReqGetCollectionsDto } from './dto';
 import { CollectionModel } from './models/collection.model';
+import { CollectionViewModel } from './models/collection.view-model';
 
 @Injectable()
 export class CollectionRepository extends DrizzleRepository {
+
+    private readonly publicUrl: string;
+
+    constructor(
+        @Inject(DRIZZLE_ORM_TOKEN)
+        protected readonly _db: LibSQLDatabase,
+        private readonly envService: EnvService
+    ) {
+        super(_db);
+        this.publicUrl = this.envService.getFirebaseEnv().storageUrl;
+    }
 
     /**
      * @warning 다른 도메인 모듈의 테이블을 참조합니다.
@@ -17,38 +29,19 @@ export class CollectionRepository extends DrizzleRepository {
     async findPagedCollections(userId: string, dto: ReqGetCollectionsDto) {
         const { perPage, page, sortOrder, sortBy } = dto;
 
-        const paginationUtil = new PaginationUtil(page, perPage);
-
-        // @formatter:off
-        const results = await this.db
+        const qb = this.db
             .select()
             .from(collectionViews)
             .where(eq(collectionViews.userId, userId))
-            // @formatter:off
             .orderBy(sql`${sql.raw(sortBy)} ${sql.raw(sortOrder)}`)
-            .limit(perPage)
-            .offset(paginationUtil.offset);
+            .$dynamic();
 
-        if (results.length === 0) {
-            return CollectionPaginationDto.fromNullData();
-        }
-
-        console.log(results);
-
-        // const items = results.map(x => ({
-        //     collectionId: x.collectionId,
-        //     imageUrls: [],
-        //     title: x.title,
-        //     totalItemCount: 0,
-        // } as CollectionResultDto));
-        const items = results.map(x =>
-            CollectionViewModel.fromPersistence(x)
+        return await this.withPagination<CollectionViewModel>(qb, page, perPage, (results) =>
+            results.map(x => CollectionViewModel.fromPersistence(x, this.publicUrl))
         );
-        const totalItemCount = results[0].totalCount;
-        return paginationUtil.generate<CollectionViewModel>(totalItemCount, items);
     }
 
-    async findCollection(userId:string, collectionId:string) {
+    async findCollection(userId: string, collectionId: string) {
         const result = await this.db
             .select()
             .from(collections)
