@@ -13,6 +13,7 @@ export class EnvService {
     return {
       port: this.configService.get<string>('APP_PORT'),
       name: this.configService.get<string>('APP_NAME'),
+      status: this.configService.get<string>('APP_STATUS'),
     };
   }
 

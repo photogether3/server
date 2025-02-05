@@ -1,4 +1,5 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, Logger } from '@nestjs/common';
+import { EnvService } from 'src/shared/env';
 
 import { DiscordColors, DiscordWebHookService } from 'src/shared/third-party';
 
@@ -6,10 +7,13 @@ import { DiscordColors, DiscordWebHookService } from 'src/shared/third-party';
 export class AppExceptionFilter implements ExceptionFilter {
 
     private readonly logger = new Logger(AppExceptionFilter.name);
+    private readonly appStatus: 'development' | 'production';
 
     constructor(
+        private readonly envService: EnvService,
         private readonly discordWebHook: DiscordWebHookService,
     ) {
+        this.appStatus = this.envService.getAppEnv().status as 'development' | 'production';
     }
 
     async catch(exception: HttpException, host: ArgumentsHost) {
@@ -21,18 +25,14 @@ export class AppExceptionFilter implements ExceptionFilter {
         const clientIp = request.headers['x-forwarded-for'] || request.connection.remoteAddress;
 
         let errorMessage = exception.message ?? '';
-        if (status >= 400 && status < 500) {
-            this.logger.warn(`[${status}] ${errorMessage} - Request IP: ${clientIp}`, exception.stack);
-        } else {
-            errorMessage = exception.message;
-            this.logger.error(`[${status}] ${errorMessage} - Request IP: ${clientIp}`, exception.stack);
-
-            // await this.discordWebHook.sendError('🚨 시스템 에러 리포트', {
-            //     endPoint: request.url,
-            //     method: request.method,
-            //     errMsg: errorMessage,
-            //     errCode: status,
-            // }, DiscordColors.ERROR);
+        this.logger.error(`[${status}] ${errorMessage} - Request IP: ${clientIp}`, exception.stack);
+        if (status < 500 && this.appStatus === 'production') {
+            await this.discordWebHook.sendError('🚨 시스템 에러 리포트', {
+                endPoint: request.url,
+                method: request.method,
+                errMsg: errorMessage,
+                errCode: status,
+            }, DiscordColors.ERROR);
         }
 
         response
