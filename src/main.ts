@@ -35,7 +35,7 @@ async function bootstrap() {
         .setTitle('Photogether 🎨')
         .setDescription('API 문서')
         .addBearerAuth()
-        .setVersion('0.8.7')
+        .setVersion('0.8.8')
         .build();
 
     const document = SwaggerModule.createDocument(app, config);
