@@ -31,7 +31,7 @@ import { UserModel } from 'src/features/user/app';
 
 import { PostFacade } from './post.facade';
 
-@Controller({ version: '1' })
+@Controller({ path: 'posts', version: '1' })
 @ApiTags('게시물 정보')
 @ApiBearerAuth()
 export class PostController {
