@@ -15,8 +15,19 @@ export class CollectionService {
     /**
      * @todo 유저의 사진첩목록을 페이징처리하여 조회합니다.
      */
-    async getCollections(userId: string, dto: ReqGetCollectionsDto): Promise<CollectionPaginationDto> {
-        return await this.collectionRepository.findPagedCollections(userId, dto);
+    async getCollectionViews(userId: string, dto: ReqGetCollectionsDto): Promise<CollectionPaginationDto> {
+        return await this.collectionRepository.findPagedCollectionViews(userId, dto);
+    }
+
+    /**
+     * @todo 유저의 특정 사진첩 뷰를 조회합니다.
+     */
+    async getCollectionView(userId: string, collectionId: string): Promise<any> {
+        const result = await this.collectionRepository.findCollectionView(userId, collectionId);
+        if (!result) {
+            throw new BadRequestException('사진첩을 찾을 수 없습니다.');
+        }
+        return result;
     }
 
     /**

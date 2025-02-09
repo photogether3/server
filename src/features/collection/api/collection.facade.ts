@@ -19,8 +19,12 @@ export class CollectionFacade {
     ) {
     }
 
-    async getCollections(userId: string, dto: ReqGetCollectionsDto) {
-        return this.collectionService.getCollections(userId, dto);
+    async getCollectionViews(userId: string, dto: ReqGetCollectionsDto) {
+        return this.collectionService.getCollectionViews(userId, dto);
+    }
+
+    async getCollectionView(id: string, collectionId: string) {
+        return await this.collectionService.getCollectionView(id, collectionId);
     }
 
     async create(userId: string, dto: ReqCreateCollectionDto) {

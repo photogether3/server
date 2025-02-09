@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { UserParam } from 'src/features/user/api';
 import { UserModel } from 'src/features/user/app';
 import {
+    CollectionDetailViewModel,
     CollectionPaginationDto,
     ReqCreateCollectionDto,
     ReqGetCollectionsDto,
@@ -25,11 +26,22 @@ export class CollectionController {
     @Get()
     @ApiOperation({ summary: '사진첩 목록 조회' })
     @ApiResponse({ type: CollectionPaginationDto })
-    async getCollections(
+    async getCollectionViews(
         @UserParam() user: UserModel,
         @Query() dto: ReqGetCollectionsDto,
     ) {
-        return await this.collectionFacade.getCollections(user.id, dto);
+        return await this.collectionFacade.getCollectionViews(user.id, dto);
+    }
+
+    @Get(':collectionId')
+    @ApiOperation({ summary: '사진첩 상세 조회' })
+    @ApiResponse({ type: CollectionDetailViewModel })
+    async getCollectionView(
+        @UserParam() user: UserModel,
+        @Param('collectionId') collectionId: string,
+    ) {
+        if (!collectionId) throw new BadRequestException('사진첩 아이디를 입력해주세요.');
+        return await this.collectionFacade.getCollectionView(user.id, collectionId);
     }
 
     @Post()

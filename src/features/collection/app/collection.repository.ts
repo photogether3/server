@@ -8,6 +8,7 @@ import { EnvService } from 'src/shared/env';
 import { ReqGetCollectionsDto } from './dto';
 import { CollectionModel } from './models/collection.model';
 import { CollectionViewModel } from './models/collection.view-model';
+import { CollectionDetailViewModel } from './models/collection-detail.view-model';
 
 @Injectable()
 export class CollectionRepository extends DrizzleRepository {
@@ -26,7 +27,7 @@ export class CollectionRepository extends DrizzleRepository {
     /**
      * @warning 다른 도메인 모듈의 테이블을 참조합니다.
      */
-    async findPagedCollections(userId: string, dto: ReqGetCollectionsDto) {
+    async findPagedCollectionViews(userId: string, dto: ReqGetCollectionsDto) {
         const { perPage, page, sortOrder, sortBy } = dto;
 
         const qb = this.db
@@ -39,6 +40,22 @@ export class CollectionRepository extends DrizzleRepository {
         return await this.withPagination<CollectionViewModel>(qb, page, perPage, (results) =>
             results.map(x => CollectionViewModel.fromPersistence(x, this.publicUrl))
         );
+    }
+
+    /**
+     * @warning 다른 도메인 모듈의 테이블을 참조합니다.
+     */
+    async findCollectionView(userId: string, collectionId: string) {
+        const result = await this.db
+            .select()
+            .from(collectionViews)
+            .where(and(
+                eq(collectionViews.userId, userId),
+                eq(collectionViews.collectionId, collectionId)
+            ))
+            .get();
+        if (!result) return null;
+        return CollectionDetailViewModel.fromPersistence(result);
     }
 
     async findCollection(userId: string, collectionId: string) {
