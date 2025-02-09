@@ -5,7 +5,7 @@ export class CollectionViewModel__Category {
     readonly categoryId: string;
 
     @ApiProperty({ description: '이름' })
-    readonly name: boolean;
+    readonly name: string;
 }
 
 export class CollectionViewModel {
